@@ -1,0 +1,27 @@
+{
+  "name": "canvas_libraries",
+  "version": "0.0.0",
+  "authors": [
+    "Graham Clapham <graham.clapham@thomsonreuters.com>"
+  ],
+  "description": "Canvas and charting library test and benchmarking.",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "compass-twitter-bootstrap": "~2.3.2",
+    "d3": "~3.4.11",
+    "easeljs": "*",
+    "fabric": "~1.4.9",
+    "kineticjs": "~5.1.0",
+    "paper": "~0.9.18",
+    "two": "~0.4.0"
+  }
+}
