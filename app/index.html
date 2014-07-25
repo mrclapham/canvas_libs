@@ -2,8 +2,32 @@
 <html>
 <head>
     <title></title>
-</head>
-<body>
+    <style>
+        #chartHolder{
+            background-color:#ff00ff;
+            width:500px;
+            height:500px;
+        }
+    </style>
+    <script type="text/javascript" src="js/data_model.js"></script>
+    <script type="text/javascript">
+        onLoad = function(){
 
+            var data = new data_model().getData();
+            console.log(data)
+
+        }
+
+        function drawBarchart(){
+
+        }
+
+
+    </script>
+</head>
+<body onload="onLoad()">
+<div id="chartHolder">
+
+</div>
 </body>
 </html>
