@@ -1,0 +1,28 @@
+{
+  "name": "canvas_libraries",
+  "version": "0.0.0",
+  "description": "Testing various canvas libraries.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mrClapham/canvas_libs.git"
+  },
+  "keywords": [
+    "Canvas",
+    "HTML5"
+  ],
+  "author": "Graham Clapham",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mrClapham/canvas_libs/issues"
+  },
+  "homepage": "https://github.com/mrClapham/canvas_libs",
+  "dependencies": {
+    "browserify": "^5.11.0",
+    "gulp": "^3.8.7",
+    "lodash": "^2.4.1"
+  }
+}
