@@ -14,19 +14,27 @@
         var createjs = window; // sets window as the createjs namespace (the object the classes will be defined in)
     </script>
 
-    <script type="text/javascript" src="js/bundle.js"></script>
+    <!--<script type="text/javascript" src="js/bundle.js"></script>-->
+
+    <script type="text/javascript" src="js/data_model.js"></script>
+    <script type="text/javascript" src="js/BaseChart.js"></script>
+    <script type="text/javascript" src="js/EasleRenderer.js"></script>
     <script type="text/javascript">
         onLoad = function(){
-
+            var targ0 = document.getElementById("chartHolder");
             var data = new data_model().getData();
-            console.log(data)
+
+
+        var _base = new BaseChart(targ0);
+        console.log(_base.getData());
+        _base.setData("Testing 1");
+
+        var _EasleRenderer = new EasleRenderer(targ0);
+        _EasleRenderer.setData({theData:"This is the easle"});
+            _EasleRenderer.setWidth(200)
+        console.log(_EasleRenderer);
 
         }
-
-        function drawBarchart(){
-
-        }
-
 
     </script>
 </head>
