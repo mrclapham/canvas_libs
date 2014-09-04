@@ -15,13 +15,15 @@
     </script>
 
     <!--<script type="text/javascript" src="js/bundle.js"></script>-->
-
+    <script type="text/javascript" src="js/scale.js"></script>
     <script type="text/javascript" src="js/data_model.js"></script>
     <script type="text/javascript" src="js/BaseChart.js"></script>
     <script type="text/javascript" src="js/EasleRenderer.js"></script>
     <script type="text/javascript">
         onLoad = function(){
-            var targ0 = document.getElementById("chartHolder");
+            var targ0 = document.getElementById("chartHolder0");
+            var targ1 = document.getElementById("chartHolder1");
+            var targ2 = document.getElementById("chartHolder2");
             var data = new data_model().getData();
 
 
@@ -29,18 +31,28 @@
         console.log(_base.getData());
         _base.setData("Testing 1");
 
-        var _EasleRenderer = new EasleRenderer(targ0);
+        var _EasleRenderer = new EasleRenderer(targ1);
         _EasleRenderer.setData({theData:"This is the easle"});
-            _EasleRenderer.setWidth(200)
         console.log(_EasleRenderer);
 
+            //-- functions
+            function togglePlay1(e){
+                _EasleRenderer.setPlaying(!_EasleRenderer.getPlaying())
+            }
+            document.getElementById("togglePlay0").addEventListener('click', togglePlay1)
         }
+
 
     </script>
 </head>
 <body onload="onLoad()">
-<div id="chartHolder">
+<button id="togglePlay0">toggle play</button>
+<button id="togglePlay1">toggle play</button>
+<div id="chartHolder0"></div>
+<div id="chartHolder1"></div>
+<div id="chartHolder2"></div>
 
-</div>
+
+
 </body>
 </html>

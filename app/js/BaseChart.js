@@ -4,17 +4,40 @@
 BaseChart= (function(target, opt_data){
     var _scope = function(target, opt_data){
         this.target = target,
-        this._width = 300,
+        this._canvas = null,
+        this._ctx = null,
+        this._backgroundColour = "#cccccc",
+        this._width = 600,
         this._height = 200,
         this.data = opt_data || {name:"genericData"};
+        this._playing = true;
+        _init.call(this);
+    }
+
+    var _init = function(){
+        _onTargetSet.call(this);
+        _initAnimation.call(this);
+    }
+
+    var _initAnimation = function(){
+        requestAnimationFrame(this.animate.bind(this));
+    }
+
+    var _onTargetSet = function(){
+        this._canvas = document.createElement('canvas');
+        this._canvas.style.width = this.getWidth()+"px";
+        this._canvas.style.height = this.getHeight()+"px";
+        this._ctx = this._canvas.getContext("2d");
+        this.target.appendChild(this._canvas);
     }
 
     var _onDataSet = function(){
-        console.log("Base Data Set", this);
         this.render();
     }
 
+
     _scope.prototype = {
+
         getData:function(){
             return this.data;
         },
@@ -22,22 +45,53 @@ BaseChart= (function(target, opt_data){
             this.data = value;
             _onDataSet.call(this);
         },
+        setPlaying:function(value){
+            this._playing = value;
+            this.onPlayingChanged();
+        },
+        getPlaying:function(){
+           return this._playing;
+        },
+        onPlayingChanged:function(){
+          console.log("Playing changed to ",this.getPlaying())
+            this.getPlaying() ? _initAnimation.call(this) : console.log("stopped");
+        },
         getHeight:function(){
            return this._height;
         },
         setHeight:function(value){
             this._height = value;
-            this.render();
+           // this.render();
         },
         getWidth:function(){
             return this._width;
         },
         setWidth:function(value){
             this._width = value;
-            this.render();
+           // this.render();
+        },
+        getCanvas:function(){
+            return this._canvas;
+        },
+        getContext:function(){
+            return this._ctx;
+        },
+        getBackgroundColour:function(){
+            return this._backgroundColour;
+        },
+        clear:function(){
+            this.getContext().clearRect(0,0,this.getWidth(), this.getHeight());
         },
         render:function(){
-            console.log("I am the base class and my renderer needs to be extended");
+            this.clear();
+            var ctx = this.getContext();
+            ctx.fillStyle = this.getBackgroundColour();
+            ctx.fillRect(0,0,100,150);
+            ctx.closePath();
+        },
+        animate:function(){
+            this.render.call(this);
+            if( this.getPlaying() ) requestAnimationFrame(this.animate.bind(this));
         }
     }
 
