@@ -2,6 +2,7 @@
  * Created by grahamclapham on 03/09/2014.
  */
 BaseChart= (function(target, opt_data){
+    console.log("THE DAT IS ... ",target)
     var _scope = function(target, opt_data){
         this.target = target,
         this._canvas = null,
@@ -9,14 +10,16 @@ BaseChart= (function(target, opt_data){
         this._backgroundColour = "#cccccc",
         this._width = 600,
         this._height = 200,
-        this.data = opt_data || {name:"genericData"};
+        this.data = opt_data || {name:"genericName"};
         this._playing = true;
+        this._canvasId = "chartCanvas_"+Math.ceil(Math.random()*1000);
         _init.call(this);
     }
 
     var _init = function(){
         _onTargetSet.call(this);
         _initAnimation.call(this);
+        this.postInit();
     }
 
     var _initAnimation = function(){
@@ -27,6 +30,7 @@ BaseChart= (function(target, opt_data){
         this._canvas = document.createElement('canvas');
         this._canvas.style.width = this.getWidth()+"px";
         this._canvas.style.height = this.getHeight()+"px";
+        this._canvas.setAttribute("id", this.getCanvasId());
         this._ctx = this._canvas.getContext("2d");
         this.target.appendChild(this._canvas);
     }
@@ -37,7 +41,9 @@ BaseChart= (function(target, opt_data){
 
 
     _scope.prototype = {
-
+        postInit:function(){
+            console.log("I am the postInit function and I should be overridden in the concrete class. I am the class specific init function - called after the Super Class init")
+        },
         getData:function(){
             return this.data;
         },
@@ -72,6 +78,15 @@ BaseChart= (function(target, opt_data){
         },
         getCanvas:function(){
             return this._canvas;
+        },
+        getCanvasId:function(){
+            return this._canvasId
+        },
+        setCanvasId:function(value){
+            this._canvasId = value;
+            if(this.getCanvas()){
+                this.getCanvas().setAttribute("id", this.getCanvasId())
+            }
         },
         getContext:function(){
             return this._ctx;
