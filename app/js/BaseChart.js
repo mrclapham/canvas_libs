@@ -2,14 +2,13 @@
  * Created by grahamclapham on 03/09/2014.
  */
 BaseChart= (function(target, opt_data){
-    console.log("THE DAT IS ... ",target)
     var _scope = function(target, opt_data){
         this.target = target,
         this._canvas = null,
         this._ctx = null,
         this._backgroundColour = "#cccccc",
-        this._width = 600,
-        this._height = 200,
+        this._width = 900,
+        this._height = 600,
         this.data = opt_data || {name:"genericName"};
         this._playing = true;
         this._canvasId = "chartCanvas_"+Math.ceil(Math.random()*1000);
@@ -35,21 +34,19 @@ BaseChart= (function(target, opt_data){
         this.target.appendChild(this._canvas);
     }
 
-    var _onDataSet = function(){
-        this.render();
-    }
-
 
     _scope.prototype = {
         postInit:function(){
-            console.log("I am the postInit function and I should be overridden in the concrete class. I am the class specific init function - called after the Super Class init")
+            //console.log("I am the postInit function and I should be overridden in the concrete class. I am the class specific init function - called after the Super Class init")
         },
         getData:function(){
             return this.data;
         },
         setData:function(value){
-            this.data = value;
-            _onDataSet.call(this);
+            if(this.data !== value){
+                this.data = value;
+                this.update();
+            }
         },
         setPlaying:function(value){
             this._playing = value;
@@ -59,7 +56,7 @@ BaseChart= (function(target, opt_data){
            return this._playing;
         },
         onPlayingChanged:function(){
-          console.log("Playing changed to ",this.getPlaying())
+          //console.log("Playing changed to ",this.getPlaying())
             this.getPlaying() ? _initAnimation.call(this) : console.log("stopped");
         },
         getHeight:function(){
@@ -105,8 +102,13 @@ BaseChart= (function(target, opt_data){
             ctx.closePath();
         },
         animate:function(){
-            this.render.call(this);
+            this.render();
             if( this.getPlaying() ) requestAnimationFrame(this.animate.bind(this));
+        },
+        update:function(){
+            this.clear();
+            this.render();
+            //console.log("The update functions is to be overridden in the concrete implementation of the concrete implementation of the class")
         }
     }
 
