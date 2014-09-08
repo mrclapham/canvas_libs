@@ -35,7 +35,6 @@ EasleRenderer.prototype.postInit = function(){
 
     this.setPlaying(false)
 
-    //this.render();
 }
 
 EasleRenderer.prototype.clearContainer = function(container){
@@ -54,57 +53,45 @@ EasleRenderer.prototype.render= function(){
             __circle.y = this.getData()[i].y;
             this.dotContainer.addChild(__circle);
             this._dotArray.push(__circle)
-            // now the line
         }
         //Update stage will render next frame
+        //onChange.call(_this, {})
+        updateLine.call(this);
 
         this.stage.update();
     }
 
-    EasleRenderer.prototype.updateDots = function(){
-
-
-    }
-
-
 //----
-EasleRenderer.prototype.updateLine = function(){
+EasleRenderer.prototype.update = function(){
+    var _this = this;
+
+    for(var i=0; i<this.getData().length; i++){
+            var xp = this.getData()[i].x;
+            var yp = this.getData()[i].y;
+            this._tween = createjs.Tween.get(this._dotArray[i], {override:false, loop:false}).to({x:xp}, 200).to({y:yp}, 200);
+            this._tween.addEventListener("change", function(e){ onChange.call(_this, e) });
+        }
+    }
+}
+
+var onChange = function(){
+    updateLine.call(this);
+    this.stage.update();
+}
+
+var initalRender = function(){
+    console.log("INITIAL RENDER", this)
+
+}//----
+var updateLine = function(){
     this.lineGraph.graphics.clear();
     this.lineGraph.graphics.moveTo(0, this.getHeight());
     this.lineGraph.graphics.beginFill("#ff00ff");
+    this.lineGraph.alpha = .4
     for(var i=0;i<this._dotArray.length; i++){
         this.lineGraph.graphics.lineTo(this._dotArray[i].x, this._dotArray[i].y);
     }
-
     this.lineGraph.graphics.lineTo(this._dotArray[ this._dotArray.length -1].x, this.getHeight());
     this.lineGraph.graphics.lineTo(0, this.getHeight());
-
-    }
-//----
-EasleRenderer.prototype.update = function(){
-    var _this = this
-
-    for(var i=0; i<this.getData().length; i++){
-            var xp = this.getData()[i].x
-            var yp = this.getData()[i].y
-            this._tween = createjs.Tween.get(this._dotArray[i], {override:false, loop:false}).to({x:xp}, 200).to({y:yp}, 200)
-            this._tween.addEventListener("change", function(e){ onChange.call(_this, e) })
-        }
-    // add a ticker to update the stage...
-   // createjs.Ticker.addEventListener('tick', function(e){ updateStage.call(_this, e) })
-   // this.stage.update();
-}
-
-    var onChange = function(e){
-        this.updateLine()
-        this.stage.update();
-
-    }
-
-    var updateStage = function(e){
-
-        this.stage.update();
-    }
-
 
 }
