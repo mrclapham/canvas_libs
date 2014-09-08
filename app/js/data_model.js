@@ -25,6 +25,17 @@ data_model = (function(opt_config){
         }
         return _data;
     }
+    //-- regular test data - non randomized
+    _scope.prototype.getRegualaData = function(value){
+        var _data = [];
+        var stepsize = (this._private.xEnd - this._private.xStart) / this._private.steps;
+        for(var i=0; i<this._private.steps; i++){
+            //_data.push({x:stepsize*i, y:this._private.yMin+Math.random()*this._private.yMax});
+            _data.push({x:stepsize*i, y:value*i});
+        }
+            return _data;
+    }
+
     return _scope;
 })();
 
