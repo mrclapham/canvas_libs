@@ -17,7 +17,7 @@
     <script type="text/javascript" src="bower_components/TweenJS/lib/tweenjs-0.5.1.combined.js"></script>
     <script type="text/javascript" src="js/scale.js"></script>
     <script type="text/javascript" src="js/data_model.js"></script>
-    <script type="text/javascript" src="js/BaseChart.js"></script>bower uninstall -save-dev TweenJS
+    <script type="text/javascript" src="js/BaseChart.js"></script>
     <script type="text/javascript" src="js/EasleRenderer.js"></script>
     <script type="text/javascript">
         onLoad = function(){
@@ -26,8 +26,15 @@
             var targ1 = document.getElementById("chartHolder1");
             var targ2 = document.getElementById("chartHolder2");
 
-            var data0 = new data_model().getData();
-            var data1 = new data_model().getData();
+            var dataConfig =  {  yMin : 0,
+                                 yMax: 100,
+                                 xStart: 0,
+                                 xEnd: 900,
+                                 steps : 12
+                               }
+
+            var data0 = new data_model(dataConfig).getData();
+            var data1 = new data_model(dataConfig).getData();
 
             var dataR0 = new data_model().getRegualaData(6);
             var dataR1 = new data_model().getRegualaData(12);
@@ -58,10 +65,7 @@
             }
             document.getElementById("easleData0").addEventListener('click', easleData0)
             document.getElementById("easleData1").addEventListener('click', easleData1)
-
-
         }
-
 
     </script>
 </head>
@@ -71,8 +75,6 @@
 
 <button id="easleData0">Easle data 0</button>
 <button id="easleData1">Easle data 1</button>
-
-
 
 <div id="chartHolder_es"><canvas id="easleCanvas" width="900px" height="600px"></canvas></div>
 <div id="chartHolder0"></div>

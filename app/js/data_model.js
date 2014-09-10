@@ -1,7 +1,8 @@
 /*   A random dater faker.  */
 
 data_model = (function(opt_config){
-    var _scope = function(){
+    var _scope = function(opt_config){
+
        this._private = {
             yMin : 0,
             yMax: 100,
@@ -9,12 +10,36 @@ data_model = (function(opt_config){
             xEnd: 400,
             steps : 8
         }
-        _init.call(this);
+        if(opt_config) _init.call(this, opt_config);
+
     }
+
+    //===================
+
     //
-    var _init =function(){
-       // console.log("INIT", this._private.yMax);
+    var _init =function(opt_config){
+        //First, have you got a config object?
+        // If so apply all the properies.
+        if(opt_config && ( typeof opt_config == 'object') ){
+            _onConfigSet.call(this, opt_config)
+        }
     }
+
+    var _onConfigSet = function(opt_config){
+        console.log("_onConfigSet ", opt_config)
+
+        for(var value in opt_config){
+            console.log(value)
+            //Underscore properties are not to be changed.
+
+            if(String(value).charAt(0) != '_') this._private[value] = opt_config[value];
+
+        }
+
+
+    }
+    //====================
+
     //
     _scope.prototype.getData = function(){
         var _data = [];
@@ -36,7 +61,11 @@ data_model = (function(opt_config){
             return _data;
     }
 
+
+
     return _scope;
 })();
+
+
 
 
