@@ -8,7 +8,7 @@ BaseChart= (function(target, opt_data){
         this._ctx = null,
         this._backgroundColour = "#cccccc",
         this._width = 900,
-        this._height = 600,
+        this._height = 400,
         this.data = opt_data || {name:"genericName"};
         this._playing = true;
         this._canvasId = "chartCanvas_"+Math.ceil(Math.random()*1000);
@@ -27,6 +27,8 @@ BaseChart= (function(target, opt_data){
 
     var _onTargetSet = function(){
         this._canvas = document.createElement('canvas');
+        this._canvas.width = this.getWidth();
+        this._canvas.height = this.getHeight();
         this._canvas.style.width = this.getWidth()+"px";
         this._canvas.style.height = this.getHeight()+"px";
         this._canvas.setAttribute("id", this.getCanvasId());
@@ -109,6 +111,9 @@ BaseChart= (function(target, opt_data){
             this.clear();
             this.render();
             //console.log("The update functions is to be overridden in the concrete implementation of the concrete implementation of the class")
+        },
+        getTarget:function(){
+            return this.target;
         }
     }
 

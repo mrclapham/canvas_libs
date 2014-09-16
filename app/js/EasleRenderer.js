@@ -14,7 +14,17 @@ EasleRenderer.prototype.postInit = function(){
     this._dotArray = [];
     this._curveRadius = 24;
     //Create a stage by getting a reference to the canvas
-    this.stage = new createjs.Stage("easleCanvas");
+
+
+    this.stage = new createjs.Stage();
+
+    this.stage.width = this.getWidth();
+    this.stage.height = this.getHeight();
+    this.stage.canvas = this.getCanvas();
+    this._canvas.style.width = this.getWidth()+"px";
+    this._canvas.style.height = this.getHeight()+"px";
+
+    //this.stage.enableMouseOver(10);
 
     //Background Container
     this.backGroundContainer = new createjs.Container();
@@ -30,33 +40,48 @@ EasleRenderer.prototype.postInit = function(){
     this.dotContainer = new createjs.Container();
     this.stage.addChild(this.dotContainer)
 
+    //tooltip
+    this.tooltip = new createjs.Container();
+    //this.stage.addChild(this.tooltip)
+
+    this.tooltip.x = 100;
+    this.tooltip.y = 100
+
+
     // this is added as a visual test for the bezier curve
     this.bezierContainer = new createjs.Container();
-    this.stage.addChild(this.bezierContainer)
+    //this.stage.addChild(this.bezierContainer)
     this.bezLine = new createjs.Shape();
     this.bezierContainer.addChild(this.bezLine);
-
+    renderTooltip.call(this);
     //Update stage will render next frame
-    this.stage.update();
-
+    //this.stage.update();
     this.setPlaying(false)
-
 }
 
 EasleRenderer.prototype.clearContainer = function(container){
     //TODO:
 }
 
+
+
 EasleRenderer.prototype.render = function(){
     this.BackgroundStripeArray = [];
     this._dotArray = []
     var _cols = ["red", "green", "blue"]
+    var _this = this;
     if( this.getData() ){
         for(var i=0; i<this.getData().length; i++){
             var __circle = new createjs.Shape();
-            __circle.graphics.beginFill(    _cols[Math.floor(Math.random()*3)]  ).drawCircle(0, 0, 4);
+            __circle.graphics.beginFill(    _cols[Math.floor(Math.random()*3)]  ).drawCircle(0, 0, 8);
             __circle.x = this.getData()[i].x;
             __circle.y = this.getData()[i].y;
+            __circle.dataIndex = i;
+            __circle.cursor = "pointer";
+            __circle.addEventListener("click", function(e){ onClicked.call(_this, e) });
+            //__circle.addEventListener("mouseover", handleClick);
+            __circle.addEventListener("rollover", function(e){ onRolled.call(_this, e) });
+            console.log(__circle)
             this.dotContainer.addChild(__circle);
             this._dotArray.push(__circle)
         }
@@ -65,6 +90,11 @@ EasleRenderer.prototype.render = function(){
         updateLine.call(this);
         drawBezier.call(this);
         this.stage.update();
+    }
+
+    //---
+    EasleRenderer.prototype.addToolTip = function(){
+        console.log("tool tip added ")
     }
 
 //----
@@ -80,27 +110,99 @@ EasleRenderer.prototype.update = function(){
     }
 }
 
+var onRolled = function(e){
+    console.log("onRolled", e.target.dataIndex)
+    var index = e.target.dataIndex
+    showTooltip.call(this, index, e)
+}
+
+var renderTooltip = function(){
+    this._toolTipHtml = document.createElement('div')
+
+
+    var p=document.createElement("p")
+    this.tollText=document.createTextNode("Hello World");
+    p.appendChild(this.tollText);
+    this._toolTipHtml.appendChild(p);
+    this.toolTipSpeed = .2
+    this._toolTipHtml.style.cssText = 'position:absolute;' +
+        'top:30px;' +
+        'left:30px;' +
+        'width:auto;' +
+        'height:auto;' +
+        'padding:5px;' +
+        '-webkit-transition: '+this.toolTipSpeed+'s ease-in;'+
+        '-moz-transition: '+this.toolTipSpeed+'s ease-in;'+
+        '-o-transition: '+this.toolTipSpeed+'s ease-in;'+
+        'transition: '+this.toolTipSpeed+'s ease-in;'+
+        '-moz-border-radius:100px;' +
+        'border:1px  solid #ddd;' +
+        'background-color:rgba(0,0,0,.5);'+
+        'display: block;'+
+        '-webkit-margin-before: 0;'+
+        '-webkit-margin-after: 0;'+
+        '-webkit-margin-start: 0px;'+
+        '-webkit-margin-end: 0px;'+
+        '-moz-box-shadow: 0px 0px 8px  #fff;'
+    ;
+
+   // this.getTarget().appendChild(this._toolTipHtml)
+
+    console.log(this._toolTipHtml)
+    this.stage.update();
+
+}
+
+
+
+var showTooltip = function(index, e){
+
+    this._toolTipHtml.style.left=  this.getData()[index].x+"px";
+    this._toolTipHtml.style.top=  this.getData()[index].y+"px";
+
+    this._toolTipHtml.innerHTML = "<p> the x value is"+this.getData()[index].x+"</p>"
+    this.tooltip.removeAllChildren();
+    var _background = new createjs.Shape()
+        _background.graphics.beginFill("#ff0000").drawRoundRect( 0, 0, 100, 50,  5 )
+    this.tooltip.addChild(_background);
+//font-family: 'Special Elite', cursive;
+    var text = new createjs.Text(String(this.getData()[index].x), "20px 'Special Elite'", "#ff7700"); text.x = 10; text.textBaseline = "alphabetic";
+    this.tooltip.addChild(text);
+
+   // console.log(this.getData()[index], this.tooltip);
+    this.stage.update();
+
+}
+
+var onClicked = function(e){
+    console.log("onClicked", e);
+}
+
 var onChange = function(){
     updateLine.call(this);
     this.stage.update();
 }
 
 var initalRender = function(){
-    console.log("INITIAL RENDER", this)
+    console.log("INITIAL RENDER", this);
 
 }//----
 var updateLine = function(){
     this.lineGraph.graphics.clear();
     this.lineGraph.graphics.moveTo(0, this.getHeight());
     this.lineGraph.graphics.beginFill("#454545");
-    this.lineGraph.alpha = .4
+    this.lineGraph.alpha = .4;
     for(var i=0;i<this._dotArray.length; i++){
-       // this.lineGraph.graphics.lineTo(this._dotArray[i].x, this._dotArray[i].y);
-        this.lineGraph.graphics.bezierCurveTo(this._dotArray[i].x-this._curveRadius, this._dotArray[i].y, this._dotArray[i].x+this._curveRadius, this._dotArray[i].y, this._dotArray[i].x, this._dotArray[i].y);
+       this.lineGraph.graphics.lineTo(this._dotArray[i].x, this._dotArray[i].y);
+       // this.lineGraph.graphics.bezierCurveTo(this._dotArray[i].x-this._curveRadius, this._dotArray[i].y, this._dotArray[i].x+this._curveRadius, this._dotArray[i].y, this._dotArray[i].x, this._dotArray[i].y);
     }
     this.lineGraph.graphics.lineTo(this._dotArray[ this._dotArray.length -1].x, this.getHeight());
     this.lineGraph.graphics.lineTo(0, this.getHeight());
+
 }
+
+
+//---------
 var drawBezier = function(){
     var __points = [{x:50, y:100}, {x:100, y:90}, {x:150, y:200}, {x:200, y:90}, {x:250, y:300}, {x:300, y:90}, {x:350, y:200}, {x:400, y:90} ]
     var xStep = 100
@@ -121,10 +223,10 @@ var drawBezier = function(){
         _circle.graphics.beginFill(  "#ff0000"  ).drawCircle(0, 0, 2);
 
         var cx1, cx2, cy1, cy2, xp, xp;
-        cx1 = __points[i].x + (2 * this._curveRadius);
-        cx2 = __points[i].x - this._curveRadius;
-        cy1 = __points[i].y
-        cy2 = __points[i].y
+        cx1 = __points[i].x //+ (2 * this._curveRadius);
+        cx2 = __points[i].x //- this._curveRadius;
+        cy1 = __points[i].y - (2 * this._curveRadius);
+        cy2 = __points[i].y + this._curveRadius;
         xp  = __points[i].x
         yp  = __points[i].y
 

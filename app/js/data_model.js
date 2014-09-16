@@ -26,10 +26,10 @@ data_model = (function(opt_config){
     }
 
     var _onConfigSet = function(opt_config){
-        console.log("_onConfigSet ", opt_config)
+       // console.log("_onConfigSet ", opt_config)
 
         for(var value in opt_config){
-            console.log(value)
+            //console.log(value)
             //Underscore properties are not to be changed.
 
             if(String(value).charAt(0) != '_') this._private[value] = opt_config[value];
