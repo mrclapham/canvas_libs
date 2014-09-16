@@ -4,6 +4,7 @@
 BaseChart= (function(target, opt_data){
     var _scope = function(target, opt_data){
         this.target = target,
+        this.createCanvas = false; // do you want an on the fly created canvas? It seems to cause problems with Easlejs.
         this._canvas = null,
         this._ctx = null,
         this._backgroundColour = "#cccccc",
@@ -16,7 +17,7 @@ BaseChart= (function(target, opt_data){
     }
 
     var _init = function(){
-        _onTargetSet.call(this);
+        if(this.createCanvas) _onTargetSet.call(this);
         _initAnimation.call(this);
         this.postInit();
     }
@@ -75,6 +76,9 @@ BaseChart= (function(target, opt_data){
             this._width = value;
            // this.render();
         },
+        setCanvas:function(value){
+             this._canvas = value;
+        },
         getCanvas:function(){
             return this._canvas;
         },
@@ -94,14 +98,16 @@ BaseChart= (function(target, opt_data){
             return this._backgroundColour;
         },
         clear:function(){
-            this.getContext().clearRect(0,0,this.getWidth(), this.getHeight());
+          if(this.getContext())  this.getContext().clearRect(0,0,this.getWidth(), this.getHeight());
         },
         render:function(){
+            if( this.getContext() ){
             this.clear();
-            var ctx = this.getContext();
-            ctx.fillStyle = this.getBackgroundColour();
-            ctx.fillRect(0,0,100,150);
-            ctx.closePath();
+                var ctx = this.getContext();
+                ctx.fillStyle = this.getBackgroundColour();
+                ctx.fillRect(0,0,100,150);
+                ctx.closePath();
+            }
         },
         animate:function(){
             this.render();

@@ -10,21 +10,23 @@ EasleRenderer.prototype = Object.create(BaseChart.prototype);
 EasleRenderer.prototype.constructor = EasleRenderer;
 
 EasleRenderer.prototype.postInit = function(){
+    this.setPlaying(false)
 
     this._dotArray = [];
     this._curveRadius = 24;
     //Create a stage by getting a reference to the canvas
 
 
-    this.stage = new createjs.Stage();
-
+    this.stage = new createjs.Stage("easleCanvas");
+    console.log(this.stage.canvas)
+    this.setCanvas( this.stage.canvas )
     this.stage.width = this.getWidth();
     this.stage.height = this.getHeight();
-    this.stage.canvas = this.getCanvas();
-    this._canvas.style.width = this.getWidth()+"px";
-    this._canvas.style.height = this.getHeight()+"px";
+    //this.stage.canvas =  //this.getCanvas();
+//    this._canvas.style.width = this.getWidth()+"px";
+//    this._canvas.style.height = this.getHeight()+"px";
 
-    //this.stage.enableMouseOver(10);
+    this.stage.enableMouseOver(10);
 
     //Background Container
     this.backGroundContainer = new createjs.Container();
@@ -50,13 +52,22 @@ EasleRenderer.prototype.postInit = function(){
 
     // this is added as a visual test for the bezier curve
     this.bezierContainer = new createjs.Container();
-    //this.stage.addChild(this.bezierContainer)
+    this.stage.addChild(this.bezierContainer)
     this.bezLine = new createjs.Shape();
     this.bezierContainer.addChild(this.bezLine);
+    this.testClicker = new createjs.Shape();
+    this.testClicker.graphics.beginFill("red").drawCircle(60, 60, 60);
+    this.bezierContainer.addChild(this.testClicker);
+    this.testClicker.addEventListener('click', function(e){ alert("Click")})
     renderTooltip.call(this);
     //Update stage will render next frame
     //this.stage.update();
-    this.setPlaying(false)
+
+
+    this.stage.on("stagemousemove", function(evt) {
+        console.log("stageX/Y: "+evt.stageX+","+evt.stageY); // always in bounds
+        console.log("rawX/Y: "+evt.rawX+","+evt.rawY); // could be < 0, or > width/height
+    });
 }
 
 EasleRenderer.prototype.clearContainer = function(container){
