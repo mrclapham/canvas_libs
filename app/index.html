@@ -5,19 +5,19 @@
     <link href='http://fonts.googleapis.com/css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Special+Elite' rel='stylesheet' type='text/css'>
     <style>
-        #chartHolder{
-            background-color:#ff00ff;
-            width:500px;
-            height:300px;
-        }
-        #chartHolder_es{
-            position: absolute;
-            top: 150px;
-            left:50px;
-        }
+        /*#chartHolder{*/
+            /*background-color:#ff00ff;*/
+            /*width:500px;*/
+            /*height:300px;*/
+        /*}*/
+        /*#chartHolder_es{*/
+            /*position: absolute;*/
+            /*top: 150px;*/
+            /*left:50px;*/
+        /*}*/
        #chartHolder0{
             position: absolute;
-            top: 750px;
+            top: 450px;
             left:50px;
         }
 
@@ -50,6 +50,10 @@
                                  steps : 12
                                }
 
+
+
+
+
             var data0 = new data_model(dataConfig).getData();
             var data1 = new data_model(dataConfig).getData();
 
@@ -58,13 +62,12 @@
 
 
 
-            console.log(data0)
+            //console.log(data0);
 
-        var _base = new BaseChart(targ0);
-       // console.log(_base.getData());
+        var _base = new BaseChart(targ1);
         _base.setData("Testing 1");
 
-        var _EasleRenderer = new EasleRenderer(targ1, data0);
+        var _EasleRenderer = new EasleRenderer(targ0, data0, {createCanvas: false, canvasId:"easleCanvas"});
 
             //-- functions
             function togglePlay1(e){
@@ -95,9 +98,10 @@
 
 <p>Easle js version</p>
 <!--<div id="chartHolder_es"><canvas id="easleCanvas" width="900px" height="600px"></canvas></div>-->
-<div id="chartHolder0"></div>
+<div id="chartHolder0"><canvas id="easleCanvas" width="800px" height = "500px"></canvas></div>
+
 <div id="chartHolder1"></div>
-<div id="chartHolder2"><canvas id="easleCanvas" width="800px" height = "500px"></canvas></div>
+<div id="chartHolder2"></div>
 
 
 

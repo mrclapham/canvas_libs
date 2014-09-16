@@ -1,10 +1,11 @@
 /**
  * Created by grahamclapham on 03/09/2014.
  */
-BaseChart= (function(target, opt_data){
-    var _scope = function(target, opt_data){
+BaseChart= (function(target, opt_data, opt_config){
+    var _scope = function(target, opt_data, opt_config){
         this.target = target,
-        this.createCanvas = false; // do you want an on the fly created canvas? It seems to cause problems with Easlejs.
+        this.opt_config = opt_config || {},
+        this.createCanvas = true; // do you want an on the fly created canvas? It seems to cause problems with Easlejs.
         this._canvas = null,
         this._ctx = null,
         this._backgroundColour = "#cccccc",
@@ -12,19 +13,33 @@ BaseChart= (function(target, opt_data){
         this._height = 400,
         this.data = opt_data || {name:"genericName"};
         this._playing = true;
-        this._canvasId = "chartCanvas_"+Math.ceil(Math.random()*1000);
+        this.canvasId = "chartCanvas_"+Math.ceil(Math.random()*1000);
+        //this.canvasId = null;
         _init.call(this);
     }
 
-    var _init = function(){
+    var _init = function(opt_config){
+        if(this.opt_config) _onConfigSet.call(this, this.opt_config);
+        console.log("CREATE CANVAS "+this.createCanvas);
         if(this.createCanvas) _onTargetSet.call(this);
+
         _initAnimation.call(this);
         this.postInit();
+    }
+
+
+    var _onConfigSet = function(){
+
+        for(var value in arguments[0]){
+            //Underscore properties are not to be changed.
+            if(String(value).charAt(0) != '_') this[value] = arguments[0][value];
+        }
     }
 
     var _initAnimation = function(){
         requestAnimationFrame(this.animate.bind(this));
     }
+
 
     var _onTargetSet = function(){
         this._canvas = document.createElement('canvas');
@@ -83,10 +98,10 @@ BaseChart= (function(target, opt_data){
             return this._canvas;
         },
         getCanvasId:function(){
-            return this._canvasId
+            return this.canvasId
         },
         setCanvasId:function(value){
-            this._canvasId = value;
+            this.canvasId = value;
             if(this.getCanvas()){
                 this.getCanvas().setAttribute("id", this.getCanvasId())
             }
@@ -120,6 +135,12 @@ BaseChart= (function(target, opt_data){
         },
         getTarget:function(){
             return this.target;
+        },
+        onConfigSet:function(){
+            for(var value in arguments[0]){
+                //Underscore properties are not to be changed.
+                if(String(value).charAt(0) != '_') this._private[value] = arguments[0][value];
+            }
         }
     }
 

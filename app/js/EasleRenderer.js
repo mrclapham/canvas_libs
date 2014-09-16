@@ -2,15 +2,16 @@
  * Created by grahamclapham on 03/09/2014.
  */
 
-function EasleRenderer(target, opt_data) {
-    BaseChart.call(this, target, opt_data); // call super constructor.
+function EasleRenderer(target, opt_data, opt_config) {
+    BaseChart.call(this, target, opt_data, opt_config); // call super constructor.
 }
 
 EasleRenderer.prototype = Object.create(BaseChart.prototype);
 EasleRenderer.prototype.constructor = EasleRenderer;
 
 EasleRenderer.prototype.postInit = function(){
-    this.setPlaying(false)
+    this.setPlaying(false);
+
 
     this._dotArray = [];
     this._curveRadius = 24;
@@ -52,28 +53,23 @@ EasleRenderer.prototype.postInit = function(){
 
     // this is added as a visual test for the bezier curve
     this.bezierContainer = new createjs.Container();
-    this.stage.addChild(this.bezierContainer)
+   // this.stage.addChild(this.bezierContainer)
     this.bezLine = new createjs.Shape();
     this.bezierContainer.addChild(this.bezLine);
-    this.testClicker = new createjs.Shape();
-    this.testClicker.graphics.beginFill("red").drawCircle(60, 60, 60);
-    this.bezierContainer.addChild(this.testClicker);
-    this.testClicker.addEventListener('click', function(e){ alert("Click")})
     renderTooltip.call(this);
     //Update stage will render next frame
     //this.stage.update();
 
-
-    this.stage.on("stagemousemove", function(evt) {
-        console.log("stageX/Y: "+evt.stageX+","+evt.stageY); // always in bounds
-        console.log("rawX/Y: "+evt.rawX+","+evt.rawY); // could be < 0, or > width/height
-    });
+//
+//    this.stage.on("stagemousemove", function(evt) {
+//        console.log("stageX/Y: "+evt.stageX+","+evt.stageY); // always in bounds
+//        console.log("rawX/Y: "+evt.rawX+","+evt.rawY); // could be < 0, or > width/height
+//    });
 }
 
 EasleRenderer.prototype.clearContainer = function(container){
     //TODO:
 }
-
 
 
 EasleRenderer.prototype.render = function(){
@@ -90,7 +86,6 @@ EasleRenderer.prototype.render = function(){
             __circle.dataIndex = i;
             __circle.cursor = "pointer";
             __circle.addEventListener("click", function(e){ onClicked.call(_this, e) });
-            //__circle.addEventListener("mouseover", handleClick);
             __circle.addEventListener("rollover", function(e){ onRolled.call(_this, e) });
             console.log(__circle)
             this.dotContainer.addChild(__circle);
@@ -100,6 +95,7 @@ EasleRenderer.prototype.render = function(){
         //onChange.call(_this, {})
         updateLine.call(this);
         drawBezier.call(this);
+        updateBackground.call(this);
         this.stage.update();
     }
 
@@ -131,10 +127,10 @@ var renderTooltip = function(){
     this._toolTipHtml = document.createElement('div')
 
 
-    var p=document.createElement("p")
+    this.p=document.createElement("p")
     this.tollText=document.createTextNode("Hello World");
-    p.appendChild(this.tollText);
-    this._toolTipHtml.appendChild(p);
+    this.p.appendChild(this.tollText);
+    this._toolTipHtml.appendChild(this.p);
     this.toolTipSpeed = .2
     this._toolTipHtml.style.cssText = 'position:absolute;' +
         'top:30px;' +
@@ -142,22 +138,28 @@ var renderTooltip = function(){
         'width:auto;' +
         'height:auto;' +
         'padding:5px;' +
-        '-webkit-transition: '+this.toolTipSpeed+'s ease-in;'+
-        '-moz-transition: '+this.toolTipSpeed+'s ease-in;'+
-        '-o-transition: '+this.toolTipSpeed+'s ease-in;'+
-        'transition: '+this.toolTipSpeed+'s ease-in;'+
+        '-webkit-transition: '+this.toolTipSpeed+'s ease-out;'+
+        '-moz-transition: '+this.toolTipSpeed+'s ease-out;'+
+        '-o-transition: '+this.toolTipSpeed+'s ease-out;'+
+        'transition: '+this.toolTipSpeed+'s ease-out;'+
         '-moz-border-radius:100px;' +
         'border:1px  solid #ddd;' +
         'background-color:rgba(0,0,0,.5);'+
         'display: block;'+
-        '-webkit-margin-before: 0;'+
-        '-webkit-margin-after: 0;'+
+        '-webkit-margin-before: 0px;'+
+        '-webkit-margin-after: 0px;'+
         '-webkit-margin-start: 0px;'+
         '-webkit-margin-end: 0px;'+
         '-moz-box-shadow: 0px 0px 8px  #fff;'
     ;
+    this.p.style.cssText = '-webkit-margin-before: 0px;'+
+                    '-webkit-margin-after: 0px;'+
+                    '-webkit-margin-start: 0px;'+
+                    '-webkit-margin-end: 0px;'+
+                    'color: #ff00ff'
 
-   // this.getTarget().appendChild(this._toolTipHtml)
+
+    this.getTarget().appendChild(this._toolTipHtml)
 
     console.log(this._toolTipHtml)
     this.stage.update();
@@ -167,11 +169,19 @@ var renderTooltip = function(){
 
 
 var showTooltip = function(index, e){
+    var point = e.target.localToGlobal(100, 100);
+    console.log("PONINT ",point.y)
+    console.log("TARG Y ",e.target.y)
 
-    this._toolTipHtml.style.left=  this.getData()[index].x+"px";
-    this._toolTipHtml.style.top=  this.getData()[index].y+"px";
 
-    this._toolTipHtml.innerHTML = "<p> the x value is"+this.getData()[index].x+"</p>"
+
+    this._toolTipHtml.style.left=  e.target.x+"px";
+    this._toolTipHtml.style.top=  e.target.y+"px";
+
+    this._toolTipHtml.innerHTML = "<p style='-webkit-margin-before: 0px; -webkit-margin-after: 0px; -webkit-margin-start: 0px; -webkit-margin-end: 0px; color: rgb(255, 255, 255);'> the y value is "+this.getData()[index].y+"</p>"
+
+
+
     this.tooltip.removeAllChildren();
     var _background = new createjs.Shape()
         _background.graphics.beginFill("#ff0000").drawRoundRect( 0, 0, 100, 50,  5 )
@@ -201,7 +211,10 @@ var initalRender = function(){
 var updateLine = function(){
     this.lineGraph.graphics.clear();
     this.lineGraph.graphics.moveTo(0, this.getHeight());
-    this.lineGraph.graphics.beginFill("#454545");
+    //this.lineGraph.graphics.beginFill("#454545");
+    this.lineGraph.graphics.beginLinearGradientFill(["#ff9933","#000000"], [0.1, 0.9], 0, 50, 0, this.getHeight())
+
+
     this.lineGraph.alpha = .4;
     for(var i=0;i<this._dotArray.length; i++){
        this.lineGraph.graphics.lineTo(this._dotArray[i].x, this._dotArray[i].y);
@@ -210,6 +223,14 @@ var updateLine = function(){
     this.lineGraph.graphics.lineTo(this._dotArray[ this._dotArray.length -1].x, this.getHeight());
     this.lineGraph.graphics.lineTo(0, this.getHeight());
 
+}
+
+var updateBackground = function(){
+    this.backGroundContainer.removeAllChildren();
+
+    this.backgroundFill = new createjs.Shape()
+    this.backgroundFill.graphics.beginFill(  "#000000"  ).drawRect(0, 0, this.getWidth(), this.getHeight());
+    this.backGroundContainer.addChild(this.backgroundFill)
 }
 
 
