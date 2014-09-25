@@ -32,6 +32,7 @@
     <!--<script type="text/javascript" src="js/bundle.js"></script>-->
     <script type="text/javascript" src="bower_components/easeljs/lib/easeljs-0.7.1.combined.js"></script>
     <script type="text/javascript" src="bower_components/TweenJS/lib/tweenjs-0.5.1.combined.js"></script>
+    <script type="text/javascript" src="bower_components/d3/d3.min.js"></script>
     <script type="text/javascript" src="js/scale.js"></script>
     <script type="text/javascript" src="js/data_model.js"></script>
     <script type="text/javascript" src="js/BaseChart.js"></script>
@@ -66,6 +67,8 @@
 
         var _base = new BaseChart(targ1);
         _base.setData("Testing 1");
+
+            BaseChart.importJSON("data/TradeViz.json")
 
         var _EasleRenderer = new EasleRenderer(targ0, data0, {createCanvas: false, canvasId:"easleCanvas"});
 

@@ -147,3 +147,19 @@ BaseChart= (function(target, opt_data, opt_config){
     return _scope;
 
 })();
+
+// Static functions...
+
+//BaseChart.importJSON = function(path){
+//
+//var oReq = new XMLHttpRequest();
+//oReq.onload = function(e){reqListener(e)};
+//oReq.open("get", path, true);
+//oReq.send();
+//
+//var reqListener =  function (e) {
+//    return e.target(e.responseText);
+//}
+//
+//
+//}
