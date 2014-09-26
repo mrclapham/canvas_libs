@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link href='http://fonts.googleapis.com/css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Special+Elite' rel='stylesheet' type='text/css'>
+    <style>
+        /*#chartHolder{*/
+            /*background-color:#ff00ff;*/
+            /*width:500px;*/
+            /*height:300px;*/
+        /*}*/
+        /*#chartHolder_es{*/
+            /*position: absolute;*/
+            /*top: 150px;*/
+            /*left:50px;*/
+        /*}*/
+       #chartHolder0{
+            position: absolute;
+            top: 450px;
+            left:50px;
+        }
+
+
+        body{
+            font-family: 'Droid Sans Mono', sans-serif ;
+        }
+    </style>
+
+    <script>    var createjs = window; // sets window as the createjs namespace (the object the classes will be defined in) </script>
+
+    <!--<script type="text/javascript" src="js/bundle.js"></script>-->
+    <script type="text/javascript" src="bower_components/easeljs/lib/easeljs-0.7.1.combined.js"></script>
+    <script type="text/javascript" src="bower_components/TweenJS/lib/tweenjs-0.5.1.combined.js"></script>
+    <script type="text/javascript" src="bower_components/d3/d3.min.js"></script>
+    <script type="text/javascript" src="js/scale.js"></script>
+    <script type="text/javascript" src="js/data_model.js"></script>
+    <script type="text/javascript" src="js/BaseChart.js"></script>
+    <script type="text/javascript" src="js/EasleRenderer.js"></script>
+    <script type="text/javascript" src="js/utils/JsonLoader.js"></script>
+    <script type="text/javascript" src="js/tradeVizD3.js"></script>
+    <script type="text/javascript">
+        onLoad = function(){
+
+            var targ0 = document.getElementById("chartHolder0");
+
+            //console.log(data0);
+            var __d3Chart;
+            var _loader = new JsonLoader();
+            _loader.listen(JsonLoader.LOAD_COMPLETE, onDataLoaded)
+            _loader.setPath("data/TradeViz.json");
+
+
+            function onDataLoaded(e){
+                console.log("The callback...", e.detail.data);
+                _d3Chart = new TradeVizD3("chartHolder0");
+                _d3Chart.setData(e.detail.data[0]);
+            }
+
+        }
+
+    </script>
+</head>
+<body onload="onLoad()">
+<button id="togglePlay0">toggle play</button>
+<button id="togglePlay1">toggle play</button>
+
+<button id="easleData0">Easle data 0</button>
+<button id="easleData1">Easle data 1</button>
+
+<p>Easle js version</p>
+<!--<div id="chartHolder_es"><canvas id="easleCanvas" width="900px" height="600px"></canvas></div>-->
+<div id="chartHolder0"></canvas></div>
+
+
+
+
+
+</body>
+</html>
