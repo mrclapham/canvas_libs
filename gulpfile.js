@@ -31,6 +31,14 @@ gulp.task('watchify', ['enable-watch-mode', 'browserify'])
 gulp.task('watch', ['watchify'], function () {
     // ... other watch code ...
 })
+// generate jsdocs
+gulp.task('jsdoc', function() {
+    if (isPluginEnabled('jsdoc')) {
+        return gulp.src(path.join('./src/scripts/**/*.js'))
+            .pipe(jsdoc.parser(jsdocOptions, 'jsdoc.json'))
+            .pipe(jsdoc.generator('./docs'));
+    }
+});
 
 // The default task (called when you run `gulp` from cli)
 gulp.task('default', ['browserify'])

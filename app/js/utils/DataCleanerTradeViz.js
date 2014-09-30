@@ -3,17 +3,19 @@
  */
 DataCleanerTradeViz = function(data){
 
-    var _cleanData
+    var _cleanData = data;
 
-    for(var i=0; i<this._data.DATES.length; i++){
-        var __date = TradeVizD3.stringToDate(this._data.DATES[i]);
-        this._data.DATES[i]= __date
-        this._data.VOLUME[i]= {volume:this._data.VOLUME[i], date:__date}
-        this._data.TICKS[i]= {volume:this._data.VOLUME[i], date:__date}
-        this._data.PRICE[i]= {volume:this._data.VOLUME[i], date:__date}
-
-
+    for(var i=0; i<_cleanData.DATES.length; i++){
+        var __date = TradeVizD3.stringToDate(_cleanData.DATES[i]);
+            _cleanData.DATES[i]= __date;
+            _cleanData.VOLUME[i]= {volume:_cleanData.VOLUME[i], date:__date};
+            _cleanData.TICKS[i]= {volume:_cleanData.TICKS[i], date:__date};
+            _cleanData.PRICE[i]= {volume:_cleanData.PRICE[i], date:__date};
     }
+    _cleanData.DATES = mergeSort(_cleanData.DATES)
+    _cleanData.VOLUME = mergeSortObj(_cleanData.VOLUME, 'date')
+    _cleanData.TICKS = mergeSortObj(_cleanData.TICKS, 'date')
+    _cleanData.PRICE = mergeSortObj(_cleanData.PRICE, 'date')
 
-
+    return _cleanData;
 }

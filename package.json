@@ -26,6 +26,7 @@
     "lodash": "^2.4.1"
   },
   "devDependencies": {
+    "gulp-jsdoc": "^0.1.4",
     "gulp-uglify": "^1.0.0",
     "gulp-watchify": "^0.2.0",
     "watchify": "^0.6.4"

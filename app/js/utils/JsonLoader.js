@@ -47,7 +47,7 @@ JsonLoader  = (function(path){
 
     var reqListener =  function (e) {
         this._data = e.target.responseText;
-        this.dispatchEvt(JsonLoader.LOAD_COMPLETE, {data:JSON.parse(this._data)} )
+        this.dispatchEvt(JsonLoader.LOAD_COMPLETE, { data:JSON.parse(this._data)} )
         return e.target.responseText;
     }
 

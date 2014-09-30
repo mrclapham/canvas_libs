@@ -17,8 +17,19 @@
         /*}*/
        #chartHolder0{
             position: absolute;
-            top: 450px;
+            top: 50px;
             left:50px;
+        }
+
+        .xTimeAxis .tick{
+            fill: #454545;
+            font-size: 10px;
+        }
+
+        .tickY{
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.25);
+            shape-rendering: crispEdges;
         }
 
 
@@ -38,6 +49,8 @@
     <script type="text/javascript" src="js/BaseChart.js"></script>
     <script type="text/javascript" src="js/EasleRenderer.js"></script>
     <script type="text/javascript" src="js/utils/JsonLoader.js"></script>
+    <script type="text/javascript" src="js/utils/mergeSort.js"></script>
+    <script type="text/javascript" src="js/utils/DataCleanerTradeViz.js"></script>
     <script type="text/javascript" src="js/tradeVizD3.js"></script>
     <script type="text/javascript">
         onLoad = function(){
