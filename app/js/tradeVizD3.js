@@ -13,6 +13,7 @@ TradeVizD3 = (function(targID){
         this._data          = null;
         this._lines         = null;
         this._dots          = null;
+        this._brush         = null;
 
         this._vScale        = null;
         this._vMin          = null;
@@ -114,6 +115,31 @@ TradeVizD3 = (function(targID){
 
     }
 
+    var _intBrush = function(){
+        this._brush = new d3.svg.brush()
+            .x(this._xScale)
+            .on("brush", _brushFunction)
+
+        this._view._svg
+            .append("g")
+            .attr("class", "x brush")
+            .call(this._brush)
+            .selectAll("rect")
+            .attr("y", -6)
+            .attr("height", 200);
+    }
+
+    var _brushFunction = function(){
+        console.log("BRUSHED");
+        /*
+
+         x.domain(brush.empty() ? x2.domain() : brush.extent());
+         focus.select(".area").attr("d", area);
+         focus.select(".x.axis").call(xAxis);
+
+         */
+    }
+
     var _initCanavas = function(){
         this._canvas = document.createElement('canvas');
         console.log(this._canvas)
@@ -127,6 +153,9 @@ TradeVizD3 = (function(targID){
 
         var clean = DataCleanerTradeViz(this._data);
         console.log("CLEAN DATA ++++++++++++++++ ",clean);
+        for(var i = 0; i< clean.TICKS.length; i++){
+            console.log( ColourRamp.getColour( clean.TICKS[i].volume) );
+        }
 //        for(var i=0; i<this._data.DATES.length; i++){
 //            this._data.DATES[i]= TradeVizD3.stringToDate(this._data.DATES[i]);
 //        }
@@ -160,6 +189,7 @@ TradeVizD3 = (function(targID){
         _drawLine.call(this);
         _initTimeAxis.call(this);
         _drawSentiment.call(this);
+        _intBrush.call(this);
 
     };
     var _drawLine = function(){

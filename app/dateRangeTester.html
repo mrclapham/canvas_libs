@@ -2,7 +2,10 @@
 <html>
 <head>
     <title></title>
+
+    <script type="text/javascript" src="js/utils/ColourRamp.js"></script>
     <script type="text/javascript" src="js/utils/dateScale.js"></script>
+
 </head>
 <body>
     <script type="text/javascript">
@@ -15,7 +18,13 @@
         _endDate.setYear(2014);
 
     var _dateScale = new DateScale([_startData, _endDate], [0, 12]);
-        console.log();
+
+        var _ticks = _dateScale.getMonthTicks()
+        console.log("TICKS ", _ticks );
+
+        for(var i=0; i < _ticks.length; i++){
+            console.log(_ticks[i])
+        }
     </script>
 </body>
 </html>

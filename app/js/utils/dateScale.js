@@ -102,7 +102,7 @@ DateScale.makeMonthArray = function(startMonth, endMonth){
     return returnArray;
 }
 
-DateScale.timeDivision=function(milliseconds){
+DateScale.timeDivision = function(milliseconds){
     var returnObject =  {}
     var minutesPerDay = 60 * 24;
     var seconds = milliseconds / 1000;
@@ -115,9 +115,28 @@ DateScale.timeDivision=function(milliseconds){
     return returnObject;
 }
 
-DateScale.getMonthTicks = function(){
-    var _ret = []
+DateScale.prototype.getMonthTicks = function(){
+    var _ret = [];
 
+    for(var i=0; i<this.yearArray.length; i++){
+        console.log("ARRAY LENGTH ",this.yearArray[i].months.length)
+        // the scaled division -
+
+        for(var ii=0; ii<this.yearArray[i].months.length; ii++){
+            var _pushObj = {}
+            _pushObj.month = this.yearArray[i].months[ii];
+            _pushObj.year = this.yearArray[i].year;
+            _ret.push( _pushObj );
+        }
+    }
+    var totalMonths = _ret.length;
+    var _division = (this.range[1] - this.range[0]) / totalMonths;
+    for(var i = 0; i<totalMonths; i++){
+        _ret[i].tick = _division * i;
+    }
+
+    console.log("THE _division "+_division)
+    return _ret;
 
 }
 

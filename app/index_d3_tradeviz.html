@@ -44,6 +44,9 @@
     <script type="text/javascript" src="bower_components/easeljs/lib/easeljs-0.7.1.combined.js"></script>
     <script type="text/javascript" src="bower_components/TweenJS/lib/tweenjs-0.5.1.combined.js"></script>
     <script type="text/javascript" src="bower_components/d3/d3.min.js"></script>
+
+    <script type="text/javascript" src="js/utils/ColourRamp.js"></script>
+
     <script type="text/javascript" src="js/scale.js"></script>
     <script type="text/javascript" src="js/data_model.js"></script>
     <script type="text/javascript" src="js/BaseChart.js"></script>
@@ -60,7 +63,7 @@
             //console.log(data0);
             var __d3Chart;
             var _loader = new JsonLoader();
-            _loader.listen(JsonLoader.LOAD_COMPLETE, onDataLoaded)
+            _loader.listen(JsonLoader.LOAD_COMPLETE, onDataLoaded);
             _loader.setPath("data/TradeViz.json");
 
 
@@ -85,7 +88,10 @@
 <!--<div id="chartHolder_es"><canvas id="easleCanvas" width="900px" height="600px"></canvas></div>-->
 <div id="chartHolder0"></canvas></div>
 
+<div id = "colourHolder">
 
+
+</div>
 
 
 
