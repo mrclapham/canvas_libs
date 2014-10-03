@@ -56,6 +56,63 @@
     <script type="text/javascript" src="js/utils/DataCleanerTradeViz.js"></script>
     <script type="text/javascript" src="js/tradeVizD3.js"></script>
     <script type="text/javascript">
+
+
+
+        function clone(src) {
+            function mixin(dest, source, copyFunc) {
+                var name, s, i, empty = {};
+                for(name in source){
+                    // the (!(name in empty) || empty[name] !== s) condition avoids copying properties in "source"
+                    // inherited from Object.prototype.	 For example, if dest has a custom toString() method,
+                    // don't overwrite it with the toString() method that source inherited from Object.prototype
+                    s = source[name];
+                    if(!(name in dest) || (dest[name] !== s && (!(name in empty) || empty[name] !== s))){
+                        dest[name] = copyFunc ? copyFunc(s) : s;
+                    }
+                }
+                return dest;
+            }
+
+            if(!src || typeof src != "object" || Object.prototype.toString.call(src) === "[object Function]"){
+                // null, undefined, any non-object, or function
+                return src;	// anything
+            }
+            if(src.nodeType && "cloneNode" in src){
+                // DOM Node
+                return src.cloneNode(true); // Node
+            }
+            if(src instanceof Date){
+                // Date
+                return new Date(src.getTime());	// Date
+            }
+            if(src instanceof RegExp){
+                // RegExp
+                return new RegExp(src);   // RegExp
+            }
+            var r, i, l;
+            if(src instanceof Array){
+                // array
+                r = [];
+                for(i = 0, l = src.length; i < l; ++i){
+                    if(i in src){
+                        r.push(clone(src[i]));
+                    }
+                }
+                // we don't clone functions for performance reasons
+                //		}else if(d.isFunction(src)){
+                //			// function
+                //			r = function(){ return src.apply(this, arguments); };
+            }else{
+                // generic objects
+                r = src.constructor ? new src.constructor() : {};
+            }
+            return mixin(r, src, clone);
+
+        }
+
+///////////////////////////////////////////////
+
         onLoad = function(){
 
             var targ0 = document.getElementById("chartHolder0");
@@ -68,9 +125,26 @@
 
 
             function onDataLoaded(e){
-                console.log("The callback...", e.detail.data);
-                _d3Chart = new TradeVizD3("chartHolder0");
-                _d3Chart.setData(e.detail.data[0]);
+//                _d3Chart = new TradeVizD3("chartHolder0");
+//                _d3Chart.setData(e.detail.data[0]);
+                var _rawData = e.detail.data[0];
+
+
+                for(var i=0; i<55; i++){
+                    var _div = document.createElement('div')
+                    _div.setAttribute('id', "div_"+i);
+                    console.log( document.getElementById('chartHolder0') )
+
+                    document.getElementById('chartHolder0').appendChild(_div);
+
+                    var _clone = clone(_rawData)
+
+                    console.log(_clone)
+                   var d3Chart_new = new TradeVizD3("div_"+i);
+                    d3Chart_new.setData( _clone );
+
+                    console.log(d3Chart_new);
+                }
             }
 
         }
