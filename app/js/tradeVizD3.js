@@ -22,6 +22,7 @@ TradeVizD3 = (function(targID){
         this._vDomainMax    = null;
 
         this._xScale        = null;
+        this._brushXScale   = null;
         this._xMin          = null;
         this._xMax          = null;
         this._xDomainMin    = null;
@@ -33,14 +34,12 @@ TradeVizD3 = (function(targID){
         _init.call(this);
     }
     //----
-
     _scope.prototype = {
         setData:function(value){
             this._data = value;
             _onDataSet.call(this);
         }
     };
-
     //-- callbacks
     var _init = function(){
 
@@ -74,32 +73,26 @@ TradeVizD3 = (function(targID){
     };
 
     var _initTimeAxis = function(){
+
         var _this = this;
         this._view._xAxis = d3.svg.axis()
             .scale(this._xScale)
             .orient("bottom")
-            .ticks(d3.time.months,1)
-
-//
+            .ticks(d3.time.months,1);
 
         var _this = this
         this._view._xAxisHolder = this._view._svg.append("g")
             .attr("transform","translate("+this.padding.left+"," + ( _this.height - _this.padding.bottom ) + ")")
-            .attr("class","xTimeAxis")
-
+            .attr("class", "x axis")
+            .attr("class","xTimeAxis");
 
         this._view._xTickHolder = this._view._svg.append("g")
             .attr("transform","translate("+this.padding.left+"," + ( _this.height - _this.padding.bottom ) + ")")
             .attr("class","xTimeAxisTicks")
 
-        this._view._xAxisHolder
-            .call(_this._view._xAxis);
-
 
         this._view._xAxisTicks =  this._view._xTickHolder.selectAll('.tickY')
             .data(_this._xScale.ticks(d3.time.months))
-
-        console.log( _this._view._xAxisHolder)
 
         this._view._xAxisTicks
             .enter()
@@ -112,13 +105,26 @@ TradeVizD3 = (function(targID){
             .attr("y2", 300 )
             .attr("class", "yTickLine" )
 
+        this._view._xAxisTicks
+            .exit()
+            .remove();
+
+        _updateTimeAxis.call(this);
 
     }
 
+    var _updateTimeAxis = function(){
+        var _this = this
+        this._view._xAxisHolder
+            .call(_this._view._xAxis);
+    }
+
     var _intBrush = function(){
+        var _this = this;
+
         this._brush = new d3.svg.brush()
-            .x(this._xScale)
-            .on("brush", _brushFunction)
+            .x(this._brushXScale)
+            .on("brush", function(){ _brushFunction.call(_this);  })
 
         this._view._svg
             .append("g")
@@ -129,37 +135,24 @@ TradeVizD3 = (function(targID){
             .attr("height", 200);
     }
 
-    var _brushFunction = function(){
-        console.log("BRUSHED");
-        /*
+    var _brushFunction = function(e){
 
-         x.domain(brush.empty() ? x2.domain() : brush.extent());
-         focus.select(".area").attr("d", area);
-         focus.select(".x.axis").call(xAxis);
+        this._xScale.domain(this._brush.empty() ? this._xScale.domain() : this._brush.extent());
+         //focus.select(".area").attr("d", area);
+         //focus.select(".x.axis").call(this._view._xAxis);
+//        var _xAx = this._view._xAxisHolder
+//                    .call(this._view._xAxis);
+        _updateTimeAxis.call(this);
+        _drawLine.call(this);
 
-         */
-    }
-
-    var _initCanavas = function(){
-        this._canvas = document.createElement('canvas');
-        console.log(this._canvas)
-        console.log(this._target)
-        this._target.appendChild(this._canvas);
     }
 
     var _onDataSet = function(){
-
         console.log("this._data.DATES" , this._data.DATES[0]);
-
         var clean = DataCleanerTradeViz(this._data);
         console.log("CLEAN DATA ++++++++++++++++ ",clean);
-        for(var i = 0; i< clean.TICKS.length; i++){
-            console.log( ColourRamp.getColour( clean.TICKS[i].volume) );
-        }
-//        for(var i=0; i<this._data.DATES.length; i++){
-//            this._data.DATES[i]= TradeVizD3.stringToDate(this._data.DATES[i]);
-//        }
 
+        this.data = clean;
         this._vDomainMin    = this._data.MINVOL;
         this._vDomainMax    = this._data.MAXVOL;
         this._vMin          = this.padding.left;
@@ -170,7 +163,7 @@ TradeVizD3 = (function(targID){
         this._xMin          = this.padding.left;
         this._xMax          = this.width-this.padding.right;
 
-        this._xScale        = d3.time.scale()
+        this._xScale = this._brushXScale         = d3.time.scale()
                                 .domain([this._data.DATES[0], this._data.DATES[ this._data.DATES.length-1 ]])
                                 .range([this.width - this.padding.left - this.padding.right, 0]);
 
@@ -178,28 +171,31 @@ TradeVizD3 = (function(targID){
                                         .domain([this._vDomainMin, this._vDomainMax])
                                         .range([this.height - this.padding.top - this.padding.bottom, 0]);
 
-        console.log("================================ ", this._vScale(100) )
-
-        //x = d3.scale.linear().domain([0, scope.model.dataLengthMax() - 1]).range([0, scope.model.sw()]);
-
         _draw.call(this);
     };
+
     var _draw = function(){
-        console.log(this._data.MAXVOL, this._data.MINVOL);
         _drawLine.call(this);
         _initTimeAxis.call(this);
         _drawSentiment.call(this);
         _intBrush.call(this);
-
     };
+
+    var _update = function(){
+
+    }
+
     var _drawLine = function(){
         // The Volume line
-    console.log("drawline called", this._data);
+
+        console.log("drawline called ")
+        //console.log(this._xScale.domain)
+
         var _this = this;
-        var _area = d3.svg.area()
+        var _volumeArea = d3.svg.area()
             .interpolate("cardinal")
             .x(function(d, i) {
-               // console.log(" DATE ", _this._xScale(d.date) );
+                console.log(" DATE ", _this._xScale(d.date) );
                 return  _this._xScale(d.date) ;
             })
             .y0(function(d) {
@@ -215,16 +211,25 @@ TradeVizD3 = (function(targID){
                                             .enter().append("path")
                                             .style("fill", '#cccccc')
                                             .attr("class", "areas")
-                                            .attr("d", _area);
+                                            .attr("d", _volumeArea);
 
+        var _colourBars = this._view._linesHolder.selectAll('coloBar')
+            .data(this.data.TICKS)
+            .enter().append('rect')
+            .attr("x", function(d, i) {
+                return  _this._xScale(d.date) ;
+            })
+            .attr("width", 4)
+            .attr("y", 10)
+
+            .attr("height", function(d,i) { return 60 })
+            .attr('fill', function(d,i){return ColourRamp.getColour( d.volume)})
+        //ColourRamp.getColour( clean.TICKS[i].volume)
         }
 
+    /// COLOUR TEST
         var _drawSentiment = function(){
-
-
-
          }
-
 
     return _scope;
 })();
@@ -238,5 +243,4 @@ TradeVizD3.stringToDate = function(string){
     _date.setFullYear(_arr[2])
 
     return _date
-
 }
