@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="bower_components/d3/d3.min.js"></script>
+    <script type="text/javascript" src="js/TradeVizPulse.js"></script>
+    <title></title>
+</head>
+<body onload="onLoaded()">
+<div id="holder">
+
+</div>
+
+</body>
+</html>
+
+<script type="text/javascript">
+    var onLoaded = function(){
+        var _tradeViz = new TradeVizPulse("holder");
+        _tradeViz.setData({stuff:"Sruff"})
+        console.log(_tradeViz);
+    }
+</script>

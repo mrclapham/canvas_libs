@@ -12,6 +12,7 @@ TradeVizD3 = (function(targID){
         this._canvas        = null;
         this._data          = null;
         this._lines         = null;
+        this._volumeArea    = null;
         this._dots          = null;
         this._brush         = null;
 
@@ -136,7 +137,6 @@ TradeVizD3 = (function(targID){
     }
 
     var _brushFunction = function(e){
-
         this._xScale.domain(this._brush.empty() ? this._xScale.domain() : this._brush.extent());
          //focus.select(".area").attr("d", area);
          //focus.select(".x.axis").call(this._view._xAxis);
@@ -177,7 +177,7 @@ TradeVizD3 = (function(targID){
     var _draw = function(){
         _drawLine.call(this);
         _initTimeAxis.call(this);
-        _drawSentiment.call(this);
+       // _drawSentiment.call(this);
         _intBrush.call(this);
     };
 
@@ -192,7 +192,7 @@ TradeVizD3 = (function(targID){
         //console.log(this._xScale.domain)
 
         var _this = this;
-        var _volumeArea = d3.svg.area()
+        this._volumeArea = d3.svg.area()
             .interpolate("cardinal")
             .x(function(d, i) {
                 console.log(" DATE ", _this._xScale(d.date) );
@@ -206,29 +206,32 @@ TradeVizD3 = (function(targID){
                 return _this.height-_this.padding.bottom;
             });
 
+
         var arr =   this._view._linesHolder.selectAll('path.areas')
                                             .data([this._data.VOLUME])
                                             .enter().append("path")
                                             .style("fill", '#cccccc')
                                             .attr("class", "areas")
-                                            .attr("d", _volumeArea);
+                                            .attr("d", this._volumeArea);
 
-        var _colourBars = this._view._linesHolder.selectAll('coloBar')
-            .data(this.data.TICKS)
-            .enter().append('rect')
-            .attr("x", function(d, i) {
-                return  _this._xScale(d.date) ;
-            })
-            .attr("width", 4)
-            .attr("y", 10)
-
-            .attr("height", function(d,i) { return 60 })
-            .attr('fill', function(d,i){return ColourRamp.getColour( d.volume)})
-        //ColourRamp.getColour( clean.TICKS[i].volume)
+        console.log(arr);
+       // _drawSentiment.call(this);
         }
 
     /// COLOUR TEST
         var _drawSentiment = function(){
+            var _this = this;
+            var _colourBars = this._view._linesHolder.selectAll('coloBar')
+                .data(this.data.TICKS)
+                .enter().append('rect')
+                .attr("x", function(d, i) {
+                    return  _this._xScale(d.date) ;
+                })
+                .attr("width", 4)
+                .attr("y", 10)
+
+                .attr("height", function(d,i) { return 60 })
+                .attr('fill', function(d,i){return ColourRamp.getColour( d.volume)})
          }
 
     return _scope;
