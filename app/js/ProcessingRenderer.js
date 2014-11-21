@@ -11,7 +11,7 @@ function ProcessingRenderer(target, opt_data, opt_config) {
     var s = function( sketch ) {
 
         var gray = "0xff00ff";
-
+        var _xp = 0;
         sketch.setup = function() {
             sketch.createCanvas(600, 400);
             sketch.background(255,244,0);
@@ -21,7 +21,8 @@ function ProcessingRenderer(target, opt_data, opt_config) {
             sketch.background(255,244,0);
 
             sketch.rect(sketch.width/2, sketch.height/2, 100, 200);
-            ellipse(50, 50, 80, 80);
+            sketch.ellipse(_xp, 50, 80, 80);
+            _xp++;
         }
 
         sketch.mousePressed = function() {
