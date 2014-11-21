@@ -6,6 +6,28 @@
 <body>
 <div id="mocha"></div>
 <script src="../app/bower_components/mocha/mocha.js"></script>
+
+
+<script type="text/javascript" src="../app/bower_components/easeljs/lib/easeljs-0.7.1.combined.js"></script>
+<script type="text/javascript" src="../app/bower_components/TweenJS/lib/tweenjs-0.5.1.combined.js"></script>
+<script type="text/javascript" src="../app/bower_components/d3/d3.min.js"></script>
+
+<script type="text/javascript" src="../app/js/utils/ColourRamp.js"></script>
+
+<script type="text/javascript" src="../app/js/scale.js"></script>
+<script type="text/javascript" src="../app/js/data_model.js"></script>
+<script type="text/javascript" src="../app/js/BaseChart.js"></script>
+<script type="text/javascript" src="../app/js/EasleRenderer.js"></script>
+<script type="text/javascript" src="../app/js/ProcessingRenderer.js"></script>
+
+<script type="text/javascript" src="../app/js/utils/JsonLoader.js"></script>
+<script type="text/javascript" src="../app/js/utils/mergeSort.js"></script>
+<script type="text/javascript" src="../app/js/utils/DataCleanerTradeViz.js"></script>
+<script type="text/javascript" src="../app/js/tradeVizD3.js"></script>
+
+
+
+
 <script src="../app/js/TradeVizPulse.js"></script>
 <script>mocha.setup('bdd')</script>
 <script src="../app/bower_components/chai/chai.js"></script>
@@ -21,6 +43,7 @@
 <script src="spec/test.js"></script>
 
 <script>mocha.run()</script>
+<div id="dom-holder"></div>
 </body>
 
 </html>
