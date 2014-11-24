@@ -22,7 +22,6 @@ BaseChart= (function(target, opt_data, opt_config){
         if(this.opt_config) _onConfigSet.call(this, this.opt_config);
         console.log("CREATE CANVAS "+this.createCanvas);
         if(this.createCanvas) _onTargetSet.call(this);
-
         _initAnimation.call(this);
         this.postInit();
     }
@@ -150,16 +149,19 @@ BaseChart= (function(target, opt_data, opt_config){
 
 // Static functions...
 
-BaseChart.importJSON = function(path){
-
-var oReq = new XMLHttpRequest();
-oReq.onload = function(e){reqListener(e)};
-oReq.open("get", path, true);
-oReq.send();
-
-var reqListener =  function (e) {
-    return e.target(e.responseText);
-}
-
-
-}
+//BaseChart.importJSON = function(path){
+//
+//var oReq = new XMLHttpRequest();
+//oReq.onload = function(e){reqListener(e)};
+//oReq.open("get", path, true);
+//oReq.send();
+//
+//var reqListener =  function (e) {
+//    console.log(e.target)
+//    console.log(e.responseText)
+//    return e.target(e.responseText);
+//    //return e.target;
+//}
+//
+//
+//}

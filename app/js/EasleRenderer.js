@@ -12,21 +12,15 @@ EasleRenderer.prototype.constructor = EasleRenderer;
 EasleRenderer.prototype.postInit = function(){
     this.setPlaying(false);
 
-
     this._dotArray = [];
     this._curveRadius = 24;
     //Create a stage by getting a reference to the canvas
-
 
     this.stage = new createjs.Stage("easleCanvas");
     console.log(this.stage.canvas)
     this.setCanvas( this.stage.canvas )
     this.stage.width = this.getWidth();
     this.stage.height = this.getHeight();
-    //this.stage.canvas =  //this.getCanvas();
-//    this._canvas.style.width = this.getWidth()+"px";
-//    this._canvas.style.height = this.getHeight()+"px";
-
     this.stage.enableMouseOver(10);
 
     //Background Container
@@ -49,7 +43,6 @@ EasleRenderer.prototype.postInit = function(){
 
     this.tooltip.x = 100;
     this.tooltip.y = 100
-
 
     // this is added as a visual test for the bezier curve
     this.bezierContainer = new createjs.Container();
@@ -87,7 +80,6 @@ EasleRenderer.prototype.render = function(){
             __circle.cursor = "pointer";
             __circle.addEventListener("click", function(e){ onClicked.call(_this, e) });
             __circle.addEventListener("rollover", function(e){ onRolled.call(_this, e) });
-            console.log(__circle)
             this.dotContainer.addChild(__circle);
             this._dotArray.push(__circle)
         }
@@ -118,6 +110,7 @@ EasleRenderer.prototype.update = function(){
 }
 
 var onRolled = function(e){
+
     console.log("onRolled", e.target.dataIndex)
     var index = e.target.dataIndex
     showTooltip.call(this, index, e)
@@ -125,8 +118,6 @@ var onRolled = function(e){
 
 var renderTooltip = function(){
     this._toolTipHtml = document.createElement('div')
-
-
     this.p=document.createElement("p")
     this.tollText=document.createTextNode("Hello World");
     this.p.appendChild(this.tollText);
@@ -160,8 +151,6 @@ var renderTooltip = function(){
 
 
     this.getTarget().appendChild(this._toolTipHtml)
-
-    console.log(this._toolTipHtml)
     this.stage.update();
 
 }

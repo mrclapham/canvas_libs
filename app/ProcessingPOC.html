@@ -12,7 +12,7 @@
 
 
         function onLoaded(){
-            var _targ = document.getElementById("proRenderer");
+            var _targ = document.getElementById("processDiv");
             var _pro = new ProcessingRenderer(_targ);
 
             console.log("Traget", _targ)
@@ -21,5 +21,6 @@
 </head>
 <body onload="onLoaded()">
 <div id="proRendererDiv"><canvas id ="proRenderer"></canvas></div>
+<div id="processDiv"></canvas></div>
 </body>
 </html>

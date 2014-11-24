@@ -53,9 +53,6 @@
                                }
 
 
-
-
-
             var data0 = new data_model(dataConfig).getData();
             var data1 = new data_model(dataConfig).getData();
 
@@ -63,13 +60,11 @@
             var dataR1 = new data_model().getRegualaData(12);
 
 
-
             //console.log(data0);
 
         var _base = new BaseChart(targ1);
         _base.setData("Testing 1");
 
-            BaseChart.importJSON("data/TradeViz.json")
 
         var _EasleRenderer = new EasleRenderer(targ0, data0, {createCanvas: false, canvasId:"easleCanvas"});
 
@@ -103,7 +98,7 @@
 <p>Easle js version</p>
 <!--<div id="chartHolder_es"><canvas id="easleCanvas" width="900px" height="600px"></canvas></div>-->
 <div id="chartHolder0"><canvas id="easleCanvas" width="800px" height = "500px"></canvas></div>
-<div id="chartHolder0"><canvas id="processingCanvas" width="800px" height = "500px"></canvas></div>
+<div id="chartHolder1"><canvas id="processingCanvas" width="800px" height = "500px"></canvas></div>
 
 <div id="chartHolder1"></div>
 <div id="chartHolder2"></div>
