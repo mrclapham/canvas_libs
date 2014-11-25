@@ -195,9 +195,37 @@ describe("Tests for Processing renderer", function(){
         })
 
 
-        it("_sketch.setColor([100,200,200]) should throw an Error", function(){
-s
-            expect( _sketch.setColor(_colourArray) ).to.not.be.null;
+        it("_sketch.setColor([100,200,200]) should throw an Error if the array is shorter than 3", function(){
+            var fn1 = function(){_sketch.setColor([100,100]) }
+            var fn2 = function(){_sketch.setColor([100]) }
+            var fn3 = function(){_sketch.setColor([100,100,100,200]) }
+            //var fn5 = function(){_sketch.setColor(["one","100","100","300"]) }
+            expect( fn1 ).to.throw(Error);
+            expect( fn2 ).to.throw(Error);
+            //expect( fn3 ).to.throw(Error);
+            //expect( fn5 ).to.throw(Error);
+        })
+
+        it("_sketch.setColor([100,200,200]) should throw an Error if arguments may not be parsed to an int", function(){
+            var fn5 = function(){_sketch.setColor(["one","100","100","300"]) }
+            expect( fn5 ).to.throw(Error);
+        })
+
+        it("_sketch.setColor([100,200,200]) should NOT throw an Error if arguments may not be parsed to an int", function(){
+            var fn5 = function(){_sketch.setColor(["100","100","100","300"]) }
+            expect( fn5 ).to.not.throw(Error);
+        })
+
+
+        it("_sketch.setColor([100,200,200]) should NOT throw an Error", function(){
+            var fn0 = function(){_sketch.setColor([100,100,100]) }
+            var fn4 = function(){_sketch.setColor([100,100,100,200]) }
+            var fn6 = function(){_sketch.setColor(["100","100","100","300"]) }
+
+            expect( fn0 ).to.throw(Error);
+            expect( fn6 ).to.not.throw(Error);
+            expect( fn4 ).to.not.throw(Error);
+
         })
 
 

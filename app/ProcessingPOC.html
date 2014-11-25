@@ -3,6 +3,8 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
+    <script type="text/javascript" src="js/data_model.js"></script>
+
     <script type="text/javascript" src="bower_components/p5js/lib/p5.js"></script>
     <script type="text/javascript" src="js/BaseChart.js"></script>
 
@@ -12,8 +14,24 @@
 
 
         function onLoaded(){
+            var dataConfig =  {  yMin : 0,
+                yMax: 100,
+                xStart: 0,
+                xEnd: 900,
+                steps : 12
+            }
+            var data0 = new data_model(dataConfig).getData();
+            var data1 = new data_model(dataConfig).getData();
+
             var _targ = document.getElementById("processDiv");
             var _pro = new ProcessingRenderer(_targ);
+
+            _pro.setData(data1);
+
+            this.setInterval(function(){
+                _pro.getData() ==  data0 ?   _pro.setData(data1) : _pro.setData(data0);
+
+            }, 2500)
 
             console.log("Traget", _targ)
         }
