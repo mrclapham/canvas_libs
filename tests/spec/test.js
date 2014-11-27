@@ -239,5 +239,63 @@ describe("Tests for Processing renderer", function(){
     })
 
 
+var test_data1 = [
+    {x:0, y:100},
+    {x:10, y:200},
+    {x:20, y:300},
+    {x:30, y:400},
+    {x:40, y:500},
+    {x:50, y:600},
+    {x:60, y:700},
+    {x:70, y:800},
+    {x:90, y:900},
+    {x:100, y:1000},
+    {x:110, y:1100},
+    {x:120, y:1200},
+]
+var _scale;
+
+    beforeEach(function(){
+        //
+    })
+describe("Tests for the Scale Domain utility" ,function(){
+        it("Scale should instatiate", function(){
+            expect(_scale).to.not.be.null;
+        })
+
+    it("_scale.map(3) should return '30' whan Scale([0,10],[0,100])", function(){
+        _scale = new Scale([0,10],[0,100])
+        expect(_scale.map(3)).to.equal(30);
+    })
+
+    it("_scale.map(15) should return '50' when Scale([0,30],[0,100])", function(){
+        _scale = new Scale([0,30],[0,100])
+        expect(_scale.map(15)).to.equal(50);
+    })
+
+    it("_scale.map(15) should return '50' when Scale([10,30],[0,100])", function(){
+        _scale = new Scale([10,30],[0,100])
+        expect(_scale.map(20)).to.equal(50);
+    })
+
+
+    it("1. _scale.map(20) should return '50' when Scale([100,500],[10,30])", function(){
+        _scale = new Scale([100,500],[10,350])
+        expect(_scale.map(100)).to.equal(10);
+    })
+
+    it("2. _scale.map(300) should return '180' when Scale([100,500],[10,30])", function(){
+        _scale = new Scale([100,500],[10,350])
+        expect(_scale.map(300)).to.equal(180);
+    })
+
+    it("3 ._scale.map(20) should return '50' when Scale([100,500],[10,30])", function(){
+        _scale = new Scale([100,500],[10,350])
+        expect(_scale.map(500)).to.equal(350);
+    })
+
+
+
+    })
 
 })

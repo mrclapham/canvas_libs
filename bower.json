@@ -25,7 +25,8 @@
     "two": "~0.4.0",
     "lodash": "^2.4.1",
     "TweenJS": "*",
-    "p5js": "~0.3.11"
+    "p5js": "~0.3.11",
+    "underscore": "~1.7.0"
   },
   "devDependencies": {
     "chai": "~1.9.2",

@@ -10,26 +10,32 @@ var OLS = (function(data){
         },
         getData : function(){
             return this._data;
+        },
+            getAlphaBeta:function(){
+            return calculate.call(this, this._data);
+            }
         }
-        }
-
+//------
         var calculate = function(data){
-            var xMean, yMean, n, alpha, beta;
+            var xMean, yMean, n, alpha, beta, sXiSquared, sXiYi;
             n = data.length;
             xMean = 0;
+            yMean = 0;
+            sXiSquared=0;
+            sXiYi = 0;
             for(var i=0; i<data.length; i++){
                 xMean += data[i].x;
+                sXiSquared += Math.pow(data[i].x,2);
+                sXiYi += data[i].x*data[i].y;
+                yMean += data[i].y;
             }
             xMean = xMean/n;
-
-            yMean = 0;
-            for(var ii=0; ii<data.length; ii++){
-                yMean += data[ii].y;
-            }
             yMean = yMean/n;
 
-            console.log("xMean ",xMean)
-            console.log("yMean ",yMean)
+            beta = (sXiYi - n*xMean*yMean)/(sXiSquared-n*Math.pow(xMean,2));
+            alpha = yMean - beta*xMean;
+
+            return {alpha:alpha, beta:beta}
         }
         calculate.call(this, this._data);
 
@@ -37,10 +43,6 @@ var OLS = (function(data){
 
     return _scope;
 })();
-
-
-
-
 
 
 var s = function( sketch ) {
@@ -57,6 +59,7 @@ var s = function( sketch ) {
     sketch._height = 300;
     sketch._leftOffset = 15;
     sketch._topOffset = 30;
+    sketch._alphaBeta = null;
 
     sketch.setup = function() {
         sketch._canvas = sketch.createCanvas(sketch._width, sketch._height);
@@ -75,6 +78,10 @@ var s = function( sketch ) {
         }
     }
 
+    sketch.scale = function(){
+
+    } // there is a scale function in the base class but, due to the way p5 works it doesn't inherit that easily.
+
 
     sketch.draw = function() {
         sketch.background(sketch._bg_r,sketch._bg_g,sketch._bg_b,sketch._bg_a);
@@ -88,7 +95,6 @@ var s = function( sketch ) {
         grd.addColorStop(1, 'rgba(255,128,0,0)');
         _context.fillStyle = grd;
         _context.fill();
-
 
         //sketch.fill(99, 99, 99, 105);
         sketch.drawGridLines()
@@ -104,6 +110,25 @@ var s = function( sketch ) {
         for(var i=0; i<sketch.dotArray.length; i++){
             sketch.smooth();
             sketch.dotArray[i].render(sketch);
+        }
+        var _ols = new OLS(sketch.data);
+
+        //this._alphaBeta = _ols.getAlphaBeta();
+        try{
+            this._alphaBeta = _ols.getAlphaBeta()
+            sketch.fill('rgba(0, 255, 0, 255)');
+            var startX, startY, endX, endY;
+            startX  =   30
+            startY  =   sketch._topOffset+ this._alphaBeta.alpha
+            endX    =   sketch._width - 30
+            endY    =   sketch._topOffset+ this._alphaBeta.beta
+
+            sketch.ellipse(startX, startY ,  30,30)
+            sketch.ellipse(endX, endY ,30,30)
+            sketch.line(startX, startY, endX, endY)
+        }catch(e){
+            //
+            console.log(e)
         }
     }
 /////////////////////
@@ -121,7 +146,6 @@ var s = function( sketch ) {
     }
 ///////////////////////
     sketch.onDataSet = function(){
-        var _ols = new OLS(sketch.data);
 
 
         if (sketch.dotArray && sketch.dotArray.length == sketch.data.length){
@@ -166,9 +190,6 @@ var s = function( sketch ) {
     return sketch;
 };
 //////////////////////////////
-
-
-
 
 //--- sub classes for the sketch
 var ChartDot = (function(x,y){
