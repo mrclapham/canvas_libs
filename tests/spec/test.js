@@ -294,6 +294,16 @@ describe("Tests for the Scale Domain utility" ,function(){
         expect(_scale.map(500)).to.equal(350);
     })
 
+    it("The max value of the array should be 120", function(){
+        var arr = [10,20,30,120,9,0,8,8]
+        expect(Scale.max(arr)).to.equal(120);
+    })
+
+    it("The max value of the array should be an object with x value of 10 and y value of 220", function(){
+        var arr = [{x:10, y:20}, {x:10, y:30}, {x:10, y:40}, {x:10, y:220}, {x:10, y:200}]
+        expect(Scale.max(arr, "y").y).to.equal(220);
+        expect(Scale.max(arr, "y").x).to.equal(10);
+    })
 
 
     })

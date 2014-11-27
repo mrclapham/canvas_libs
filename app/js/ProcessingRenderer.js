@@ -38,12 +38,9 @@ var OLS = (function(data){
             return {alpha:alpha, beta:beta}
         }
         calculate.call(this, this._data);
-
     }
-
     return _scope;
 })();
-
 
 var s = function( sketch ) {
     sketch.frameRate(16);
@@ -57,16 +54,20 @@ var s = function( sketch ) {
     sketch.data = {};
     sketch._width = 900;
     sketch._height = 300;
-    sketch._leftOffset = 15;
+    sketch._leftOffset = 45;
+    sketch._rightOffset = 45;
     sketch._topOffset = 30;
     sketch._alphaBeta = null;
+    sketch._scaleX;
+    sketch._scaleY;
+    sketch.scale = null;   // there is a scale function in the base class but, due to the way p5 works it doesn't inherit that easily. It is a seperat util - so no biggie.
 
     sketch.setup = function() {
         sketch._canvas = sketch.createCanvas(sketch._width, sketch._height);
         sketch.background(0,0,0, 255);
-        for(var i=0; i<4; i++){
-            sketch.dotArray[i] = new ChartDot(Math.random()*200, Math.random()*200);
-        }
+        //for(var i=0; i<4; i++){
+        //    sketch.dotArray[i] = new ChartDot(Math.random()*200, Math.random()*200);
+        //}
         console.log(sketch.drawingContext)
 
     };
@@ -77,11 +78,6 @@ var s = function( sketch ) {
             sketch.line(sketch.dotArray[ii]._currentPosition.x, 0, sketch.dotArray[ii]._currentPosition.x, sketch._height );
         }
     }
-
-    sketch.scale = function(){
-
-    } // there is a scale function in the base class but, due to the way p5 works it doesn't inherit that easily.
-
 
     sketch.draw = function() {
         sketch.background(sketch._bg_r,sketch._bg_g,sketch._bg_b,sketch._bg_a);
@@ -103,8 +99,8 @@ var s = function( sketch ) {
         for(var ii=0; ii<sketch.dotArray.length; ii++){
             sketch.vertex(sketch.dotArray[ii]._currentPosition.x, sketch.dotArray[ii]._currentPosition.y);
         }
-        sketch.vertex(sketch._width, sketch._height);
-        sketch.vertex(0, sketch._height);
+        sketch.vertex(sketch._width - sketch._rightOffset, sketch._height);
+        sketch.vertex(sketch._leftOffset, sketch._height);
         sketch.endShape(sketch.CLOSE);
 
         for(var i=0; i<sketch.dotArray.length; i++){
@@ -118,10 +114,10 @@ var s = function( sketch ) {
             this._alphaBeta = _ols.getAlphaBeta()
             sketch.fill('rgba(0, 255, 0, 255)');
             var startX, startY, endX, endY;
-            startX  =   30
-            startY  =   sketch._topOffset+ this._alphaBeta.alpha
-            endX    =   sketch._width - 30
-            endY    =   sketch._topOffset+ this._alphaBeta.beta
+            startX  =   30;
+            startY  =   sketch._topOffset+ this._alphaBeta.alpha;
+            endX    =   sketch._width - 30;
+            endY    =   sketch._topOffset+ this._alphaBeta.beta;
 
             sketch.ellipse(startX, startY ,  30,30)
             sketch.ellipse(endX, endY ,30,30)
@@ -130,6 +126,28 @@ var s = function( sketch ) {
             //
             console.log(e)
         }
+    }
+    sketch.setWidth = function(value){
+       if(sketch._width != value){
+           sketch._width = value;
+           sketch.onSizeChanged();
+       }
+    }
+    sketch.getWidth = function(){
+        return sketch._width;
+    }
+    sketch.setHeight = function(value){
+        if(sketch._height != value){
+            sketch._height = value;
+            sketch.onSizeChanged();
+        }
+    }
+    sketch.getHeight = function(){
+        return sketch._height;
+    }
+    sketch.onSizeChanged = function(){
+        sketch.resizeCanvas( sketch.getWidth(), sketch.getHeight() );
+        console.log("THE SIZE HAS BEEN CHANGED ________")
     }
 /////////////////////
     sketch.mousePressed = function() {
@@ -146,20 +164,41 @@ var s = function( sketch ) {
     }
 ///////////////////////
     sketch.onDataSet = function(){
+        sketch.maxX = Scale.max(sketch.data, 'x');
+        sketch.minX = Scale.min(sketch.data, 'x');
+        sketch.maxY = Scale.max(sketch.data, 'y');
+        sketch.minY = Scale.min(sketch.data, 'y');
+        sketch._scaleX = new Scale([sketch.minX.x, sketch.maxX.x],[sketch._leftOffset, sketch.getWidth()-sketch._rightOffset])
+        sketch._scaleY = new Scale([sketch.minY.y, sketch.maxY.y],[40, sketch.getHeight()-sketch._topOffset])
+        //console.log("--------------------------------------------------")
+        //console.log("MAX X",sketch.maxX )
+        //console.log("MAX Y",sketch.maxY )
+        //console.log("min X",sketch.minX )
+        //console.log("min Y",sketch.minY )
 
+        var sx = sketch._scaleX;
+        var sy = sketch._scaleY;
+
+        //console.log("MAX Y MAPPPED _________", sy.map(sketch.maxY.y) );
 
         if (sketch.dotArray && sketch.dotArray.length == sketch.data.length){
             for(var i=0; i<sketch.data.length; i++){
-                sketch.dotArray[i].setPosition( sketch.data[i].x, sketch._topOffset + sketch.data[i].y );
+              //  console.log("sy.map(sketch.data[i].y   ",sy.map(sketch.data[i].y))
+                sketch.dotArray[i].setPosition( sx.map(sketch.data[i].x), sketch.getHeight() - sy.map(sketch.data[i].y) );
+                //sketch.createDot(i)
             }
         }else{
             console.log("New array made ");
             sketch.dotArray = [];
             for(var i=0; i<sketch.data.length; i++){
-                sketch.dotArray[i]=new ChartDot( sketch.data[i].x, sketch.data[i].y );
-                sketch.dotArray[i].setData( sketch.data[i] );
+                sketch.createDot(i)
             }
         }
+    }
+    // Adding a function to return the dot to keep it dry
+    sketch.createDot = function(i){
+        sketch.dotArray[i]=new ChartDot( sketch.data[i].x, sketch.data[i].y );
+        sketch.dotArray[i].setData( sketch.data[i] );
     }
     // API
     sketch.getr = function(){
@@ -173,9 +212,7 @@ var s = function( sketch ) {
                 _passed= false
             }
         }
-
         if(!_passed) throw new Error("setColor requites an array of four numbers, all between 0 and 255")
-
         sketch._color = value;
     }
 
@@ -225,16 +262,13 @@ var ChartDot = (function(x,y){
             var leftPad = 10;
             var topPad = -10;
            this._p5Canvas.fill(0, 0, 0, 190);
-           this._p5Canvas.rect(100, 300, 100,100);
+          // this._p5Canvas.rect(100, 300, 100,100);
             this._p5Canvas.rect(leftPad+this.getCurrentPosition().x,topPad+this.getCurrentPosition().y, 60, 20);
             this._p5Canvas.fill(255);
             this._p5Canvas.noStroke();
             this._p5Canvas.text(this.getData().x, leftPad+5+this.getCurrentPosition().x,topPad+15+this.getCurrentPosition().y);
+        },
 
-        },
-        removeLabel:function(){
-            // may not be needed
-        },
         setData:function(value){
             this._data = value;
         },
@@ -304,7 +338,7 @@ var ChartDot = (function(x,y){
             this._currentPosition.add(this._velocity);
 
             targ.ellipse(this._currentPosition.x, this._currentPosition.y, this._radius, this._radius);
-            targ.line(this._currentPosition.x, this._currentPosition.y, this._desired_position.x, this._desired_position.y)
+            targ.line(this._currentPosition.x, this._currentPosition.y, this._desired_position.x, this._desired_position.y);
             targ.fill(255,0,0,255);
             targ.ellipse(this._desired_position.x, this._desired_position.y, this._radius/3, this._radius/3);
 
@@ -329,6 +363,8 @@ ProcessingRenderer.prototype.postInit = function() {
     this.setPlaying(false);
     this._p5 = new p5(s, this.getTarget());
     this._p5.background(0,0,0);
+    this._p5.setWidth(this.getWidth());
+    this._p5.setHeight(this.getHeight());
 }
 
 

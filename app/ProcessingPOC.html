@@ -32,16 +32,27 @@
 
             _pro.setData(data1);
 
-            this.setInterval(function(){
+//            this.setInterval(function(){
+//                _pro.getData() ==  data0 ?   _pro.setData(data1) : _pro.setData(data0);
+//
+//            }, 4000)
+
+            //  console.log("Traget", _targ)
+
+            var _b1 = document.getElementById('b1');
+
+            console.log(_b1);
+
+            document.getElementById('b1').addEventListener('click', function(){
                 _pro.getData() ==  data0 ?   _pro.setData(data1) : _pro.setData(data0);
-
-            }, 4000)
-
-            console.log("Traget", _targ)
+            })
         }
+
     </script>
 </head>
 <body onload="onLoaded()">
+<button id="b1">data 1</button>
+<button id="b2">data 2</button>
 <div id="processDiv"></canvas></div>
 </body>
 </html>

@@ -40,10 +40,11 @@ This is just syntactical sugar. They are the underscore functions.
 It seemed more convenient to have them as a static function of Scale.
  */
 
-Scale.min = function(value){
-    return _.min(value);
+Scale.min = function(value, objectValue){
+
+    return objectValue ?  _.min(value, function(o){return o[objectValue]}) : _.min(value);
 }
 
-Scale.max = function(value){
-    return _.max(value);
+Scale.max = function(value, objectValue){
+    return objectValue ?  _.max(value, function(o){return o[objectValue]}) : _.max(value);
 }
