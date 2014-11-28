@@ -17,7 +17,7 @@ EasleRenderer.prototype.postInit = function(){
     //Create a stage by getting a reference to the canvas
 
     this.stage = new createjs.Stage("easleCanvas");
-    console.log(this.stage.canvas)
+    //console.log(this.stage.canvas)
     this.setCanvas( this.stage.canvas )
     this.stage.width = this.getWidth();
     this.stage.height = this.getHeight();

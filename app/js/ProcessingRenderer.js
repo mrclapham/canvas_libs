@@ -1,45 +1,62 @@
+/*
+    Move this class to another js file.
+ */
+
 var OLS = (function(data){
-    var _scope = function(data){
+//-- callbacks for the methods...
+    var calculate = function(data){
+        var xMean, yMean, n, alpha, beta, sXiSquared, sXiYi, resXi;
+        n = data.length;
+        xMean = 0;
+        yMean = 0;
+        sXiSquared=0;
+        sXiYi = 0;
+        for(var i=0; i<data.length; i++){
+            xMean += data[i].x;
+            sXiSquared += Math.pow(data[i].x,2);
+            sXiYi += data[i].x*data[i].y;
+            yMean += data[i].y;
+        }
+        xMean = xMean/n;
+        yMean = yMean/n;
 
+        beta = (sXiYi - n*xMean*yMean)/(sXiSquared-n*Math.pow(xMean,2));
+        alpha = yMean - beta*xMean;
+
+        return {alpha:alpha, beta:beta}
+    }
+    //////////
+
+    /////////
+    var _scope = function(data) {
         this._data = data || {};
-
+    }
         _scope.prototype = {
             setData : function(value){
-            this._data = value;
+                this._data = value;
             calculate.call(this, this._data);
-        },
-        getData : function(){
-            return this._data;
-        },
-            getAlphaBeta:function(){
-            return calculate.call(this, this._data);
+            },
+            getData : function(){
+                return this._data;
+            },
+            getAlphaBeta : function(){
+                return calculate.call(this, this._data) || null;
+            },
+            getYHat : function(){
+                var _yHat = [];
+                var _residuals = [];
+                var ab = calculate.call(this, this._data);
+
+                for(var i=0;i<this.getData().length; i++){
+                    //console.log( ab.alpha + (ab.beta*this.getData()[i].x) )
+                    _yHat[i] = ab.alpha + (ab.beta*this.getData()[i].x)
+                    _residuals[i] = this.getData()[i].y - _yHat[i];
+                    console.log(_residuals[i])
+                }
+                return {yhat:_yHat, residuals:_residuals}
             }
         }
-//------
-        var calculate = function(data){
-            var xMean, yMean, n, alpha, beta, sXiSquared, sXiYi;
-            n = data.length;
-            xMean = 0;
-            yMean = 0;
-            sXiSquared=0;
-            sXiYi = 0;
-            for(var i=0; i<data.length; i++){
-                xMean += data[i].x;
-                sXiSquared += Math.pow(data[i].x,2);
-                sXiYi += data[i].x*data[i].y;
-                yMean += data[i].y;
-            }
-            xMean = xMean/n;
-            yMean = yMean/n;
-
-            beta = (sXiYi - n*xMean*yMean)/(sXiSquared-n*Math.pow(xMean,2));
-            alpha = yMean - beta*xMean;
-
-            return {alpha:alpha, beta:beta}
-        }
-        calculate.call(this, this._data);
-    }
-    return _scope;
+    return  _scope;
 })();
 
 var s = function( sketch ) {
@@ -51,12 +68,14 @@ var s = function( sketch ) {
     sketch._bg_a = 255;
     sketch._color = null;
     sketch.dotArray = [];
+    sketch.yHatArray = [];
     sketch.data = {};
     sketch._width = 900;
     sketch._height = 300;
     sketch._leftOffset = 45;
     sketch._rightOffset = 45;
-    sketch._topOffset = 30;
+    sketch._topOffset = 60;
+    sketch._bottomOffset = 60;
     sketch._alphaBeta = null;
     sketch._scaleX;
     sketch._scaleY;
@@ -65,15 +84,11 @@ var s = function( sketch ) {
     sketch.setup = function() {
         sketch._canvas = sketch.createCanvas(sketch._width, sketch._height);
         sketch.background(0,0,0, 255);
-        //for(var i=0; i<4; i++){
-        //    sketch.dotArray[i] = new ChartDot(Math.random()*200, Math.random()*200);
-        //}
-        console.log(sketch.drawingContext)
-
     };
+
     sketch.drawGridLines = function(){
-        sketch.stroke(255,255,255,80)
-        sketch.strokeWeight(.25)
+        sketch.stroke(255,255,255,80);
+        sketch.strokeWeight(.25);
         for(var ii=0; ii<sketch.dotArray.length; ii++){
             sketch.line(sketch.dotArray[ii]._currentPosition.x, 0, sketch.dotArray[ii]._currentPosition.x, sketch._height );
         }
@@ -82,12 +97,13 @@ var s = function( sketch ) {
     sketch.draw = function() {
         sketch.background(sketch._bg_r,sketch._bg_g,sketch._bg_b,sketch._bg_a);
 
-        var _context = sketch.drawingContext
-         var grd = _context.createLinearGradient(0, 0, 0, 200);
-         // light blue
-         grd.addColorStop(0, 'rgba(255,128,0,30)');
-         // dark blue
-         grd.addColorStop(0.15, 'rgba(255,0,255, 10)');
+        var _context = sketch.drawingContext;
+        var grd = _context.createLinearGradient(0, 0, 0, 200);
+
+        // light blue
+        grd.addColorStop(0, 'rgba(255,128,0,30)');
+        // dark blue
+        grd.addColorStop(0.15, 'rgba(255,0,255, 10)');
         grd.addColorStop(1, 'rgba(255,128,0,0)');
         _context.fillStyle = grd;
         _context.fill();
@@ -103,30 +119,75 @@ var s = function( sketch ) {
         sketch.vertex(sketch._leftOffset, sketch._height);
         sketch.endShape(sketch.CLOSE);
 
+
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+        sketch.beginShape();
+        for(var n =0; n < sketch.yHatArray.length; n++){
+            var start, end;
+            start = sketch.dotArray[n]._currentPosition.x;
+            end = sketch.getHeight() - sketch.getScaleY().map(sketch.yHatArray[n]);
+            sketch.stroke('rgba(255,128,0,30)');
+            sketch.strokeWeight(2);
+           // sketch.ellipse(start, end, 6,6)
+            sketch.vertex(start, end)
+        }
+
+        sketch.endShape();
+
+        for(var n =0; n < sketch.yHatArray.length; n++){
+            sketch.fill(255,0,100, 255);
+            var start, end;
+            start = sketch.dotArray[n]._currentPosition.x;
+            end = sketch.getHeight() - sketch.getScaleY().map(sketch.yHatArray[n]);
+            sketch.stroke('rgba(255,128,0,30)');
+            sketch.strokeWeight(2);
+            sketch.ellipse(start, end, 6,6)
+        }
+
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
         for(var i=0; i<sketch.dotArray.length; i++){
             sketch.smooth();
             sketch.dotArray[i].render(sketch);
         }
+        //sketch.createAlphaBetaCurve()
+    }
+
+    sketch.createAlphaBetaCurve = function(){
         var _ols = new OLS(sketch.data);
 
-        //this._alphaBeta = _ols.getAlphaBeta();
         try{
-            this._alphaBeta = _ols.getAlphaBeta()
-            sketch.fill('rgba(0, 255, 0, 255)');
-            var startX, startY, endX, endY;
-            startX  =   30;
-            startY  =   sketch._topOffset+ this._alphaBeta.alpha;
-            endX    =   sketch._width - 30;
-            endY    =   sketch._topOffset+ this._alphaBeta.beta;
+            var _alphaBeta = _ols.getAlphaBeta();
+            sketch.yHatArray  = _ols.getYHat().yhat
+            console.log("Y HATTT TT T T ",sketch.yHatArray)
 
-            sketch.ellipse(startX, startY ,  30,30)
-            sketch.ellipse(endX, endY ,30,30)
-            sketch.line(startX, startY, endX, endY)
+            //
+            //for(var i=0; i<this._alphaBeta.getYHat().length; i++){
+            //    sketch.yHatArray[i] = new YHatDot( 60*i , sketch.getScaleY().map( this._alphaBeta.getYHat()[i] ) );
+            //}
+
+
+
+            //sketch.fill('rgba(0, 255, 0, 255)');
+            //var startX, startY, endX, endY;
+            //startX  =   sketch._leftOffset;
+            ////startY  =   sketch._topOffset+ this._alphaBeta.alpha;
+            //startY  =   sketch.getHeight() - sketch.getScaleY().map(this._alphaBeta.beta);
+            //
+            //endX    =   sketch._width - sketch._rightOffset;
+            //endY    =   sketch.getHeight() - sketch.getScaleY().map(this._alphaBeta.alpha);
+            //
+            //sketch.ellipse(startX, startY ,  20,20);
+            //sketch.ellipse(endX, endY ,20,20);
+            //sketch.line(startX, startY, endX, endY);
+
         }catch(e){
             //
             console.log(e)
         }
     }
+
     sketch.setWidth = function(value){
        if(sketch._width != value){
            sketch._width = value;
@@ -147,7 +208,6 @@ var s = function( sketch ) {
     }
     sketch.onSizeChanged = function(){
         sketch.resizeCanvas( sketch.getWidth(), sketch.getHeight() );
-        console.log("THE SIZE HAS BEEN CHANGED ________")
     }
 /////////////////////
     sketch.mousePressed = function() {
@@ -162,38 +222,42 @@ var s = function( sketch ) {
         sketch.data = value;
         sketch.onDataSet();
     }
-///////////////////////
-    sketch.onDataSet = function(){
+
+    sketch._createScale = function(){
         sketch.maxX = Scale.max(sketch.data, 'x');
         sketch.minX = Scale.min(sketch.data, 'x');
         sketch.maxY = Scale.max(sketch.data, 'y');
         sketch.minY = Scale.min(sketch.data, 'y');
-        sketch._scaleX = new Scale([sketch.minX.x, sketch.maxX.x],[sketch._leftOffset, sketch.getWidth()-sketch._rightOffset])
-        sketch._scaleY = new Scale([sketch.minY.y, sketch.maxY.y],[40, sketch.getHeight()-sketch._topOffset])
-        //console.log("--------------------------------------------------")
-        //console.log("MAX X",sketch.maxX )
-        //console.log("MAX Y",sketch.maxY )
-        //console.log("min X",sketch.minX )
-        //console.log("min Y",sketch.minY )
+        sketch._scaleX = new Scale([sketch.minX.x, sketch.maxX.x],[sketch._leftOffset, sketch.getWidth()-sketch._rightOffset]);
+        sketch._scaleY = new Scale([sketch.minY.y, sketch.maxY.y],[sketch._bottomOffset, sketch.getHeight()-sketch._topOffset]);
+    }
+    sketch.getScaleX = function(){
+        return sketch._scaleX
+    }
+    sketch.getScaleY = function(){
+        return sketch._scaleY
+    }
+
+///////////////////////
+    sketch.onDataSet = function(){
+        sketch._createScale();
 
         var sx = sketch._scaleX;
         var sy = sketch._scaleY;
 
-        //console.log("MAX Y MAPPPED _________", sy.map(sketch.maxY.y) );
-
         if (sketch.dotArray && sketch.dotArray.length == sketch.data.length){
             for(var i=0; i<sketch.data.length; i++){
-              //  console.log("sy.map(sketch.data[i].y   ",sy.map(sketch.data[i].y))
                 sketch.dotArray[i].setPosition( sx.map(sketch.data[i].x), sketch.getHeight() - sy.map(sketch.data[i].y) );
-                //sketch.createDot(i)
             }
         }else{
-            console.log("New array made ");
             sketch.dotArray = [];
             for(var i=0; i<sketch.data.length; i++){
                 sketch.createDot(i)
+                sketch.dotArray[i].setPosition( sx.map(sketch.data[i].x), sketch.getHeight() - sy.map(sketch.data[i].y) );
             }
         }
+        sketch.createAlphaBetaCurve()
+
     }
     // Adding a function to return the dot to keep it dry
     sketch.createDot = function(i){
@@ -228,11 +292,55 @@ var s = function( sketch ) {
 };
 //////////////////////////////
 
+//--
+    var YHatDot = (function(x,y){
+        var _scope = function(x,y){
+            this._width = 10;
+            this._x = x;
+            this._y = y;
+            this._currentPosition = null;
+            this._desired_position = new p5.Vector(this._x, this._y);
+
+            this._maxSpeed = 5;
+            this._velocity = new p5.Vector(0,0);
+            this._r = 100;
+            this._g = 100;
+            this._b = 100;
+            this._alpha = 255;
+            this._strokWeight = 1;
+            this._radius = 12;
+            int.call(this);
+        }
+
+        var int = function(){
+            if(!this._currentPosition &&  this._desired_position){
+                this._currentPosition = new p5.Vector(this._desired_position.x, this._desired_position.y);
+            }else{
+                this._currentPosition = new p5.Vector(0,0);
+            }
+        }
+
+        _scope.prototype = {
+            setPosition:function(value) {
+                if (value.length > 1 && value[0] && !isNaN(value[0]) && value[1] && !isNaN(value[1])) {
+                    //--
+                    this._x = value[0];
+                    this._y = value[1];
+                    this._desired_position = new p5.Vector(this._x, this._y);
+                }
+            },
+            getPositionVector : function(){
+                return this._desired_position;
+            }
+        }
+        return _scope;
+    })();
+
 //--- sub classes for the sketch
 var ChartDot = (function(x,y){
     var _scope = function(x,y){
-        this._p5Canvas = null,
-        this._data = {}
+        this._p5Canvas = null;
+        this._data = {};
         this._width = 10;
         this._x = x;
         this._y = y;
@@ -245,15 +353,15 @@ var ChartDot = (function(x,y){
         this._b = 100;
         this._alpha = 255;
         this._strokWeight = 1;
-        this._radius = 22;
+        this._radius = 12;
         int.call(this);
     }
 
     var int = function(){
         if(!this._currentPosition &&  this._desired_position){
-            this._currentPosition = new p5.Vector(this._desired_position.x, this._desired_position.y)
+            this._currentPosition = new p5.Vector(this._desired_position.x, this._desired_position.y);
         }else{
-            this._currentPosition = new p5.Vector(0,0)
+            this._currentPosition = new p5.Vector(0,0);
         }
     }
 
@@ -266,7 +374,7 @@ var ChartDot = (function(x,y){
             this._p5Canvas.rect(leftPad+this.getCurrentPosition().x,topPad+this.getCurrentPosition().y, 60, 20);
             this._p5Canvas.fill(255);
             this._p5Canvas.noStroke();
-            this._p5Canvas.text(this.getData().x, leftPad+5+this.getCurrentPosition().x,topPad+15+this.getCurrentPosition().y);
+            this._p5Canvas.text("x:"+this.getData().x+ "y:"+this.getData().y, leftPad+5+this.getCurrentPosition().x,topPad+15+this.getCurrentPosition().y);
         },
 
         setData:function(value){
@@ -333,7 +441,7 @@ var ChartDot = (function(x,y){
 
             if(isNaN( this._velocity.x ))  this._velocity.x = 0;
             if(isNaN( this._velocity.y ))  this._velocity.y = 0;
-            if(isNaN(this._velocity.y)) console.log("VEL Y norm"+this._velocity.y)
+            if(isNaN(this._velocity.y)) console.log("VEL Y norm"+this._velocity.y);
 
             this._currentPosition.add(this._velocity);
 
@@ -347,8 +455,6 @@ var ChartDot = (function(x,y){
     }
     return _scope;
 })();
-
-
 
 function ProcessingRenderer(target, opt_data, opt_config) {
     opt_config ? opt_config.createCanvas = false : opt_config = {createCanvas:false};

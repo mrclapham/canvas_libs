@@ -52,13 +52,17 @@ describe('Test the functionality of the base class', function(){
     });
 
     it("_BaseChart should not be null", function(){
+        expect(_BaseChart).not.to.be.null;
+    });
+
+    it("_opt_data should not be null", function(){
         expect(_opt_data).not.to.be.null;
     });
 
-    it("_BaseChart should not be null", function(){
-        expect(_opt_data).not.to.be.null;
-    });
 
+    it("_BaseChart to have method 'setPlaying'.", function(){
+        expect(_BaseChart.setPlaying).to.be.a("function");
+    });
 
 
 })
@@ -304,6 +308,105 @@ describe("Tests for the Scale Domain utility" ,function(){
         expect(Scale.max(arr, "y").y).to.equal(220);
         expect(Scale.max(arr, "y").x).to.equal(10);
     })
+
+
+    })
+    var _dataSet, _procFixture, _procRenderer, _alphaBeta, _ols, _yHat, _residuals;
+    describe("Test the Regression Analysis", function(){
+        beforeEach(function(){
+             _procFixture = document.createElement('div');
+             _dataSet = [{x:1,y:2}, {x:2,y:3}, {x:3,y:3}, {x:4,y:4}, {x:5,y:4}];
+             _procRenderer = new ProcessingRenderer(_procFixture);
+        })
+        afterEach(function(){
+            delete _procFixture;
+            delete _dataSet;
+            delete _procRenderer;
+        })
+
+         _ols = new OLS(_dataSet);
+
+        it("_dataSet should not be null.", function(){
+            expect(_dataSet).to.not.be.null;
+        });
+
+        it("_ols should not be null.", function(){
+            expect(_ols).to.not.be.null;
+        });
+
+        it("_ols should have a setData method", function(){
+            expect(_ols.setData).to.be.a("function");
+        });
+
+        it("_ols should have a setData method", function(){
+            expect(_ols.setData).to.be.a("function");
+        });
+
+/*
+    Float helper function to reduce to one decimal point
+ */
+
+        var oneDecimalPoint = function(value){
+           return  parseFloat(value.toFixed(1))
+        }
+
+        it("Should have an alpha value of 1.7.", function(){
+            _ols.setData(_dataSet);
+            _alphaBeta = _ols.getAlphaBeta()
+            expect( parseFloat(_alphaBeta.alpha.toFixed(1)) ).to.equal(1.7);
+        });
+
+        it("Should have an beta value of 0.5.", function(){
+            _ols.setData(_dataSet);
+            _alphaBeta = _ols.getAlphaBeta()
+            expect( parseFloat(_alphaBeta.beta.toFixed(1)) ).to.equal(0.5);
+        });
+
+        it("_ols should have a getYHat method", function(){
+            expect(_ols.getYHat).to.be.a("function");
+        });
+
+        it("_ols getYHat.residuals( should return an array the same length as the dataset", function(){
+            _ols.setData(_dataSet);
+            _yHat = _ols.getYHat().residuals
+           expect( _yHat.length ).to.equal(_dataSet.length);
+        });
+
+        it("_ols getYHat[0 - 4].yhat should be 2.2, 2.7, 3.2, 3.7, 4.2, respectively", function(){
+            _ols.setData(_dataSet);
+            _yHat = _ols.getYHat().yhat
+            expect( _yHat[0] ).to.equal(2.2);
+            expect( _yHat[1] ).to.equal(2.7);
+            expect( _yHat[2] ).to.equal(3.2);
+            expect( _yHat[3] ).to.equal(3.7);
+            expect( _yHat[4] ).to.equal(4.2);
+
+            /*
+             2.2
+             2.7
+             3.2
+             3.7
+             4.2
+             */
+        });
+
+        it("_ols getYHat[0 - 4].residuals should be -0.2, 0.3, -0.2, 0.3, -0.2, respectively", function(){
+            _ols.setData(_dataSet);
+            _residuals = _ols.getYHat().residuals
+            expect( oneDecimalPoint(_residuals[0]) ).to.equal(-0.2);
+            expect( oneDecimalPoint(_residuals[1]) ).to.equal(0.3);
+            expect( oneDecimalPoint(_residuals[2])).to.equal(-0.2);
+            expect( oneDecimalPoint(_residuals[3]) ).to.equal(0.3);
+            expect( oneDecimalPoint(_residuals[4]) ).to.equal(-0.2);
+
+            /*
+             -0.2
+             0.3
+             -0.2
+             0.3
+             -0.2
+             */
+        });
 
 
     })

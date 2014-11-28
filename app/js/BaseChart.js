@@ -24,7 +24,7 @@ BaseChart= (function(target, opt_data, opt_config){
 
     var _init = function(opt_config){
         if(this.opt_config) _onConfigSet.call(this, this.opt_config);
-        console.log("CREATE CANVAS "+this.createCanvas);
+        //console.log("CREATE CANVAS "+this.createCanvas);
         if(this.createCanvas) _onTargetSet.call(this);
         _initAnimation.call(this);
         this.postInit();
@@ -80,7 +80,7 @@ BaseChart= (function(target, opt_data, opt_config){
         },
         onPlayingChanged:function(){
           //console.log("Playing changed to ",this.getPlaying())
-            this.getPlaying() ? _initAnimation.call(this) : console.log("stopped");
+            this.getPlaying() ? _initAnimation.call(this) : null;
         },
         getHeight:function(){
            return this._height;

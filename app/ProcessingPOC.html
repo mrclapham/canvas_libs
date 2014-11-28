@@ -15,22 +15,22 @@
     <script src="js/ProcessingRenderer.js"></script>
     <script type="text/javascript">
 
-
-
         function onLoaded(){
             var dataConfig =  {  yMin : 0,
                 yMax: 100,
                 xStart: 0,
                 xEnd: 900,
-                steps : 12
+                steps : 60
             }
             var data0 = new data_model(dataConfig).getData();
             var data1 = new data_model(dataConfig).getData();
+            var _dataSetXl = [{x:1,y:2}, {x:2,y:3}, {x:3,y:3}, {x:4,y:4}, {x:5,y:4}];
+
 
             var _targ = document.getElementById("processDiv");
             var _pro = new ProcessingRenderer(_targ);
 
-            _pro.setData(data1);
+            _pro.setData(_dataSetXl);
 
 //            this.setInterval(function(){
 //                _pro.getData() ==  data0 ?   _pro.setData(data1) : _pro.setData(data0);
@@ -44,7 +44,7 @@
             console.log(_b1);
 
             document.getElementById('b1').addEventListener('click', function(){
-                _pro.getData() ==  data0 ?   _pro.setData(data1) : _pro.setData(data0);
+                _pro.getData() ==  data0 ?   _pro.setData(_dataSetXl) : _pro.setData(data0);
             })
         }
 
