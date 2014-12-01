@@ -381,13 +381,6 @@ describe("Tests for the Scale Domain utility" ,function(){
             expect( _yHat[3] ).to.equal(3.7);
             expect( _yHat[4] ).to.equal(4.2);
 
-            /*
-             2.2
-             2.7
-             3.2
-             3.7
-             4.2
-             */
         });
 
         it("_ols getYHat[0 - 4].residuals should be -0.2, 0.3, -0.2, 0.3, -0.2, respectively", function(){
@@ -399,15 +392,47 @@ describe("Tests for the Scale Domain utility" ,function(){
             expect( oneDecimalPoint(_residuals[3]) ).to.equal(0.3);
             expect( oneDecimalPoint(_residuals[4]) ).to.equal(-0.2);
 
-            /*
-             -0.2
-             0.3
-             -0.2
-             0.3
-             -0.2
-             */
         });
 
+    })
+
+    describe("Tests for the functions to create grid lines on the Processing chart", function(){
+        it("one and one should be two", function(){
+                expect(1+1).to.equal(2);
+        })
+
+
+        it("_sketch.calculateYDivisions should be a function", function(){
+                expect(_sketch.calculateYDivisions).to.be.a("function");
+        })
+
+        it("_sketch.calculateYDivisions(3000000) to return 10000", function(){
+            expect(_sketch.calculateYDivisions(3000000)).to.equal(10000);
+        })
+
+        it("_sketch.calculateYDivisions(1000000) to return 10000", function(){
+            expect(_sketch.calculateYDivisions(1000000)).to.equal(1000);
+        })
+
+        it("_sketch.calculateYDivisions(100000) to return 10000", function(){
+            expect(_sketch.calculateYDivisions(100000)).to.equal(1000);
+        })
+
+        it("_sketch.calculateYDivisions(100000) to return 10000", function(){
+            expect(_sketch.calculateYDivisions(10000)).to.equal(1000);
+        })
+
+        it("_sketch.calculateYDivisions(1000) to return 100", function(){
+            expect(_sketch.calculateYDivisions(1000)).to.equal(100);
+        })
+
+        it("_sketch.calculateYDivisions(1000) to return 100", function(){
+            expect(_sketch.calculateYDivisions(100)).to.equal(10);
+        })
+
+        it("_sketch.calculateYDivisions(1000) to return 100", function(){
+            expect(_sketch.calculateYDivisions(10)).to.equal(1);
+        })
 
     })
 

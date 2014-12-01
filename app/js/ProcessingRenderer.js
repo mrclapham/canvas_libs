@@ -60,7 +60,7 @@ var OLS = (function(data){
 })();
 
 var s = function( sketch ) {
-    sketch.frameRate(16);
+    //sketch.frameRate(16);
     sketch._xp = 0;
     sketch._bg_r = 60;
     sketch._bg_g = 60;
@@ -77,6 +77,7 @@ var s = function( sketch ) {
     sketch._topOffset = 60;
     sketch._bottomOffset = 60;
     sketch._alphaBeta = null;
+    sketch.yGridInterval = 1 // the default spacing oth the yGrid lines
     sketch._scaleX;
     sketch._scaleY;
     sketch.scale = null;   // there is a scale function in the base class but, due to the way p5 works it doesn't inherit that easily. It is a seperat util - so no biggie.
@@ -86,11 +87,34 @@ var s = function( sketch ) {
         sketch.background(0,0,0, 255);
     };
 
+    sketch.calculateYDivisions = function(range){
+
+        var _divisions = 1;
+
+        if(range <= 10){_divisions = 10}
+        if(range >= 100){_divisions = 100}
+        if(range >= 1000){_divisions = 100}
+        if(range >= 10000){_divisions = 1000}
+        if(range >= 100000){_divisions = 1000}
+        if(range > 1000000){_divisions = 10000}
+        return _divisions;
+    }
+
     sketch.drawGridLines = function(){
         sketch.stroke(255,255,255,80);
         sketch.strokeWeight(.25);
         for(var ii=0; ii<sketch.dotArray.length; ii++){
-            sketch.line(sketch.dotArray[ii]._currentPosition.x, 0, sketch.dotArray[ii]._currentPosition.x, sketch._height );
+            sketch.line(sketch.dotArray[ii]._currentPosition.x, sketch._topOffset, sketch.dotArray[ii]._currentPosition.x, sketch._height-sketch._bottomOffset );
+        }
+        //console.log("Grid lines are being drawn ")
+        if(sketch.maxY && sketch.minY && sketch.maxY.y && sketch.minY.y){
+            var range = sketch.maxY.y - sketch.minY.y;
+            var division = sketch.calculateYDivisions(range);
+            console.log(range, division);
+            for(var i = sketch.minY.y; i<sketch.maxY.y; i+=division){
+                var yPos = sketch._height - sketch.getScaleY().map(i)
+                sketch.line(sketch._leftOffset, yPos, sketch._width-sketch._rightOffset,  yPos);
+            }
         }
     }
 
@@ -101,22 +125,20 @@ var s = function( sketch ) {
         var grd = _context.createLinearGradient(0, 0, 0, 200);
 
         // light blue
-        grd.addColorStop(0, 'rgba(255,128,0,30)');
-        // dark blue
-        grd.addColorStop(0.15, 'rgba(255,0,255, 10)');
-        grd.addColorStop(1, 'rgba(255,128,0,0)');
+        grd.addColorStop(0, 'rgba(255,128,0,1)');
+       // grd.addColorStop(.7, 'rgba(255,128,0,50)');
+        grd.addColorStop(1, 'rgba(255,128,0,0.2)');
         _context.fillStyle = grd;
         _context.fill();
 
-        //sketch.fill(99, 99, 99, 105);
         sketch.drawGridLines()
         sketch.stroke(200,255,200,100);
         sketch.beginShape();
         for(var ii=0; ii<sketch.dotArray.length; ii++){
             sketch.vertex(sketch.dotArray[ii]._currentPosition.x, sketch.dotArray[ii]._currentPosition.y);
         }
-        sketch.vertex(sketch._width - sketch._rightOffset, sketch._height);
-        sketch.vertex(sketch._leftOffset, sketch._height);
+        sketch.vertex(sketch._width - sketch._rightOffset, sketch._height-sketch._bottomOffset);
+        sketch.vertex(sketch._leftOffset, sketch._height-sketch._bottomOffset);
         sketch.endShape(sketch.CLOSE);
 
 
@@ -160,27 +182,6 @@ var s = function( sketch ) {
         try{
             var _alphaBeta = _ols.getAlphaBeta();
             sketch.yHatArray  = _ols.getYHat().yhat
-            console.log("Y HATTT TT T T ",sketch.yHatArray)
-
-            //
-            //for(var i=0; i<this._alphaBeta.getYHat().length; i++){
-            //    sketch.yHatArray[i] = new YHatDot( 60*i , sketch.getScaleY().map( this._alphaBeta.getYHat()[i] ) );
-            //}
-
-
-
-            //sketch.fill('rgba(0, 255, 0, 255)');
-            //var startX, startY, endX, endY;
-            //startX  =   sketch._leftOffset;
-            ////startY  =   sketch._topOffset+ this._alphaBeta.alpha;
-            //startY  =   sketch.getHeight() - sketch.getScaleY().map(this._alphaBeta.beta);
-            //
-            //endX    =   sketch._width - sketch._rightOffset;
-            //endY    =   sketch.getHeight() - sketch.getScaleY().map(this._alphaBeta.alpha);
-            //
-            //sketch.ellipse(startX, startY ,  20,20);
-            //sketch.ellipse(endX, endY ,20,20);
-            //sketch.line(startX, startY, endX, endY);
 
         }catch(e){
             //
