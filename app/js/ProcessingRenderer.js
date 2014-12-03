@@ -51,7 +51,6 @@ var OLS = (function(data){
                     //console.log( ab.alpha + (ab.beta*this.getData()[i].x) )
                     _yHat[i] = ab.alpha + (ab.beta*this.getData()[i].x)
                     _residuals[i] = this.getData()[i].y - _yHat[i];
-                    console.log(_residuals[i])
                 }
                 return {yhat:_yHat, residuals:_residuals}
             }
@@ -70,8 +69,8 @@ var s = function( sketch ) {
     sketch.dotArray = [];
     sketch.yHatArray = [];
     sketch.data = {};
-    sketch._width = 900;
-    sketch._height = 300;
+    sketch.width = 900;
+    sketch.height = 300;
     sketch._leftOffset = 45;
     sketch._rightOffset = 45;
     sketch._topOffset = 60;
@@ -83,7 +82,7 @@ var s = function( sketch ) {
     sketch.scale = null;   // there is a scale function in the base class but, due to the way p5 works it doesn't inherit that easily. It is a seperat util - so no biggie.
 
     sketch.setup = function() {
-        sketch._canvas = sketch.createCanvas(sketch._width, sketch._height);
+        sketch._canvas = sketch.createCanvas(sketch.width, sketch.height);
         sketch.background(0,0,0, 255);
     };
 
@@ -92,11 +91,11 @@ var s = function( sketch ) {
         var _divisions = 1;
 
         if(range <= 10){_divisions = 10}
-        if(range >= 100){_divisions = 100}
+        if(range >= 100){_divisions = 10}
         if(range >= 1000){_divisions = 100}
         if(range >= 10000){_divisions = 1000}
-        if(range >= 100000){_divisions = 1000}
-        if(range > 1000000){_divisions = 10000}
+        if(range >= 100000){_divisions = 10000}
+        if(range >= 1000000){_divisions = 100000}
         return _divisions;
     }
 
@@ -104,16 +103,18 @@ var s = function( sketch ) {
         sketch.stroke(255,255,255,80);
         sketch.strokeWeight(.25);
         for(var ii=0; ii<sketch.dotArray.length; ii++){
-            sketch.line(sketch.dotArray[ii]._currentPosition.x, sketch._topOffset, sketch.dotArray[ii]._currentPosition.x, sketch._height-sketch._bottomOffset );
+            sketch.line(sketch.dotArray[ii]._currentPosition.x, sketch._topOffset, sketch.dotArray[ii]._currentPosition.x, sketch.height-sketch._bottomOffset );
         }
         //console.log("Grid lines are being drawn ")
         if(sketch.maxY && sketch.minY && sketch.maxY.y && sketch.minY.y){
             var range = sketch.maxY.y - sketch.minY.y;
             var division = sketch.calculateYDivisions(range);
-            console.log(range, division);
-            for(var i = sketch.minY.y; i<sketch.maxY.y; i+=division){
-                var yPos = sketch._height - sketch.getScaleY().map(i)
-                sketch.line(sketch._leftOffset, yPos, sketch._width-sketch._rightOffset,  yPos);
+            for(var i = sketch._roundedYValues.min; i<sketch._roundedYValues.max; i+=sketch._roundedYValues.division){
+                var yPos = sketch.height - sketch.getScaleY().map(i);
+                sketch.line(sketch._leftOffset, yPos, sketch.width-sketch._rightOffset,  yPos);
+                sketch.textAlign(sketch.RIGHT);
+                sketch.fill("rgba(255,255,255,255)");
+                sketch.text(i,sketch._leftOffset-5, yPos);
             }
         }
     }
@@ -137,8 +138,8 @@ var s = function( sketch ) {
         for(var ii=0; ii<sketch.dotArray.length; ii++){
             sketch.vertex(sketch.dotArray[ii]._currentPosition.x, sketch.dotArray[ii]._currentPosition.y);
         }
-        sketch.vertex(sketch._width - sketch._rightOffset, sketch._height-sketch._bottomOffset);
-        sketch.vertex(sketch._leftOffset, sketch._height-sketch._bottomOffset);
+        sketch.vertex(sketch.width - sketch._rightOffset, sketch.height-sketch._bottomOffset);
+        sketch.vertex(sketch._leftOffset, sketch.height-sketch._bottomOffset);
         sketch.endShape(sketch.CLOSE);
 
 
@@ -190,22 +191,22 @@ var s = function( sketch ) {
     }
 
     sketch.setWidth = function(value){
-       if(sketch._width != value){
-           sketch._width = value;
+       if(sketch.width != value){
+           sketch.width = value;
            sketch.onSizeChanged();
        }
     }
     sketch.getWidth = function(){
-        return sketch._width;
+        return sketch.width;
     }
     sketch.setHeight = function(value){
-        if(sketch._height != value){
-            sketch._height = value;
+        if(sketch.height != value){
+            sketch.height = value;
             sketch.onSizeChanged();
         }
     }
     sketch.getHeight = function(){
-        return sketch._height;
+        return sketch.height;
     }
     sketch.onSizeChanged = function(){
         sketch.resizeCanvas( sketch.getWidth(), sketch.getHeight() );
@@ -229,9 +230,55 @@ var s = function( sketch ) {
         sketch.minX = Scale.min(sketch.data, 'x');
         sketch.maxY = Scale.max(sketch.data, 'y');
         sketch.minY = Scale.min(sketch.data, 'y');
+
+        sketch._roundedYValues = sketch.roundValues(sketch.minY.y, sketch.maxY.y);
+
+
+        console.log(sketch.minY.y, sketch.maxY.y)
+        console.log(sketch._roundedYValues)
+
         sketch._scaleX = new Scale([sketch.minX.x, sketch.maxX.x],[sketch._leftOffset, sketch.getWidth()-sketch._rightOffset]);
-        sketch._scaleY = new Scale([sketch.minY.y, sketch.maxY.y],[sketch._bottomOffset, sketch.getHeight()-sketch._topOffset]);
+        sketch._scaleY = new Scale([sketch._roundedYValues.min, sketch._roundedYValues.max],[sketch._bottomOffset, sketch.getHeight()-sketch._topOffset]);
     }
+
+    sketch.roundValues = function(min, max){
+
+        var _min=parseInt(min), _max=parseInt(max);
+        var _range = max-min;
+        var division = sketch.calculateYDivisions(_range);
+        _min<0 ? _min -=division : _min = 0;
+        _max+=division;
+        // now find the divider by turning the number to a string....
+        var _numStringLengthMax = String(_max).length-2;
+        var _numStringLengthMin = String(_min).length-2;
+
+        var _dividerMax = "1", _dividerMin ="1", _primaryDivision;
+
+        for(var i=0;i<_numStringLengthMax; i++){
+            _dividerMax+="0";
+        }
+        for(var ii=0;ii<_numStringLengthMin; ii++){
+            _dividerMin+="0";
+        }
+
+        _dividerMax = parseInt(_dividerMax);
+        _dividerMin = parseInt(_dividerMin);
+        _primaryDivision = _dividerMin<_dividerMax ? _dividerMax : _dividerMin;
+
+        _max/=_primaryDivision;
+        _max = Math.floor(_max);
+        _max *= _primaryDivision;
+
+        _min/=_primaryDivision;
+        _min = Math.floor(_min);
+        _min *= _primaryDivision;
+
+
+        return {min:_min, max:_max, division:division}
+
+    }
+
+
     sketch.getScaleX = function(){
         return sketch._scaleX
     }
@@ -296,7 +343,7 @@ var s = function( sketch ) {
 //--
     var YHatDot = (function(x,y){
         var _scope = function(x,y){
-            this._width = 10;
+            this.width = 10;
             this._x = x;
             this._y = y;
             this._currentPosition = null;
@@ -342,7 +389,7 @@ var ChartDot = (function(x,y){
     var _scope = function(x,y){
         this._p5Canvas = null;
         this._data = {};
-        this._width = 10;
+        this.width = 10;
         this._x = x;
         this._y = y;
         this._currentPosition = null;
@@ -372,10 +419,11 @@ var ChartDot = (function(x,y){
             var topPad = -10;
            this._p5Canvas.fill(0, 0, 0, 190);
           // this._p5Canvas.rect(100, 300, 100,100);
-            this._p5Canvas.rect(leftPad+this.getCurrentPosition().x,topPad+this.getCurrentPosition().y, 60, 20);
+            this._p5Canvas.rect(leftPad+this.getCurrentPosition().x,topPad+this.getCurrentPosition().y, 160, 20);
             this._p5Canvas.fill(255);
             this._p5Canvas.noStroke();
-            this._p5Canvas.text("x:"+this.getData().x+ "y:"+this.getData().y, leftPad+5+this.getCurrentPosition().x,topPad+15+this.getCurrentPosition().y);
+            this._p5Canvas.textAlign(this._p5Canvas.LEFT);
+            this._p5Canvas.text("x:"+this.getData().x.toFixed(2)+ "y:"+this.getData().y.toFixed(2), leftPad+5+this.getCurrentPosition().x,topPad+15+this.getCurrentPosition().y);
         },
 
         setData:function(value){

@@ -436,4 +436,103 @@ describe("Tests for the Scale Domain utility" ,function(){
 
     })
 
+    function roundNumber(min, max){
+        var _min, _max;
+        var _range = max-min;
+
+
+        return {min:_min, max:_max}
+    }
+
+    describe.only("The number should be rounded up or down", function(){
+        beforeEach(function(){
+            _sketch = new p5(s, _fixture);
+        });
+        afterEach(function(){
+            delete _sketch;
+        })
+        it("When roundValues(0,100) division should be 10 ", function(){
+            var _mm = _sketch.roundValues(0,100)
+            expect(_mm.division).to.equal(10)
+        })
+
+        it("When roundValues(0,1000) division should be 100 ", function(){
+            var _mm = _sketch.roundValues(0,1000)
+            expect(_mm.division).to.equal(100)
+        })
+
+        it("When roundValues(0,1200) division should be 100 ", function(){
+            var _mm = _sketch.roundValues(0,1200)
+            expect(_mm.division).to.equal(100)
+        })
+
+        it("When roundValues(0,12000) division should be 1000 ", function(){
+            var _mm = _sketch.roundValues(0,12000)
+            expect(_mm.division).to.equal(1000)
+        })
+
+        it("When roundValues(0,120000) division should be 10000 ", function(){
+            var _mm = _sketch.roundValues(0,120000)
+            expect(_mm.division).to.equal(10000)
+        })
+
+        it("When roundValues(0,1200000) division should be 10000 ", function(){
+            var _mm = _sketch.roundValues(0,1200000)
+            expect(_mm.division).to.equal(100000)
+        })
+
+
+
+        it("When roundValues(0,100) min should be 0, max should be 100", function(){
+            var _mm = _sketch.roundValues(0,100)
+            expect(_mm.min).to.equal(0)
+            expect(_mm.max).to.equal(110)
+        })
+
+        it("When roundValues(0,101) min should be 0, max should be 110", function(){
+            var _mm = _sketch.roundValues(0,101)
+            expect(_mm.min).to.equal(0)
+            expect(_mm.max).to.equal(110)
+        })
+
+        it("When 0,13050 - min should be 0, max should be 14000", function(){
+            var _mm = _sketch.roundValues(0,13050);
+            expect(_mm.min).to.equal(0)
+            expect(_mm.max).to.equal(14000)
+        })
+
+        it("When -200,13050 - min should be -1000, max should be 14000", function(){
+            var _mm = _sketch.roundValues(-200,13050);
+            expect(_mm.min).to.equal(-1000)
+            expect(_mm.max).to.equal(14000)
+            expect(_mm.division).to.equal(1000)
+        })
+
+        it("When -1200,13050 - min should be -1000, max should be 14000", function(){
+            var _mm = _sketch.roundValues(-1200,13050);
+            expect(_mm.min).to.equal(-2000)
+            expect(_mm.max).to.equal(14000)
+            expect(_mm.division).to.equal(1000)
+        })
+
+        it("When -1200,1050 - min should be -1000, max should be 14000", function(){
+            var _mm = _sketch.roundValues(-1200,1050);
+            expect(_mm.min).to.equal(-2000)
+            expect(_mm.max).to.equal(2000)
+            expect(_mm.division).to.equal(1000)
+        })
+
+
+
+        it("min should be 0, max should be 14000", function(){
+            var _mm = _sketch.roundValues(0,13050);
+            expect(_mm.min).to.equal(0)
+            expect(_mm.max).to.equal(14000)
+        })
+
+
+
+    })
+
+
 })

@@ -10,8 +10,8 @@ BaseChart= (function(target, opt_data, opt_config){
         this._canvas = null,
         this._ctx = null,
         this._backgroundColour = "#cccccc",
-        this._width = 900,
-        this._height = 400,
+        this.width = 900,
+        this.height = 400,
         this.data = opt_data || {name:"genericName"};
         this._playing = true;
         this.canvasId = "chartCanvas_"+Math.ceil(Math.random()*1000);
@@ -83,17 +83,17 @@ BaseChart= (function(target, opt_data, opt_config){
             this.getPlaying() ? _initAnimation.call(this) : null;
         },
         getHeight:function(){
-           return this._height;
+           return this.height;
         },
         setHeight:function(value){
-            this._height = value;
+            this.height = value;
            // this.render();
         },
         getWidth:function(){
-            return this._width;
+            return this.width;
         },
         setWidth:function(value){
-            this._width = value;
+            this.width = value;
            // this.render();
         },
         setCanvas:function(value){
@@ -134,7 +134,7 @@ BaseChart= (function(target, opt_data, opt_config){
             if( this.getPlaying() ) requestAnimationFrame(this.animate.bind(this));
         },
         update:function(){
-            this._scale = new Scale([this.leftMargin, this._width - this.rightMargin],[Scale.min(this.getData()),Scale.max(this.getData()) ]);
+            this._scale = new Scale([this.leftMargin, this.width - this.rightMargin],[Scale.min(this.getData()),Scale.max(this.getData()) ]);
             this.clear();
             this.render();
             //console.log("The update functions is to be overridden in the concrete implementation of the concrete implementation of the class")
