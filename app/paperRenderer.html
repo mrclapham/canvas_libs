@@ -42,7 +42,7 @@
                 yMax: 100,
                 xStart: 0,
                 xEnd: 900,
-                steps : 18
+                steps : 48
             }
 
 
@@ -58,7 +58,10 @@
 
 
             var _paper2 = new PaperRenderer("paperCanv2", data1);
-            _paper.setData(data1)
+            _paper2.setData(data1)
+
+            var _paper3 = new PaperRenderer("paperCanv3", data0);
+            _paper3.setData(data1)
 
             document.getElementById("togglePlay0").addEventListener('click', function(){
                 _paper.setData(data0)
@@ -88,6 +91,7 @@
 <div id="chartHolder0"></div>
 <div id="chartHolder1"><canvas id = "paperCanv" width="900px" height="500px"></canvas></div>
 <div id="chartHolder1"><canvas id = "paperCanv2" width="900px" height="500px"></canvas></div>
+<div id="chartHolder1"><canvas id = "paperCanv3" width="900px" height="500px"></canvas></div>
 
 
 </body>
