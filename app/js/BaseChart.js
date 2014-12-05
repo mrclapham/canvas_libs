@@ -24,7 +24,6 @@ BaseChart= (function(target, opt_data, opt_config){
 
     var _init = function(opt_config){
         if(this.opt_config) _onConfigSet.call(this, this.opt_config);
-        //console.log("CREATE CANVAS "+this.createCanvas);
         if(this.createCanvas) _onTargetSet.call(this);
         _initAnimation.call(this);
         this.postInit();
@@ -123,10 +122,10 @@ BaseChart= (function(target, opt_data, opt_config){
         render:function(){
             if( this.getContext() ){
             this.clear();
-                var ctx = this.getContext();
-                ctx.fillStyle = this.getBackgroundColour();
-                ctx.fillRect(0,0,100,150);
-                ctx.closePath();
+                //var ctx = this.getContext();
+                //ctx.fillStyle = this.getBackgroundColour();
+                //ctx.fillRect(0,0,100,150);
+                //ctx.closePath();
             }
         },
         animate:function(){
