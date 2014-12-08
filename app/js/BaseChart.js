@@ -30,6 +30,12 @@ BaseChart= (function(target, opt_data, opt_config){
         if(this.opt_config) _onConfigSet.call(this, this.opt_config);
         if(this.createCanvas) _onTargetSet.call(this);
         _initAnimation.call(this);
+
+        try{
+            this.initScale();
+        }catch(e){
+            //--
+        }
         this.postInit();
     }
 
@@ -196,8 +202,12 @@ BaseChart= (function(target, opt_data, opt_config){
             this.render();
             if( this.getPlaying() ) requestAnimationFrame(this.animate.bind(this));
         },
-        update:function(){
+        initScale:function(){
             this._scale = new Scale([this.leftMargin, this.width - this.rightMargin],[Scale.min(this.getData()),Scale.max(this.getData()) ]);
+            _createScale.call(this);
+        },
+        update:function(){
+            this.initScale();
             _createScale.call(this);
             this.clear();
             this.render();
