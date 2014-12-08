@@ -18,6 +18,10 @@ BaseChart= (function(target, opt_data, opt_config){
         this._scale = null;
         this.leftMargin =20;
         this.rightMargin = 20;
+        this.topMargin = 40;
+        this.bottomMargin = 50;
+        this._scaleX;
+        this._scaleY;
         //this.canvasId = null;
         _init.call(this);
     }
@@ -41,7 +45,6 @@ BaseChart= (function(target, opt_data, opt_config){
         requestAnimationFrame(this.animate.bind(this));
     }
 
-
     var _onTargetSet = function(){
         this._canvas = document.createElement('canvas');
         this._canvas.width = this.getWidth();
@@ -53,6 +56,60 @@ BaseChart= (function(target, opt_data, opt_config){
         this.target.appendChild(this._canvas);
     }
 
+    var _createScale = function(){
+        this.maxX = Scale.max(this.getData(), 'x');
+        this.minX = Scale.min(this.getData(), 'x');
+        this.maxY = Scale.max(this.getData(), 'y');
+        this.minY = Scale.min(this.getData(), 'y');
+        this._roundedYValues = _roundValues(this.minY.y, this.maxY.y);
+        this._scaleX = new Scale([this.minX.x, this.maxX.x],[this.leftMargin, this.getWidth()-this.rightMargin]);
+        this._scaleY = new Scale([this._roundedYValues.min, this._roundedYValues.max],[this.bottomMargin, this.getHeight()-this.topMargin]);
+    }
+
+    var _calculateYDivisions = function(range){
+        var _divisions = 1;
+        if(range <= 10){_divisions = 10}
+        if(range >= 100){_divisions = 10}
+        if(range >= 1000){_divisions = 100}
+        if(range >= 10000){_divisions = 1000}
+        if(range >= 100000){_divisions = 10000}
+        if(range >= 1000000){_divisions = 100000}
+        return _divisions;
+    }
+
+    var _roundValues = function(min, max){
+        var _min=parseInt(min), _max=parseInt(max);
+        var _range = max-min;
+        var division = _calculateYDivisions(_range);
+        _min<0 ? _min -=division : _min = 0;
+        _max+=division;
+        // now find the divider by turning the number to a string....
+        var _numStringLengthMax = String(_max).length-2;
+        var _numStringLengthMin = String(_min).length-2;
+
+        var _dividerMax = "1", _dividerMin ="1", _primaryDivision;
+
+        for(var i=0;i<_numStringLengthMax; i++){
+            _dividerMax+="0";
+        }
+        for(var ii=0;ii<_numStringLengthMin; ii++){
+            _dividerMin+="0";
+        }
+
+        _dividerMax = parseInt(_dividerMax);
+        _dividerMin = parseInt(_dividerMin);
+        _primaryDivision = _dividerMin<_dividerMax ? _dividerMax : _dividerMin;
+
+        _max/=_primaryDivision;
+        _max = Math.floor(_max);
+        _max *= _primaryDivision;
+
+        _min/=_primaryDivision;
+        _min = Math.floor(_min);
+        _min *= _primaryDivision;
+
+        return {min:_min, max:_max, division:division}
+    }
 
     _scope.prototype = {
         postInit:function(){
@@ -104,6 +161,12 @@ BaseChart= (function(target, opt_data, opt_config){
         getCanvasId:function(){
             return this.canvasId
         },
+        getXscale:function(){
+            return this._scaleX;
+        },
+        getYscale:function(){
+            return this._scaleY;
+        },
         setCanvasId:function(value){
             this.canvasId = value;
             if(this.getCanvas()){
@@ -116,6 +179,7 @@ BaseChart= (function(target, opt_data, opt_config){
         getBackgroundColour:function(){
             return this._backgroundColour;
         },
+
         clear:function(){
           if(this.getContext())  this.getContext().clearRect(0,0,this.getWidth(), this.getHeight());
         },
@@ -134,6 +198,7 @@ BaseChart= (function(target, opt_data, opt_config){
         },
         update:function(){
             this._scale = new Scale([this.leftMargin, this.width - this.rightMargin],[Scale.min(this.getData()),Scale.max(this.getData()) ]);
+            _createScale.call(this);
             this.clear();
             this.render();
             //console.log("The update functions is to be overridden in the concrete implementation of the concrete implementation of the class")

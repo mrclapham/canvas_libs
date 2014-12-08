@@ -39,10 +39,7 @@ PaperRenderer.prototype.postInit = function(){
 
 // Pass a color name to the fillColor property, which is internally
 // converted to a Color.
-    this.leftMargin = 40;
-    this.rightMargin = 60;
-    this.topMargin = 40;
-    this.bottomMargin = 50;
+
     this._circle.fillColor = this.dotColor;
     this._path = new _paper.Path();
     this._start = new _paper.Point(100, 100);
@@ -50,6 +47,7 @@ PaperRenderer.prototype.postInit = function(){
     this.myPath = new _paper.Path();
     this.myPath.add(new _paper.Point(0, 0));
     this.myPath.strokeColor = this.dotColor;
+
     this._xSale = null;
     this._yScale = null;
     var _this = this;
@@ -74,10 +72,6 @@ PaperRenderer.prototype.makeDot = function(x,y){
 }
 
 var _drawDots =function(){
-    console.log("DRAW DOTS...")
-    console.log("DRAW DOTS... ARRAY ",this._circleArray.length )
-    console.log("DRAW DOTS... DATA ", this.getData().length)
-
 
     var diff;
     if(this._circleArray.length != this.getData().length){
@@ -119,8 +113,6 @@ var _drawDots =function(){
         console.log(this._circleArray)
     }
 
-    console.log("SAME LENGTH? _ DRAW DOTS... ARRAY ",this._circleArray.length )
-    console.log("SAME LENGTH? _ DRAW DOTS... DATA ", this.getData().length)
 
 }
 
@@ -148,15 +140,20 @@ var _drawLine = function(){
 var _onFrame = function(){
    // this.activate();
 
+
     for(var i =0; i<this.getData().length; i++){
         if(this.myPath.segments[i]){
-            var currentPos = new _paper.Point(this.myPath.segments[i].getPoint().x , this.myPath.segments[i].getPoint().y)
-            var desiredPos = new _paper.Point(this.getData()[i].x, this.getData()[i].y)
+            var currentPos = new _paper.Point(this.myPath.segments[i].getPoint().x , this.myPath.segments[i].getPoint().y);
+
+            var xp =  this.getXscale()  ? this.getXscale().map( this.getData()[i].x ) : this.getData()[i].x;
+            var yp =  this.getYscale()  ? this.getYscale().map( this.getData()[i].y ) : this.getData()[i].y;
+
+            var desiredPos = new _paper.Point( xp, yp );
             var diff = desiredPos.subtract(currentPos);
-            var velocity = diff.divide(6)
-            var se = this.myPath.segments[i]
+            var velocity = diff.divide(6);
+            var se = this.myPath.segments[i];
             var newpos = currentPos.add(velocity); //new __paper.Point(_this.getData()[i].x, _this.getData()[i].y)
-            se.setPoint( newpos )
+            se.setPoint( newpos );
             if(this._circleArray[i]) this._circleArray[i].position = newpos;
         }
     }
@@ -178,7 +175,7 @@ var _scribble = function(){
 }
 
 PaperRenderer.prototype.render = function(){
-    console.log("RENDER")
+    console.log("RENDER: ",this.getYscale() )
     _drawLine.call(this);
     _drawDots.call(this);
     //this._path.lineTo(this._start.add([ Math.random()*300, Math.random()*300 ]));
