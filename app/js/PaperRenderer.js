@@ -39,6 +39,10 @@ PaperRenderer.prototype.postInit = function(){
 
 // Pass a color name to the fillColor property, which is internally
 // converted to a Color.
+    this.leftMargin = 40;
+    this.rightMargin = 60;
+    this.topMargin = 40;
+    this.bottomMargin = 50;
     this._circle.fillColor = this.dotColor;
     this._path = new _paper.Path();
     this._start = new _paper.Point(100, 100);
@@ -46,7 +50,8 @@ PaperRenderer.prototype.postInit = function(){
     this.myPath = new _paper.Path();
     this.myPath.add(new _paper.Point(0, 0));
     this.myPath.strokeColor = this.dotColor;
-
+    this._xSale = null;
+    this._yScale = null;
     var _this = this;
 
     _paper.view.onFrame = function(e){
@@ -70,27 +75,9 @@ PaperRenderer.prototype.makeDot = function(x,y){
 
 var _drawDots =function(){
     console.log("DRAW DOTS...")
-    console.log("DRAW DOTS...",this._circleArray.length )
-    console.log("DRAW DOTS...", this.getData().length)
+    console.log("DRAW DOTS... ARRAY ",this._circleArray.length )
+    console.log("DRAW DOTS... DATA ", this.getData().length)
 
-    for(var dot in this._circleArray){
-        this._circleArray[dot].remove()
-        delete this._circleArray[dot]
-    }
-
-
-    this._circleArray = []
-
-    for(var i=0; i<this.getData().length; i++){
-        // var _dot = this.makeDot( this.getData()[i].x, this.getData()[i].y );
-        //console.log("DOT>>>>>>>>>>>>> ",_dot)
-        this.activate();
-        var _circle = new _paper.Path.Circle(new _paper.Point(this.getData()[i].x, this.getData()[i].y), 6);
-        this._circleArray.push(_circle)
-        _circle.fillColor = this.dotColor;
-    }
-   // console.log(this._circleArray)
-    /*
 
     var diff;
     if(this._circleArray.length != this.getData().length){
@@ -107,31 +94,34 @@ var _drawDots =function(){
             this._circleArray.push(_circle)
             _circle.fillColor = this.dotColor;
         }
-        console.log(this._circleArray)
-
+       // console.log(this._circleArray)
     }
     ////////////
 
     if(diff<0){
-        diff= 0-diff
-        for(var i=0; i<diff; i++){
+
+        var _removealArray = this._circleArray.splice(this._circleArray.length+diff,  0-diff )
+
+        for(var i=0; i<_removealArray.length; i++){
             // var _dot = this.makeDot( this.getData()[i].x, this.getData()[i].y );
             this.activate();
             //var _circle = new _paper.Path.Circle(new _paper.Point(this.getData()[i].x, this.getData()[i].y), 6);
-            this._circleArray.push(_circle)
-            var toDelete = this._circleArray.splice(i,1)
+            var toDelete = _removealArray[i]
             console.log("DELETE :: ",toDelete)
-
             try{
-                toDelete[0].delete();
+                toDelete.remove();
+                delete toDelete;
             }catch(e){
-
+                ///---
             }
            // _circle.fillColor = this.dotColor;
         }
         console.log(this._circleArray)
     }
-    */
+
+    console.log("SAME LENGTH? _ DRAW DOTS... ARRAY ",this._circleArray.length )
+    console.log("SAME LENGTH? _ DRAW DOTS... DATA ", this.getData().length)
+
 }
 
 var _drawLine = function(){
@@ -163,22 +153,20 @@ var _onFrame = function(){
             var currentPos = new _paper.Point(this.myPath.segments[i].getPoint().x , this.myPath.segments[i].getPoint().y)
             var desiredPos = new _paper.Point(this.getData()[i].x, this.getData()[i].y)
             var diff = desiredPos.subtract(currentPos);
-            var velocity = diff.divide(12)
+            var velocity = diff.divide(6)
             var se = this.myPath.segments[i]
             var newpos = currentPos.add(velocity); //new __paper.Point(_this.getData()[i].x, _this.getData()[i].y)
             se.setPoint( newpos )
+            if(this._circleArray[i]) this._circleArray[i].position = newpos;
         }
     }
-
     //this.myPath.smooth();
     this.myPath.add(new _paper.Point(this.getWidth(), 300));
     this.myPath.add(new _paper.Point(0, 300));
     this.myPath.closed = true;
     this.myPath.fillColor = "rgba(255,0,255,0.1)"
     //this.myPath.dashArray = [10, 4];
-
 }
-
 
 
 var _scribble = function(){
@@ -202,5 +190,4 @@ PaperRenderer.prototype.render = function(){
    // this.myPath.fullySelected = true;
     //this.myPath.smooth();
     _paper.view.draw();
-
 }
