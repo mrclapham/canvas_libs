@@ -64,7 +64,7 @@ PaperRenderer.prototype.makeDot = function(x,y){
     this.activate();
     var _dot = new _paper.Shape.Circle(x,y, 6);
     _dot.fillColor = "rgba(100,200,89,1)";
-
+    console.log("_dot ",_dot);
     return _dot;
 }
 
@@ -74,11 +74,10 @@ var _drawDots =function(){
     console.log("DRAW DOTS...", this.getData().length)
 
     for(var dot in this._circleArray){
-        console.log(this._circleArray[dot])
-        this.activate();
-
-        this._circleArray[dot].delete();
+        this._circleArray[dot].remove()
+        delete this._circleArray[dot]
     }
+
 
     this._circleArray = []
 
@@ -90,7 +89,7 @@ var _drawDots =function(){
         this._circleArray.push(_circle)
         _circle.fillColor = this.dotColor;
     }
-    console.log(this._circleArray)
+   // console.log(this._circleArray)
     /*
 
     var diff;
