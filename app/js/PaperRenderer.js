@@ -13,6 +13,11 @@ function PaperRenderer(target, opt_data, opt_config){
     }else{
         opt_config = {createCanvas:false, canvasId:target};
     }
+    //The vars
+    this.backgroundColour = "rgba(19,19,19,1)"
+    this.fillColour1 = "rgba(226,114,43,1)"
+    this.fillColour2 = "rgba(226,114,43,0)"
+
     this.dotColor = "red"
     BaseChart.call(this, target, opt_data, opt_config); // call super constructor.
 
@@ -39,25 +44,25 @@ PaperRenderer.prototype.postInit = function(){
 
 // Pass a color name to the fillColor property, which is internally
 // converted to a Color.
-
+    this._layer2 = new _paper.Layer();
     this._circle.fillColor = this.dotColor;
     this._path = new _paper.Path();
     this._start = new _paper.Point(100, 100);
     this._path.moveTo(this._start);
-    this.myPath = new _paper.Path();
-    this.myPath.add(new _paper.Point(0, 0));
-    this.myPath.strokeColor = this.dotColor;
+
 
     var _this = this;
-    this._layer2 = new _paper.Layer();
-    _drawBackground.call(this);
 
+
+    _drawBackground.call(this);
+    _drawAreaChart.call(this);
     _paper.view.onFrame = function(e){
         _onFrame.call(_this);
     }
 }
 
 PaperRenderer.prototype.activate = function(opt_layer){
+    //If there is a layer with this ID use activate that layer.
     if(opt_layer) console.log("L2 ",this[opt_layer]);
 
     if(opt_layer && this[opt_layer]){
@@ -89,10 +94,16 @@ var _drawBackground = function(){
     console.log("ACTIVATED ...",layer);
     //layer.sendToBack();
 
-    var __point = new _paper.Point(30, 20);
+    var __point = new _paper.Point(0, 0);
     var _size = new _paper.Point(this.getWidth(), this.getHeight())
     this._background = new _paper.Shape.Rectangle(__point, _size);
-    this._background.fillColor = "rgba(0,200,200, .9)";
+    this._background.fillColor = this.backgroundColour;
+}
+
+var _drawAreaChart = function(){
+    this.myPath = new _paper.Path();
+    this.myPath.add(new _paper.Point(0, 0));
+    this.myPath.strokeColor = this.dotColor;
 }
 
 var _drawDots =function(){
@@ -172,7 +183,7 @@ var _onFrame = function(){
     this.myPath.closed = true;
     this.myPath.fillColor = {
         gradient: {
-            stops: ['rgba(255, 0, 255, 1)', 'rgba(255, 0, 255, .1)']
+            stops: [this.fillColour1, this.fillColour2]
         },
         origin: [0,this.getHeight()/2],
             destination: [0,this.getHeight()]
