@@ -17,6 +17,12 @@ function PaperRenderer(target, opt_data, opt_config){
     this.backgroundColour = "rgba(19,19,19,1)"
     this.fillColour1 = "rgba(226,114,43,1)"
     this.fillColour2 = "rgba(226,114,43,0)"
+    this.gridLineStyle = {
+        strokeColor: 'white',
+        strokeWidth: .3,
+       // dashArray: [2, 2],
+        fillColor: 'red'
+    };
 
     this.dotColor = "red"
     BaseChart.call(this, target, opt_data, opt_config); // call super constructor.
@@ -99,34 +105,103 @@ var _drawBackground = function(){
 }
 
 
-var _createLine = function(from, to){
-    var _line = _paper.Line
-}
+
+/*
+
+
+
+ var diff;
+ if(this._circleArray.length != this.getData().length){
+ diff =  this.getData().length - this._circleArray.length
+ }
+ ///////////////
+ if(diff>0){
+ for(var i=0; i<diff; i++){
+ // var _dot = this.makeDot( this.getData()[i].x, this.getData()[i].y );
+ //console.log("DOT>>>>>>>>>>>>> ",_dot)
+ this.activate();
+ var _circle = new _paper.Path.Circle(new _paper.Point(this.getData()[i].x, this.getData()[i].y), 6);
+ this._circleArray.push(_circle)
+ _circle.fillColor = this.dotColor;
+ }
+ // console.log(this._circleArray)
+ }
+ ////////////
+ if(diff<0){
+ var _removealArray = this._circleArray.splice(this._circleArray.length+diff,  0-diff )
+
+ for(var i=0; i<_removealArray.length; i++){
+ // var _dot = this.makeDot( this.getData()[i].x, this.getData()[i].y );
+ this.activate();
+ //var _circle = new _paper.Path.Circle(new _paper.Point(this.getData()[i].x, this.getData()[i].y), 6);
+ var toDelete = _removealArray[i]
+ try{
+ toDelete.remove();
+ delete toDelete;
+ }catch(e){
+ ///---
+ }
+ }
+ }
+
+
+ */
+
+
+var _createLine = (function(from, to, displayValue, opt_config){
+    var _scope = function(from, to, displayValue, opt_config){
+        console.log("OPT CONFIG + ",opt_config)
+        this.config = opt_config || {}
+        for(var prop in this.config){
+            this[prop] = this.config[prop]
+        }
+        this.style = this.config.style || { strokeWeight : 0.5, strokeColor: "rgba(255,0,255, 1)"}
+        this.from = from;
+        this.to = to;
+        this.displayValue = displayValue;
+        this.line = new _paper.Path.Line(from,to);
+
+        this.line.style = this.style
+    }
+    _scope.prototype.setPosition = function(points){
+
+    }
+
+    //var _line = _paper.Path.Line(from,to);
+    //_line.strokeWeight = .5;
+    //_line.strokeColor = "rgba(255,0,255, 1)";
+    return _scope // {line:_line, from:from, to:to, displayValue:displayValue}
+})();
+
 
 var _drawYlines = function(){
-    console.log("draw y lines ")
     this.activate();
     if(this.maxY && this.minY && this.maxY.y && this.minY.y){
         var range = this.maxY.y - this.minY.y;
-       // var division = _calculateYDivisions(range);
-        //
 
-
-        var steps = (this._roundedYValues.max-this._roundedYValues.min) / this._roundedYValues.division
+        var steps = Math.ceil((this._roundedYValues.max-this._roundedYValues.min) / this._roundedYValues.division)
         console.log("The number of steps is --- ", steps);
 
+        var diff;
+        if(this._yLineArray.length != steps){
+            diff =  this._yLineArray.length != steps
+            for(var i=0; i<this._yLineArray.length; i++){
+                this._yLineArray[i].line.remove();
+                delete this._yLineArray[i].line;
+            }
+            this._yLineArray = []
+        }
 
-        for(var i = this._roundedYValues.min; i<this._roundedYValues.max; i+=this._roundedYValues.division){
-           // console.log("this.getHeight()", this.getHeight())
-           // console.log("this.getScaleY()",this.getYscale())
-            var yPos = this.getHeight() - this.getYscale().map(i);
-           // console.log("yPos ",yPos);
+        for(var i = 0; i<steps; i++){
+            var displayValue = i*this._roundedYValues.division
+            var yPos = this.getHeight() - this.getYscale().map(displayValue);
+
             var from = new _paper.Point(this.leftMargin, yPos);
             var to = new _paper.Point(this.getWidth()-this.rightMargin, yPos);
-            var lyn = _paper.Path.Line(from,to);
-            console.log(lyn.segments[0])
-            lyn.strikeWeight = 1;
-            lyn.strokeColor = "rgba(255,0,255, 1)";
+
+            var lyn = new _createLine(from,to,displayValue, {style:this.gridLineStyle});
+            console.log(lyn)
+            this._yLineArray[i] = lyn;
             //sketch.line(sketch._leftOffset, yPos, sketch.width-sketch._rightOffset,  yPos);
             //sketch.textAlign(sketch.RIGHT);
             //sketch.fill("rgba(255,255,255,255)");
