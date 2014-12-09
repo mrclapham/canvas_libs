@@ -63,6 +63,7 @@ BaseChart= (function(target, opt_data, opt_config){
     }
 
     var _createScale = function(){
+        console.log("_createScale ca;led")
         this.maxX = Scale.max(this.getData(), 'x');
         this.minX = Scale.min(this.getData(), 'x');
         this.maxY = Scale.max(this.getData(), 'y');
@@ -73,17 +74,22 @@ BaseChart= (function(target, opt_data, opt_config){
     }
 
     var _calculateYDivisions = function(range){
-        var _divisions = 1;
+        //console.log("_calculateYDivisions called ", range)
+        var _divisions = 20;
         if(range <= 10){_divisions = 10}
+        if(range <= 100 && range >= 10){_divisions = 10}
         if(range >= 100){_divisions = 10}
         if(range >= 1000){_divisions = 100}
         if(range >= 10000){_divisions = 1000}
         if(range >= 100000){_divisions = 10000}
         if(range >= 1000000){_divisions = 100000}
+        //console.log("_calculateYDivisions called END", _divisions)
+
         return _divisions;
     }
 
     var _roundValues = function(min, max){
+        //console.log("_roundValues caled ",max,min);
         var _min=parseInt(min), _max=parseInt(max);
         var _range = max-min;
         var division = _calculateYDivisions(_range);

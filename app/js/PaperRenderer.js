@@ -20,12 +20,10 @@ function PaperRenderer(target, opt_data, opt_config){
 
     this.dotColor = "red"
     BaseChart.call(this, target, opt_data, opt_config); // call super constructor.
-
 };
 
 PaperRenderer.prototype = Object.create(BaseChart.prototype);
 PaperRenderer.prototype.constructor = PaperRenderer;
-
 PaperRenderer.prototype.postInit = function(){
     this.setPlaying(false)
 
@@ -37,25 +35,25 @@ PaperRenderer.prototype.postInit = function(){
     }
 
     _paper.setup(_canv);
-    this._circle = new paper.Path.Circle(new paper.Point(80, 50), 10);
+    //this._circle = new paper.Path.Circle(new paper.Point(80, 50), 10);
 
     this. pointArray = [];
-    this._circleArray =[]
+    this._circleArray =[];
+    this._yLineArray = [];
 
 // Pass a color name to the fillColor property, which is internally
 // converted to a Color.
     this._layer2 = new _paper.Layer();
-    this._circle.fillColor = this.dotColor;
     this._path = new _paper.Path();
     this._start = new _paper.Point(100, 100);
     this._path.moveTo(this._start);
 
-
     var _this = this;
-
 
     _drawBackground.call(this);
     _drawAreaChart.call(this);
+    _drawYlines.call(this);
+
     _paper.view.onFrame = function(e){
         _onFrame.call(_this);
     }
@@ -63,7 +61,7 @@ PaperRenderer.prototype.postInit = function(){
 
 PaperRenderer.prototype.activate = function(opt_layer){
     //If there is a layer with this ID use activate that layer.
-    if(opt_layer) console.log("L2 ",this[opt_layer]);
+    //if(opt_layer) console.log("L2 ",this[opt_layer]);
 
     if(opt_layer && this[opt_layer]){
         try{
@@ -91,13 +89,57 @@ PaperRenderer.prototype.makeDot = function(x,y){
 var _drawBackground = function(){
     //this.activate()
     var layer = this.activate('_layer2')
-    console.log("ACTIVATED ...",layer);
+    //console.log("ACTIVATED ...",layer);
     //layer.sendToBack();
 
     var __point = new _paper.Point(0, 0);
     var _size = new _paper.Point(this.getWidth(), this.getHeight())
     this._background = new _paper.Shape.Rectangle(__point, _size);
     this._background.fillColor = this.backgroundColour;
+}
+
+
+var _createLine = function(from, to){
+    var _line = _paper.Line
+}
+
+var _drawYlines = function(){
+    console.log("draw y lines ")
+    this.activate();
+    if(this.maxY && this.minY && this.maxY.y && this.minY.y){
+        var range = this.maxY.y - this.minY.y;
+       // var division = _calculateYDivisions(range);
+        //
+
+
+        var steps = (this._roundedYValues.max-this._roundedYValues.min) / this._roundedYValues.division
+        console.log("The number of steps is --- ", steps);
+
+
+        for(var i = this._roundedYValues.min; i<this._roundedYValues.max; i+=this._roundedYValues.division){
+           // console.log("this.getHeight()", this.getHeight())
+           // console.log("this.getScaleY()",this.getYscale())
+            var yPos = this.getHeight() - this.getYscale().map(i);
+           // console.log("yPos ",yPos);
+            var from = new _paper.Point(this.leftMargin, yPos);
+            var to = new _paper.Point(this.getWidth()-this.rightMargin, yPos);
+            var lyn = _paper.Path.Line(from,to);
+            console.log(lyn.segments[0])
+            lyn.strikeWeight = 1;
+            lyn.strokeColor = "rgba(255,0,255, 1)";
+            //sketch.line(sketch._leftOffset, yPos, sketch.width-sketch._rightOffset,  yPos);
+            //sketch.textAlign(sketch.RIGHT);
+            //sketch.fill("rgba(255,255,255,255)");
+            //sketch.text(i,sketch._leftOffset-5, yPos);
+        }
+    }
+}
+
+var _positionYlines = function(){
+    for(var i=0; i<this._yLineArray.length; i++){
+        var o = this._yLineArray[i]
+        // o.line.position =
+    }
 }
 
 var _drawAreaChart = function(){
@@ -203,12 +245,12 @@ PaperRenderer.prototype.render = function(){
     console.log("RENDER: ",this.getYscale() )
     _drawLine.call(this);
     _drawDots.call(this);
+    _drawYlines.call(this);
 
     //this._path.lineTo(this._start.add([ Math.random()*300, Math.random()*300 ]));
     // Draw the view now:
     //_paper.view.draw();
     //_paper2.view.draw();
-    this._circle.position = Math.random()*300, Math.random()*300;
     //_paper.remove( this._circle );
    // this.myPath.fullySelected = true;
     //this.myPath.smooth();
