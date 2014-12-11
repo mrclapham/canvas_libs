@@ -210,6 +210,10 @@ var _drawYlines = function(){
     }
 }
 
+var _addToolTip = function(data){
+
+}
+
 var _positionYlines = function(){
     for(var i=0; i<this._yLineArray.length; i++){
         var o = this._yLineArray[i]
@@ -236,6 +240,12 @@ var _drawDots =function(){
             //console.log("DOT>>>>>>>>>>>>> ",_dot)
             this.activate();
             var _circle = new _paper.Path.Circle(new _paper.Point(this.getData()[i].x, this.getData()[i].y), 6);
+            _circle.data = this.getData()[i];
+            _circle.data.index=i;
+
+            _circle.on('mouseenter', function(e){
+                console.log(this.data)
+            })
             this._circleArray.push(_circle)
             _circle.fillColor = this.dotColor;
         }
@@ -295,8 +305,8 @@ var _onFrame = function(){
         }
     }
     //this.myPath.smooth();
-    this.myPath.insert(this.getData().length, new _paper.Point(this.getWidth()-this.rightMargin, this.getHeight()));
-    this.myPath.insert(this.getData().length+1, new _paper.Point(this.leftMargin, this.getHeight()));
+    this.myPath.insert(this.getData().length, new _paper.Point(this.getWidth()-this.rightMargin, this.getHeight() - this.bottomMargin));
+    this.myPath.insert(this.getData().length+1, new _paper.Point(this.leftMargin, this.getHeight() - this.bottomMargin ));
     this.myPath.closed = true;
     this.myPath.fillColor = {
         gradient: {
