@@ -46,6 +46,7 @@ PaperRenderer.prototype.postInit = function(){
     this. pointArray = [];
     this._circleArray =[];
     this._yLineArray = [];
+    this._dynamicDotArray = []
 
 // Pass a color name to the fillColor property, which is internally
 // converted to a Color.
@@ -59,6 +60,7 @@ PaperRenderer.prototype.postInit = function(){
     _drawBackground.call(this);
     _drawAreaChart.call(this);
     _drawYlines.call(this);
+    _createToolTip.call(this);
 
     _paper.view.onFrame = function(e){
         _onFrame.call(_this);
@@ -92,6 +94,10 @@ PaperRenderer.prototype.makeDot = function(x,y){
     return _dot;
 }
 
+PaperRenderer.prototype.getTooltip = function() {
+    return this._tooltipelement;
+}
+
 var _drawBackground = function(){
     //this.activate()
     var layer = this.activate('_layer2')
@@ -105,52 +111,8 @@ var _drawBackground = function(){
 }
 
 
-
-/*
-
-
-
- var diff;
- if(this._circleArray.length != this.getData().length){
- diff =  this.getData().length - this._circleArray.length
- }
- ///////////////
- if(diff>0){
- for(var i=0; i<diff; i++){
- // var _dot = this.makeDot( this.getData()[i].x, this.getData()[i].y );
- //console.log("DOT>>>>>>>>>>>>> ",_dot)
- this.activate();
- var _circle = new _paper.Path.Circle(new _paper.Point(this.getData()[i].x, this.getData()[i].y), 6);
- this._circleArray.push(_circle)
- _circle.fillColor = this.dotColor;
- }
- // console.log(this._circleArray)
- }
- ////////////
- if(diff<0){
- var _removealArray = this._circleArray.splice(this._circleArray.length+diff,  0-diff )
-
- for(var i=0; i<_removealArray.length; i++){
- // var _dot = this.makeDot( this.getData()[i].x, this.getData()[i].y );
- this.activate();
- //var _circle = new _paper.Path.Circle(new _paper.Point(this.getData()[i].x, this.getData()[i].y), 6);
- var toDelete = _removealArray[i]
- try{
- toDelete.remove();
- delete toDelete;
- }catch(e){
- ///---
- }
- }
- }
-
-
- */
-
-
 var _createLine = (function(from, to, displayValue, opt_config){
     var _scope = function(from, to, displayValue, opt_config){
-        console.log("OPT CONFIG + ",opt_config)
         this.config = opt_config || {}
         for(var prop in this.config){
             this[prop] = this.config[prop]
@@ -200,14 +162,57 @@ var _drawYlines = function(){
             var to = new _paper.Point(this.getWidth()-this.rightMargin, yPos);
 
             var lyn = new _createLine(from,to,displayValue, {style:this.gridLineStyle});
-            console.log(lyn)
             this._yLineArray[i] = lyn;
-            //sketch.line(sketch._leftOffset, yPos, sketch.width-sketch._rightOffset,  yPos);
-            //sketch.textAlign(sketch.RIGHT);
-            //sketch.fill("rgba(255,255,255,255)");
-            //sketch.text(i,sketch._leftOffset-5, yPos);
         }
     }
+}
+
+var Tooltip = (function(parent){
+    var _scope = function(parent){
+        this._text = "default text"
+        this._position = null;
+        this._parent = parent
+        _init.call(this);
+    }
+    var _init = function(){
+        console.log("Making the tooltip")
+        if(!this._position ) this._position =  new _paper.Point(30, 30);
+        this._toolTipTextElement = new _paper.PointText(this._position );
+        this._toolTipTextElement.fillColor = '#ff00ff';
+        _onTextChanged.call(this);
+    }
+    var _onPositionChanged = function(){
+
+    }
+    var _onTextChanged = function(){
+        this._toolTipTextElement.content = this._text;
+    }
+
+    _scope.prototype = {
+        setPosition:function(value){
+            this._position = value
+            _onPositionChanged.call(this);
+        },
+        getPosition:function(){
+            return this._position
+        },
+        setText:function(value){
+            this._text = value;
+            _onTextChanged.call(this)
+            console.log("TExt changed... ")
+        },
+        getText:function(){
+            return this._text
+        }
+    }
+
+    return _scope
+})();
+
+var _createToolTip = function(){
+    this.activate();
+    this._tooltipelement = new Tooltip(this)
+    console.log(this._tooltipelement)
 }
 
 var _addToolTip = function(data){
@@ -217,7 +222,6 @@ var _addToolTip = function(data){
 var _positionYlines = function(){
     for(var i=0; i<this._yLineArray.length; i++){
         var o = this._yLineArray[i]
-        // o.line.position =
     }
 }
 
@@ -227,8 +231,112 @@ var _drawAreaChart = function(){
     this.myPath.strokeColor = this.dotColor;
 }
 
-var _drawDots =function(){
+///-- class for the dots
 
+var Dot = (function(parent, position, data){
+    var _scope = function(parent, position, data){
+        this._position = position;
+        this.parent = parent;
+        this.data = data;
+        this._unselectedOuterColour = "rgba(255, 0, 255, 1)"
+        this._outerRadius = 12;
+        this._innerGraphic;
+        this._outerGraphic;
+        this._group;
+
+        _init.call(this);
+    }
+    _scope.prototype = {
+        remove:function(){
+           if( this._innerGraphic ) this._innerGraphic.remove();
+           if( this._outerGraphic ) this._outerGraphic.remove();
+        },
+        setPosition:function(value){
+            this._position = value;
+            _onPositionChanged.call(this);
+        },
+        getPosition:function(){
+
+        }
+    }
+    var _init = function(){
+        console.log("INIT CALLED ON DOT.... ")
+        this._innerGraphic = new _paper.Path.Circle(this._position,  this._outerRadius);
+        this._innerGraphic.fillColor = this._unselectedOuterColour;
+        this._innerGraphic.blendMode = 'multiply';
+
+        this._outerGraphic = new _paper.Path.Circle(this._position,  this._outerRadius/2);
+        this._outerGraphic.fillColor = "rgba(0,255,255,1)";
+        //this._outerGraphic.blendMode = 'multiply';
+
+        this._group = new _paper.Group([this._innerGraphic, this._outerGraphic])
+
+    }
+    var _onPositionChanged = function(){
+        this._group.setPosition( this._position );
+    }
+    return _scope;
+})();
+
+
+
+
+
+
+
+var _drawDynamicDots = function(){
+    var diff;
+    if(this._dynamicDotArray.length != this.getData().length){
+        diff =  this.getData().length - this._dynamicDotArray.length
+    }
+    ///////////////
+    if(diff>0){
+        for(var i=0; i<diff; i++){
+            this.activate();
+
+            var _circle = new Dot(this, new _paper.Point(this.getData()[i].x, this.getData()[i].y), this.getData()[i]);
+            //console.log(" - - ------ - -- - -",_circle)
+            //var _circle = new _paper.Path.Circle(new _paper.Point(this.getData()[i].x, this.getData()[i].y), 6);
+            //_circle.data = this.getData()[i];
+            //_circle.data.index=i;
+            //_circle.data.parent=this;
+            //
+            //_circle.on('mouseenter', function(e){
+            //    console.log(this.data);
+            //    this.data.parent.getTooltip().setText(this.data.y);
+            //})
+            this._dynamicDotArray.push(_circle);
+            //_circle.fillColor = this.dotColor;
+        }
+    }
+    ////////////
+    if(diff<0){
+        var _removealArray = this._dynamicDotArray.splice(this._dynamicDotArray.length+diff,  0-diff )
+
+        for(var i=0; i<_removealArray.length; i++){
+            this.activate();
+            var toDelete = _removealArray[i]
+            try{
+                toDelete.remove();
+                delete toDelete;
+            }catch(e){
+                ///---
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+var _drawDots =function(){
     var diff;
     if(this._circleArray.length != this.getData().length){
          diff =  this.getData().length - this._circleArray.length
@@ -236,17 +344,17 @@ var _drawDots =function(){
     ///////////////
     if(diff>0){
         for(var i=0; i<diff; i++){
-            // var _dot = this.makeDot( this.getData()[i].x, this.getData()[i].y );
-            //console.log("DOT>>>>>>>>>>>>> ",_dot)
             this.activate();
             var _circle = new _paper.Path.Circle(new _paper.Point(this.getData()[i].x, this.getData()[i].y), 6);
             _circle.data = this.getData()[i];
             _circle.data.index=i;
+            _circle.data.parent=this;
 
             _circle.on('mouseenter', function(e){
-                console.log(this.data)
+                console.log(this.data);
+                this.data.parent.getTooltip().setText(this.data.y);
             })
-            this._circleArray.push(_circle)
+            this._circleArray.push(_circle);
             _circle.fillColor = this.dotColor;
         }
        // console.log(this._circleArray)
@@ -256,9 +364,7 @@ var _drawDots =function(){
         var _removealArray = this._circleArray.splice(this._circleArray.length+diff,  0-diff )
 
         for(var i=0; i<_removealArray.length; i++){
-            // var _dot = this.makeDot( this.getData()[i].x, this.getData()[i].y );
             this.activate();
-            //var _circle = new _paper.Path.Circle(new _paper.Point(this.getData()[i].x, this.getData()[i].y), 6);
             var toDelete = _removealArray[i]
             try{
                 toDelete.remove();
@@ -302,6 +408,7 @@ var _onFrame = function(){
             var newpos = currentPos.add(velocity); //new __paper.Point(_this.getData()[i].x, _this.getData()[i].y)
             se.setPoint( newpos );
             if(this._circleArray[i]) this._circleArray[i].position = newpos;
+            if(this._dynamicDotArray[i]) this._dynamicDotArray[i].setPosition(newpos);
         }
     }
     //this.myPath.smooth();
@@ -331,7 +438,7 @@ PaperRenderer.prototype.render = function(){
     _drawLine.call(this);
     _drawDots.call(this);
     _drawYlines.call(this);
-
+    _drawDynamicDots.call(this);
     //this._path.lineTo(this._start.add([ Math.random()*300, Math.random()*300 ]));
     // Draw the view now:
     //_paper.view.draw();
