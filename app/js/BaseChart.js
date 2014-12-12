@@ -70,7 +70,7 @@ BaseChart= (function(target, opt_data, opt_config){
         this.minY = Scale.min(this.getData(), 'y');
         this._roundedYValues = _roundValues(this.minY.y, this.maxY.y);
         this._scaleX = new Scale([this.minX.x, this.maxX.x],[this.leftMargin, this.getWidth()-this.rightMargin]);
-        this._scaleY = new Scale([this._roundedYValues.min, this._roundedYValues.max],[this.bottomMargin, this.getHeight()-this.topMargin]);
+        this._scaleY = new Scale([this._roundedYValues.min, this._roundedYValues.max],[this.getHeight()-this.topMargin, this.bottomMargin]);
     }
 
     var _calculateYDivisions = function(range){
