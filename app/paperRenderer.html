@@ -5,21 +5,16 @@
     <link href='http://fonts.googleapis.com/css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Special+Elite' rel='stylesheet' type='text/css'>
     <style>
-
        #chartHolder0{
             position: absolute;
             top: 160px;
             left:60px;
         }
-
         body{
             font-family: 'Droid Sans Mono', sans-serif ;
         }
-
     </style>
-
     <!--<script type="text/javascript" src="js/bundle.js"></script>-->
-
     <script type="text/javascript" src="bower_components/underscore/underscore-min.js"></script>
     <script type="text/javascript" src="js/utils/scale.js"></script>
     <script type="text/javascript" src="bower_components/paper/dist/paper-full.min.js"></script>
@@ -45,27 +40,15 @@
                 steps : 48
             }
 
-
             var data0 = new data_model(dataConfig).getData();
             var data1 = new data_model(dataConfig1).getData();
 
             var dataR0 = new data_model().getRegualaData(6);
             var dataR1 = new data_model().getRegualaData(12);
 
-
         var _paper = new PaperRenderer("paperCanv", data0, {dotColor:"green", leftMargin:80});
-           // _paper.setData(data0);
-
-
             var _paper2 = new PaperRenderer("paperCanv2", data1);
-            //_paper2.setData(data1)
-
             var _paper3 = new PaperRenderer("paperCanv3", data0);
-            //_paper3.setData(data1)
-
-
-
-
 
             document.getElementById("togglePlay0").addEventListener('click', function(){
                 _paper.setData(data0)
@@ -74,15 +57,7 @@
             document.getElementById("togglePlay1").addEventListener('click', function(){
                 _paper.setData(data1)
             })
-
-
-
-
         }
-
-
-
-
     </script>
 </head>
 <body onload="onLoad()">
@@ -92,11 +67,9 @@
 
 <p>Paper js version</p>
 <!--<div id="chartHolder_es"><canvas id="easleCanvas" width="900px" height="600px"></canvas></div>-->
-<div id="chartHolder0"></div>
-<div id="chartHolder1"><canvas id = "paperCanv" width="900px" height="500px"></canvas></div>
-<div id="chartHolder1"><canvas id = "paperCanv2" width="900px" height="500px"></canvas></div>
-<div id="chartHolder1"><canvas id = "paperCanv3" width="900px" height="500px"></canvas></div>
-
-
+    <div id="chartHolder0"></div>
+    <div id="chartHolder1"><canvas id = "paperCanv" width="900px" height="500px"></canvas></div>
+    <div id="chartHolder1"><canvas id = "paperCanv2" width="900px" height="500px"></canvas></div>
+    <div id="chartHolder1"><canvas id = "paperCanv3" width="900px" height="500px"></canvas></div>
 </body>
 </html>

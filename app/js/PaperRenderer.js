@@ -10,9 +10,8 @@ var defaultFontStyle = {
                         //justification: "left",
                         fontFamily: "'Special Elite', cursive"
                         };
-
+// A paper renderer - extaendin the BaseChart
 function PaperRenderer(target, opt_data, opt_config){
-
     if(opt_config){
         opt_config.createCanvas = false;
         opt_config.canvasId = target;
@@ -36,6 +35,7 @@ function PaperRenderer(target, opt_data, opt_config){
 
 PaperRenderer.prototype             = Object.create(BaseChart.prototype);
 PaperRenderer.prototype.constructor = PaperRenderer;
+
 PaperRenderer.prototype.postInit    = function(){
     this.setPlaying(false);
 
