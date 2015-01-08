@@ -15,8 +15,8 @@ EasleRenderer.prototype.postInit = function(){
     this._dotArray = [];
     this._curveRadius = 24;
     //Create a stage by getting a reference to the canvas
-
-    this.stage = new createjs.Stage("easleCanvas");
+    this.setCanvasId(this.getTarget());
+    this.stage = new createjs.Stage(this.getTarget());
     //console.log(this.stage.canvas)
     this.setCanvas( this.stage.canvas )
     this.stage.width = this.getWidth();
@@ -64,22 +64,35 @@ EasleRenderer.prototype.clearContainer = function(container){
     //TODO:
 }
 
+EasleRenderer.prototype.makeDot = function(i){
+    var _cols = ["red", "green", "blue"];
+    var _this = this
+    var __circle = new createjs.Shape();
+    __circle.graphics.beginFill(    _cols[Math.floor(Math.random()*3)]  ).drawCircle(0, 0, 8);
+    //__circle.x = this.getData()[i].x;
+    //__circle.y = this.getData()[i].y;
+
+    __circle.x = this.getXscale().map( this.getData()[i].x );
+    __circle.y = this.getXscale().map( this.getData()[i].y );
+
+    __circle.dataIndex = i;
+    __circle.cursor = "pointer";
+    __circle.addEventListener("click", function(e){ onClicked.call(_this, e) });
+    __circle.addEventListener("rollover", function(e){ onRolled.call(_this, e) });
+
+    return __circle
+}
 
 EasleRenderer.prototype.render = function(){
+
+    console.log("RENDER CALLED ",this.getData().length)
     this.BackgroundStripeArray = [];
     this._dotArray = []
-    var _cols = ["red", "green", "blue"]
+
     var _this = this;
     if( this.getData() ){
         for(var i=0; i<this.getData().length; i++){
-            var __circle = new createjs.Shape();
-            __circle.graphics.beginFill(    _cols[Math.floor(Math.random()*3)]  ).drawCircle(0, 0, 8);
-            __circle.x = this.getData()[i].x;
-            __circle.y = this.getData()[i].y;
-            __circle.dataIndex = i;
-            __circle.cursor = "pointer";
-            __circle.addEventListener("click", function(e){ onClicked.call(_this, e) });
-            __circle.addEventListener("rollover", function(e){ onRolled.call(_this, e) });
+            __circle = this.makeDot(i);
             this.dotContainer.addChild(__circle);
             this._dotArray.push(__circle)
         }
@@ -97,16 +110,39 @@ EasleRenderer.prototype.render = function(){
     }
 
 //----
+
+
+
 EasleRenderer.prototype.update = function(){
     var _this = this;
+    console.log(this._dotArray.length, this.getData().length);
+    if(this._dotArray.length<this.getData().length){
+        console.log("new circle")
+
+        for(var i=this._dotArray.length; i<this.getData().length; i++){
+            var xp = this.getXscale().map( this.getData()[i].x );
+            var yp = this.getXscale().map( this.getData()[i].y );
+            var __circle = this.makeDot(i);
+            this.dotContainer.addChild(__circle);
+            this._dotArray[i]=__circle;
+        }
+    }
 
     for(var i=0; i<this.getData().length; i++){
-            var xp = this.getData()[i].x;
-            var yp = this.getData()[i].y;
+            var xp = this.getXscale().map( this.getData()[i].x );
+            var yp = this.getXscale().map( this.getData()[i].y );
             this._tween = createjs.Tween.get(this._dotArray[i], {override:false, loop:false}).to({x:xp}, 200).to({y:yp}, 200);
             this._tween.addEventListener("change", function(e){ onChange.call(_this, e) });
         }
     }
+}
+
+EasleRenderer.prototype.drawYgrid = function(){
+
+}
+
+EasleRenderer.prototype.drawXgrid = function(){
+
 }
 
 var onRolled = function(e){
@@ -143,16 +179,14 @@ var renderTooltip = function(){
         '-webkit-margin-end: 0px;'+
         '-moz-box-shadow: 0px 0px 8px  #fff;'
     ;
-    this.p.style.cssText = '-webkit-margin-before: 0px;'+
-                    '-webkit-margin-after: 0px;'+
-                    '-webkit-margin-start: 0px;'+
-                    '-webkit-margin-end: 0px;'+
-                    'color: #ff00ff'
-
-
-    this.getTarget().appendChild(this._toolTipHtml)
+    this.p.style.cssText =  '-webkit-margin-before: 0px;'+
+                            '-webkit-margin-after: 0px;'+
+                            '-webkit-margin-start: 0px;'+
+                            '-webkit-margin-end: 0px;'+
+                            'color: #ff00ff';
+    console.log("this.getTarget() ",this.getTarget())
+    document.getElementById(this.getTarget()).parentNode.appendChild(this._toolTipHtml)
     this.stage.update();
-
 }
 
 
@@ -163,12 +197,10 @@ var showTooltip = function(index, e){
     console.log("TARG Y ",e.target.y)
 
 
-
     this._toolTipHtml.style.left=  e.target.x+"px";
     this._toolTipHtml.style.top=  e.target.y+"px";
 
     this._toolTipHtml.innerHTML = "<p style='-webkit-margin-before: 0px; -webkit-margin-after: 0px; -webkit-margin-start: 0px; -webkit-margin-end: 0px; color: rgb(255, 255, 255);'> the y value is "+this.getData()[index].y+"</p>"
-
 
 
     this.tooltip.removeAllChildren();
@@ -199,10 +231,9 @@ var initalRender = function(){
 }//----
 var updateLine = function(){
     this.lineGraph.graphics.clear();
-    this.lineGraph.graphics.moveTo(0, this.getHeight());
+    this.lineGraph.graphics.moveTo(this.leftOffset, this.getHeight());
     //this.lineGraph.graphics.beginFill("#454545");
     this.lineGraph.graphics.beginLinearGradientFill(["#ff9933","#000000"], [0.1, 0.9], 0, 50, 0, this.getHeight())
-
 
     this.lineGraph.alpha = .4;
     for(var i=0;i<this._dotArray.length; i++){
@@ -211,7 +242,6 @@ var updateLine = function(){
     }
     this.lineGraph.graphics.lineTo(this._dotArray[ this._dotArray.length -1].x, this.getHeight());
     this.lineGraph.graphics.lineTo(0, this.getHeight());
-
 }
 
 var updateBackground = function(){

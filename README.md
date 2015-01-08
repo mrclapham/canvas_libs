@@ -37,18 +37,50 @@ Libraries I looked at but decided to not trial, at this point, were two.js and k
  
 * ActionScript like syntax;
 * Grouping of elements;
-* Masking
-* Caching of graphic elements
-* Event listeners
+* Masking;
+* Caching of graphic elements;
+* touch support for mobile devices;
+* Event listeners.
 
-For anyone with ActionScript experience Easle should have a fairly shallow learning curve, having borrowed much of its syntax and paradigms from ActionScript. It allows the nested grouping of elements and EventListeners to be added to created elements in a DOM-like fashion.
-Paths drawing and modification is fairly straighforward using the same moveTo/lineTo syntax found in native Canvas and ActionScript. 
-Animations is not hanldled natively but fortunatly Easle is part of the Create.js package
+For anyone with ActionScript experience Easle should have a fairly shallow learning curve, having borrowed much of its syntax and paradigms from ActionScript. It allows the nested grouping of elements and EventListeners to be added to created elements in a DOM-like fashion. It also retains the ‘display list’ paradignm of ActionScript where elements may be added and removed form the 'Stage' as and when required.
 
+Paths drawing and modification is fairly straighforward using the same moveTo/lineTo syntax found in native Canvas and ActionScript. Both bezier and quadratic curves are supported.
 
+Animations is not hanldled natively but, fortunatly, Easle is part of the Create.js package which includeds TweenJs - a tweening library similar to GreenSock’s TweenMax. 
 
-FabricJS
-Cons: the line/shape drawing API is cumbersome
+The documentation contains a caveat about the text being expesive to generate, in my test example I generated the text-based tool-tips via HTML but used the DisplayObject localToGlobal method to position them correctly. Easle also has the ability to cache DisplayObjects - be they graphic or text - to speed up rendering and make it a less expesive prospect.
+
+All in all Easle is a hugely versitile canvas library for a range of applications: charting, data-viz, game development, banner ads - basically anything once done with Flash.
+
+As for cons, a cetain amount of built-in animation capability would have been nice as would a 2D Vector class. Both of these capabilities may, however, be handled by third party libraries. 
+
+###FabricJS
+
+* Built in drag and drop capabilities;
+* Grouping of items;
+* Event listeners;
+* PhotoShop-like image filters;
+* SVG import.
+
+Each of the libraries has its unique USP and Fabrics’s seems to be its built-in drag and drop/draggable-resizing capabilites. Simply by setting a display object’s 'selectable' property to 'true'.
+
+Fabric also has built in animation capabilities with onChange and onComplete Events much like GreenSock's TweenMax. 
+
+If you can get past its eye-wateringly ugly website Fabric has a wealth of features. It treats graphic elements as DOM elements allowing individulal elements to be animated or to have EventListeners added for, say, mouse Events.
+
+If each library has its niche Fabric's niche seems to be for creating on-line versions of PhotoShop/Illustrator/Paint type apps. There are off-the-shelf tools in there for creating drawing brushes, image filtering and manipulation. 
+
+On the down side the line/shape drawing API is cumbersome compared to the other libraries looked at and animating path elements created some unwanted image-noise type artifacts around the path’s edges. The documentation could be more comprehensive too.
+
+###PaperJs
+PaperJs whets you appetite with some very impressive examples on its website, with source code provided. As with many of the libraries it takes a DOM-like approch to created elements allowing them to be manipulated individually and to have EventListeners added. 
+
+The learning curve is slightly steeper for PaperJs - there are, however, a wealth of tutorials on the site and the documentation is excellent. The learning curve is steeper partly due to the wealth of features and partly to do with the quirks involved in scoping, particularly if using PaperJs in JavaScript mode not PaperScript mode (see [http://paperjs.org/tutorials/getting-started/working-with-paper-js/](http://paperjs.org/tutorials/getting-started/working-with-paper-js/)). I pefer a modular, Class based approach and initially found I was drawing to the wrong canvas instance when creating a number of Class instances. Once I surrmounted that hurdle I found it a joy to work with. If it has a USP it is probably paths (hence the proponderance of animated curves in the code examples) with smoothing, simplifying and flattening available out-of-the-box.
+
+The inclusion of vector geometry is a big bonus, particularly for data visualisation and mimiking kinetic physics.
+
+Animation is handled in a fairly rudimentry fashion using what I assume is requestAnimationFrame running at 60fps by calling its onFrame() method. This could become sluggish if expensive tasks are being performed on each frame. It could, however, be teamed with TweenMax ([http://greensock.com/tweenmax](http://greensock.com/tweenmax)) or Even TweenJs ([http://www.createjs.com/#!/TweenJS](http://www.createjs.com/#!/TweenJS)), sister library to the aforementioned EasleJs, if this becomes an issue.
+
 
 ### Running the examples
 
