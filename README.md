@@ -55,10 +55,15 @@ All in all Easle is a hugely versitile canvas library for a range of application
 As for cons, a cetain amount of built-in animation capability would have been nice as would a 2D Vector class. Both of these capabilities may, however, be handled by third party libraries. 
 
 ###FabricJS
+[http://fabricjs.com/](http://fabricjs.com/)
+
+ Main features:
 
 * Built in drag and drop capabilities;
 * Grouping of items;
 * Event listeners;
+* touch event support;
+* Canvas elements teated as DOM elements;
 * PhotoShop-like image filters;
 * SVG import.
 
@@ -73,14 +78,54 @@ If each library has its niche Fabric's niche seems to be for creating on-line ve
 On the down side the line/shape drawing API is cumbersome compared to the other libraries looked at and animating path elements created some unwanted image-noise type artifacts around the path’s edges. The documentation could be more comprehensive too.
 
 ###PaperJs
+[http://paperjs.org/](http://paperjs.org/)
+
+ Main features:
+ 
+* Strong path and geometry features;
+* Vector and maths capabilities;
+* Event listeners;
+* Canvas elements treated as DOM elements;
+
 PaperJs whets you appetite with some very impressive examples on its website, with source code provided. As with many of the libraries it takes a DOM-like approch to created elements allowing them to be manipulated individually and to have EventListeners added. 
 
 The learning curve is slightly steeper for PaperJs - there are, however, a wealth of tutorials on the site and the documentation is excellent. The learning curve is steeper partly due to the wealth of features and partly to do with the quirks involved in scoping, particularly if using PaperJs in JavaScript mode not PaperScript mode (see [http://paperjs.org/tutorials/getting-started/working-with-paper-js/](http://paperjs.org/tutorials/getting-started/working-with-paper-js/)). I pefer a modular, Class based approach and initially found I was drawing to the wrong canvas instance when creating a number of Class instances. Once I surrmounted that hurdle I found it a joy to work with. If it has a USP it is probably paths (hence the proponderance of animated curves in the code examples) with smoothing, simplifying and flattening available out-of-the-box.
 
 The inclusion of vector geometry is a big bonus, particularly for data visualisation and mimiking kinetic physics.
 
-Animation is handled in a fairly rudimentry fashion using what I assume is requestAnimationFrame running at 60fps by calling its onFrame() method. This could become sluggish if expensive tasks are being performed on each frame. It could, however, be teamed with TweenMax ([http://greensock.com/tweenmax](http://greensock.com/tweenmax)) or Even TweenJs ([http://www.createjs.com/#!/TweenJS](http://www.createjs.com/#!/TweenJS)), sister library to the aforementioned EasleJs, if this becomes an issue.
+Animation is handled in a fairly rudimentry fashion using what I assume is requestAnimationFrame, running at 60fps by calling its onFrame() method. This could become sluggish if expensive tasks are being performed on each frame. It could, however, be teamed with TweenMax ([http://greensock.com/tweenmax](http://greensock.com/tweenmax)) or Even TweenJs ([http://www.createjs.com/#!/TweenJS](http://www.createjs.com/#!/TweenJS)), sister library to the aforementioned EasleJs, if this becomes an issue.
 
+###p5
+[http://p5js.org/](http://p5js.org/)
+
+Main features:
+
+* Strong path and geometry features;
+* Vector and maths capabilities;
+* Additional libraies to allow webcam access and music synthesis.
+
+P5 is the new kid on the block and currently still in Beta. It is a javaScript interpretation of Processing [https://www.processing.org/](https://www.processing.org/) the popular Java based language for data visualisation and generative art. There has been, for some time, a javaScript version of sorts for Processing. This was, however, more of a parser for converting Java based Processing files to JavaScript and not everything could be successfully converted from Java to JavaScript. Although later iterations of processing.jsallowed using JavaScript natively this appears to have been userped by p5.js.
+
+Just as Easle.js will have a relativly shallow learning curve for ActionScripters p5 will feel very familer to anyone who has used Processing. The principal is you need to write two functions setup() and draw(). As they suggest 'setup' is an initialisation function and draw is called, by default, 60 times a second (processer allowing).
+
+P5 is closest to Paper.js in feel with built-in vector geometry, a host of excellent maths and geometry functions and curve and shape methods which make it extremely flexible for making marks on screen.
+
+In addition it has three add-on libraries p5.dom, p5.sound and p5.gibber which provide access to webcams, video, audio sythesis and music sequencing capabilites.
+
+Unlike the other libraries showcased there is less of a DOM approach and more aof a raw canvas approach to image creation. calling the 'background' method within the 'draw' method floods the canvas with a specified colour and clearing all previously drawn elements in the process. Not calling the 'background' method allows the image to build up - frame by frame. Setting an alpha value on the background (or indeed any drawn element) has the effect of building the image up in translucent layers. It means it's down to you to create your own interactivity and map your on-screen elements. That said it reamins a powerful and versitile library, particularly if you wish to create generative art.
+
+###D3
+[http://d3js.org/](http://d3js.org/)
+
+Main features:
+
+* SVG rendering;
+* A mature set of data visualisation tools;
+* Excellent documentation.
+
+D3 is a heavyweight of data visualisation. It is a mature library of tools which allows data points to be bound to DOM elements and to nutate their state id the data changes.
+
+By default SVG is used for display. This can be a 
 
 ### Running the examples
 

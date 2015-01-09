@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="bower_components/d3/d3.min.js"></script>
+    <script src="js/utils/Random365Data.js"></script>
+    <script src="js/LineFillChart.js"></script>
+    <link rel="stylesheet" href="css/datavis.css"/>
+    <title></title>
+</head>
+<body onload="onLoaded()">
+
+
+
+<div class="grid_box">
+
+    <ul class="main_nav_ul">
+        <li><a class='blackBttActive' id="btt_ran_line_year" href="#">4 months </a></li>
+        <li><a class="blackBttActive" id="btt_ran_line_month" href="#">6 months</a></li>
+        <li><a class="blackBttActive" id="btt_ran_line_day" href="#">18 months</a></li>
+    </ul>
+
+</div>
+
+<div id="line_graph_holder"></div>
+
+
+
+</body>
+</html>
+<script>
+    function onLoaded(){
+
+        function generateDataArray(length, year, months){
+            var retArr = [];
+
+            for(var i=0; i<length; i++){
+                retArr.push(Random365Data(year, months));
+            }
+            return retArr;
+        }
+
+        //--- colour array
+
+        function makeColorGradient(frequency1, frequency2, frequency3,
+                                   phase1, phase2, phase3,
+                                   center, width, len)
+        {
+
+            function RGB2Color(r,g,b)
+            {
+                return '#' + byte2Hex(r) + byte2Hex(g) + byte2Hex(b);
+            }
+
+            function byte2Hex(n)
+            {
+                var nybHexString = "0123456789ABCDEF";
+                return String(nybHexString.substr((n >> 4) & 0x0F,1)) + nybHexString.substr(n & 0x0F,1);
+            }
+
+            if (len == undefined)      len = 50;
+            if (center == undefined)   center = 128;
+            if (width == undefined)    width = 127;
+
+            var rbw =[]
+
+            for (var i = 0; i < len; ++i)
+            {
+                var red = Math.sin(frequency1*i + phase1) * width + center;
+                var grn = Math.sin(frequency2*i + phase2) * width + center;
+                var blu = Math.sin(frequency3*i + phase3) * width + center;
+                rbw.push(RGB2Color(red,grn,blu) );
+            }
+            return(rbw) ;
+        }
+        var cols= makeColorGradient(.3,.3,.3,0,2,4);
+        var _data0 = generateDataArray(3, 2015, 4);
+        var _data1 = generateDataArray(3, 2015, 8);
+        var _data2 = generateDataArray(4, 2015, 12);
+        var sc = new LineFillChart('#line_graph_holder', generateDataArray(3, 2013, 3), {w:700,h:350, dummy: "DummyData", lineColorArray:cols, line_color:'#ff00ff' });
+
+
+        document.getElementById("btt_ran_line_year").addEventListener('click', function(){
+            sc.setData(_data0);
+        });
+
+        document.getElementById("btt_ran_line_month").addEventListener('click', function(){
+            sc.setData(_data1);
+        });
+
+        document.getElementById("btt_ran_line_day").addEventListener('click', function(){
+            sc.setData(_data2);
+        });
+
+
+
+        console.log(_data0)
+    }
+</script>
