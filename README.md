@@ -33,6 +33,8 @@ Although all libraries appear, on the surface, to be aiming for a similar goal, 
 Libraries I looked at but decided to not trial, at this point, were two.js and kinetic.js. Kinetic shows some promise and is very poular, however,  at present its website appears to be in need of some maintenance with 404s on the tutorials. Two.js is a promising newcomer but, at present, lacks image and text support.
 
 ###Easle JS
+[http://www.createjs.com/#!/EaselJS](http://www.createjs.com/#!/EaselJS)
+
  Main features:
  
 * ActionScript like syntax;
@@ -112,7 +114,7 @@ P5 is closest to Paper.js in feel with built-in vector geometry, a host of excel
 
 In addition it has three add-on libraries p5.dom, p5.sound and p5.gibber which provide access to webcams, video, audio sythesis and music sequencing capabilites.
 
-Unlike the other libraries showcased there is less of a DOM approach and more aof a raw canvas approach to image creation. calling the 'background' method within the 'draw' method floods the canvas with a specified colour and clearing all previously drawn elements in the process. Not calling the 'background' method allows the image to build up - frame by frame. Setting an alpha value on the background (or indeed any drawn element) has the effect of building the image up in translucent layers. It means it's down to you to create your own interactivity and map your on-screen elements. That said it reamins a powerful and versitile library, particularly if you wish to create generative art.
+Unlike the other libraries showcased there is less of a DOM approach and more aof a raw canvas approach to image creation. calling the 'background' method within the 'draw' method floods the canvas with a specified colour and clearing all previously drawn elements in the process. Not calling the 'background' method allows the image to build up - frame by frame. Setting an alpha value on the background (or indeed any drawn element) has the effect of building the image up in translucent layers. It means it's down to you to create your own interactivity and map your on-screen elements. It also, currently, lacks a direct method to create gradient fills (although, you have access to the underlying canvas context). That said it reamins a powerful and versitile library and fun to use, particularly if you wish to create generative art.
 
 ###D3
 [http://d3js.org/](http://d3js.org/)
@@ -121,13 +123,33 @@ Main features:
 
 * SVG rendering;
 * A mature set of data visualisation tools;
-* Excellent documentation.
+* Excellent documentation and examples.
 
-D3 is a heavyweight of data visualisation. It is a mature library of tools which allows data points to be bound to DOM elements and to nutate their state id the data changes.
+D3 is a heavyweight of data visualisation. It is a mature library of tools which allows data points to be bound to DOM elements and to mutate their state if and when the underlying data changes.
 
-By default SVG is used for display. This can be a 
+By default SVG is used for display. This can be a blessing or a curse. As SVG is resolution independent your creations will look pin sharp on any monitor and can be zoomed with no loss of resolution. The downside is that each data point is a DOM element so when you are rendering thousands of points you can run into performance issues - particularly when animating. And older versions of IE are not supported (but we're used to that).
 
-### Running the examples
+D3 is not a charting libary such as Google Charts or ChartJS – which provide specific, off-the-shelf, bar, line, pie etc charts, with an API to customize the look and feel. D3 is much nore low level - it provides the wearwithall to create your own custom charts, graphs and visualisations. It also provides a comprehensive set of helpers to allow you to, for example, create numerical and time-series axies, scale functions and layout helpers for common graph types like bar, pie, chord and scatterplot. 
+A skim through the examples provided on the site will give you a flavour of the what may be acheived using D3. The tutorials provided tend to be fairly rudimentary but there are numerous examples with source code which may be reverse engineered to work out how they were put together.
+
+Tweening is built in for some slinky animations and styling of SVG elements may be acheived through a combination of JavaScript, CSS. You can also create SVG filters for shadow and glow effects - although this can become complex.
+
+###Conclusions
+So, which is the best? As ever with JavaScript libraries it comes down to horses for courses. 
+
+I have been a long-time fan of D3 - it is suficcienlty low-level to allow it to be used as building-blocks rather than boiler-plate. At the same time it has virtually every tool you could need for creating browser-based charts.
+
+P5 is an interesting newcomer but Paper is a more mature and feature rich alternative, however, the sound and video capabilities of p5 make it an interesting prospect.
+
+Easle if Flash ported to JavasCript (well, a cut-down version anyway) and would be a first choice for building on-line games.
+
+Fabric, whilst not without its uses, fell in a the middle ground between the other libraries. It's drag and drop implementation seemed to be the only thing it excelled at, compared to the other libraries.
+
+Time will tell, but Paper is the library is the library I am keenest to explore in more depth – although I have been toying with p5 for purely recriational ends [http://codepen.io/mrClapham/pen/zxoogq](http://codepen.io/mrClapham/pen/zxoogq).
+
+This is far from an exhausive test and it's best you test drive each library for yourself. There are examples to reverse engineer – my  experience with each library dictated how far I took them. 
+
+###Running the examples
 
 Browserify is an optional extra - the individual examples will all run in isolation.
 
