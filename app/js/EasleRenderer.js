@@ -112,14 +112,14 @@ EasleRenderer.prototype.render = function(){
 //----
 
 
-
 EasleRenderer.prototype.update = function(){
     var _this = this;
     console.log(this._dotArray.length, this.getData().length);
     if(this._dotArray.length<this.getData().length){
         console.log("new circle")
-
-        for(var i=this._dotArray.length; i<this.getData().length; i++){
+        this.dotContainer.removeAllChildren();
+       // for(var i=this._dotArray.length; i<this.getData().length; i++){
+        for(var i=0; i<this.getData().length; i++){
             var xp = this.getXscale().map( this.getData()[i].x );
             var yp = this.getXscale().map( this.getData()[i].y );
             var __circle = this.makeDot(i);
