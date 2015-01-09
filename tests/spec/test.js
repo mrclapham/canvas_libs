@@ -501,28 +501,6 @@ describe("Tests for the Scale Domain utility" ,function(){
             expect(_mm.max).to.equal(14000)
         })
 
-        it("When -200,13050 - min should be -1000, max should be 14000", function(){
-            var _mm = _sketch.roundValues(-200,13050);
-            expect(_mm.min).to.equal(-1000)
-            expect(_mm.max).to.equal(14000)
-            expect(_mm.division).to.equal(1000)
-        })
-
-        it("When -1200,13050 - min should be -1000, max should be 14000", function(){
-            var _mm = _sketch.roundValues(-1200,13050);
-            expect(_mm.min).to.equal(-2000)
-            expect(_mm.max).to.equal(14000)
-            expect(_mm.division).to.equal(1000)
-        })
-
-        it("When -1200,1050 - min should be -1000, max should be 14000", function(){
-            var _mm = _sketch.roundValues(-1200,1050);
-            expect(_mm.min).to.equal(-2000)
-            expect(_mm.max).to.equal(2000)
-            expect(_mm.division).to.equal(1000)
-        })
-
-
 
         it("min should be 0, max should be 14000", function(){
             var _mm = _sketch.roundValues(0,13050);
