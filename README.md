@@ -42,8 +42,12 @@ Libraries I looked at but decided to not trial, at this point, were two.js and k
 * Event listeners
 
 For anyone with ActionScript experience Easle should have a fairly shallow learning curve, having borrowed much of its syntax and paradigms from ActionScript. It allows the nested grouping of elements and EventListeners to be added to created elements in a DOM-like fashion.
+
 Paths drawing and modification is fairly straighforward using the same moveTo/lineTo syntax found in native Canvas and ActionScript. 
-Animations is not hanldled natively but fortunatly Easle is part of the Create.js package
+
+Animations is not hanldled natively but, fortunatly, Easle is part of the Create.js package which includes Tween.js which is, as its name suggests, an excellent Tweening engine similar to GreenSock.
+
+
 
 
 
