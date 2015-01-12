@@ -117,16 +117,29 @@ EasleRenderer.prototype.update = function(){
     console.log(this._dotArray.length, this.getData().length);
     if(this._dotArray.length<this.getData().length){
         console.log("new circle")
-        this.dotContainer.removeAllChildren();
+      //  this.dotContainer.removeAllChildren();
        // for(var i=this._dotArray.length; i<this.getData().length; i++){
         for(var i=0; i<this.getData().length; i++){
             var xp = this.getXscale().map( this.getData()[i].x );
             var yp = this.getXscale().map( this.getData()[i].y );
-            var __circle = this.makeDot(i);
-            this.dotContainer.addChild(__circle);
-            this._dotArray[i]=__circle;
+            if(!this._dotArray[i]){
+                var __circle = this.makeDot(i);
+                this.dotContainer.addChild(__circle);
+                this._dotArray[i]=__circle;
+            }
         }
     }
+
+    ///--
+    if(this._dotArray.length>this.getData().length) {
+                console.log("THE ARRAY IS TOO LONG...")
+        for(var i=this._dotArray.length; i> this.getData().length;  i--){
+            toDelete = this._dotArray.pop();
+            console.log(toDelete)
+            toDelete.parent.removeChild(toDelete);
+        }
+    }
+        console.log(this._dotArray.length, this.getData().length);
 
     for(var i=0; i<this.getData().length; i++){
             var xp = this.getXscale().map( this.getData()[i].x );
@@ -230,6 +243,7 @@ var initalRender = function(){
 
 }//----
 var updateLine = function(){
+    console.log("update line called ...")
     this.lineGraph.graphics.clear();
     this.lineGraph.graphics.moveTo(this.leftOffset, this.getHeight());
     //this.lineGraph.graphics.beginFill("#454545");
