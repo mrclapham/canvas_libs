@@ -63,7 +63,7 @@ BaseChart= (function(target, opt_data, opt_config){
     }
 
     var _createScale = function(){
-        console.log("_createScale ca;led")
+        console.log("_createScale called")
         this.maxX = Scale.max(this.getData(), 'x');
         this.minX = Scale.min(this.getData(), 'x');
         this.maxY = Scale.max(this.getData(), 'y');

@@ -58,6 +58,26 @@ EasleRenderer.prototype.postInit = function(){
 //        console.log("stageX/Y: "+evt.stageX+","+evt.stageY); // always in bounds
 //        console.log("rawX/Y: "+evt.rawX+","+evt.rawY); // could be < 0, or > width/height
 //    });
+    this.BackgroundStripeArray = [];
+    this._dotArray = [];
+
+    var _this = this;
+    if (this.getData()) {
+        for (var i = 0; i < this.getData().length; i++) {
+            __circle = this.makeDot(i);
+            this.dotContainer.addChild(__circle);
+            this._dotArray.push(__circle);
+        }
+        //Update stage will render next frame
+        //onChange.call(_this, {})
+        updateLine.call(this);
+        drawBezier.call(this);
+        updateBackground.call(this);
+        this.stage.update();
+    }
+
+
+
 }
 
 EasleRenderer.prototype.clearContainer = function(container){
@@ -83,42 +103,12 @@ EasleRenderer.prototype.makeDot = function(i){
     return __circle
 }
 
-EasleRenderer.prototype.render = function(){
-
-    console.log("RENDER CALLED ",this.getData().length)
-    this.BackgroundStripeArray = [];
-    this._dotArray = []
-
-    var _this = this;
-    if( this.getData() ){
-        for(var i=0; i<this.getData().length; i++){
-            __circle = this.makeDot(i);
-            this.dotContainer.addChild(__circle);
-            this._dotArray.push(__circle)
-        }
-        //Update stage will render next frame
-        //onChange.call(_this, {})
-        updateLine.call(this);
-        drawBezier.call(this);
-        updateBackground.call(this);
-        this.stage.update();
-    }
-
-    //---
-    EasleRenderer.prototype.addToolTip = function(){
-        console.log("tool tip added ")
-    }
 
 //----
 
-
-EasleRenderer.prototype.update = function(){
+EasleRenderer.prototype.render = function(){
     var _this = this;
-    console.log(this._dotArray.length, this.getData().length);
     if(this._dotArray.length<this.getData().length){
-        console.log("new circle")
-      //  this.dotContainer.removeAllChildren();
-       // for(var i=this._dotArray.length; i<this.getData().length; i++){
         for(var i=0; i<this.getData().length; i++){
             var xp = this.getXscale().map( this.getData()[i].x );
             var yp = this.getXscale().map( this.getData()[i].y );
@@ -129,10 +119,8 @@ EasleRenderer.prototype.update = function(){
             }
         }
     }
-
     ///--
     if(this._dotArray.length>this.getData().length) {
-                console.log("THE ARRAY IS TOO LONG...")
         for(var i=this._dotArray.length; i> this.getData().length;  i--){
             toDelete = this._dotArray.pop();
             console.log(toDelete)
@@ -148,7 +136,7 @@ EasleRenderer.prototype.update = function(){
             this._tween.addEventListener("change", function(e){ onChange.call(_this, e) });
         }
     }
-}
+
 
 EasleRenderer.prototype.drawYgrid = function(){
 
