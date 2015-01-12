@@ -18,13 +18,13 @@
   "dependencies": {
     "compass-twitter-bootstrap": "~2.3.2",
     "d3": "~3.4.11",
-    "easeljs": "*",
+    "easeljs": "~0.7.1",
     "fabric": "~1.4.9",
     "kineticjs": "~5.1.0",
     "paper": "~0.9.21",
     "two": "~0.4.0",
     "lodash": "^2.4.1",
-    "TweenJS": "*",
+    "TweenJS": "~0.5.1",
     "p5js": "~0.3.11",
     "underscore": "~1.7.0"
   },
