@@ -4,6 +4,8 @@
     <title></title>
     <link href='http://fonts.googleapis.com/css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Special+Elite' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/datavis.css"/>
+
     <style>
         /*#chartHolder{*/
             /*background-color:#ff00ff;*/
@@ -48,7 +50,7 @@
             var targ1 = document.getElementById("chartHolder1");
             var targ2 = document.getElementById("chartHolder2");
 
-            var dataConfig =  {  yMin : 0,
+            var dataConfig0 =  {  yMin : 0,
                                  yMax: 100,
                                  xStart: 0,
                                  xEnd: 900,
@@ -56,26 +58,36 @@
                                }
 
 
-            var data0 = new data_model(dataConfig).getData();
-            var data1 = new data_model(dataConfig).getData();
+            var dataConfig1 =  {  yMin : 0,
+                yMax: 100,
+                xStart: 0,
+                xEnd: 900,
+                steps : 32
+            }
 
-            var dataR0 = new data_model().getRegualaData(6);
-            var dataR1 = new data_model().getRegualaData(12);
+            var dataConfig2 =  {  yMin : 0,
+                yMax: 100,
+                xStart: 0,
+                xEnd: 1900,
+                steps : 88
+            }
 
+            var data0 = new data_model(dataConfig0).getData();
+            var data1 = new data_model(dataConfig1).getData();
+            var data2 = new data_model(dataConfig2).getData();
 
-            //console.log(data0);
+            var dataR0 = new data_model().getRegualaData(26);
+            var dataR1 = new data_model().getRegualaData(52);
 
         var _base = new BaseChart(targ1);
         _base.setData("Testing 1");
 
-
-        var _EasleRenderer = new EasleRenderer(targ0, data0, {createCanvas: false, canvasId:"easleCanvas"});
+        var _EasleRenderer = new EasleRenderer("easleCanvas", data0, {createCanvas: false});
 
             //-- functions
             function togglePlay1(e){
                 _EasleRenderer.setPlaying(!_EasleRenderer.getPlaying())
             }
-            document.getElementById("togglePlay0").addEventListener('click', togglePlay1)
 
             ///-- data updates
             function easleData0(){
@@ -83,28 +95,28 @@
             }
             function easleData1(){
                 _EasleRenderer.setData(data1)
+            }
 
+            function easleData2(){
+                _EasleRenderer.setData(data2)
             }
             document.getElementById("easleData0").addEventListener('click', easleData0)
             document.getElementById("easleData1").addEventListener('click', easleData1)
+            document.getElementById("easleData2").addEventListener('click', easleData2)
         }
 
     </script>
 </head>
 <body onload="onLoad()">
-<button id="togglePlay0">toggle play</button>
-<button id="togglePlay1">toggle play</button>
-
 <button id="easleData0">Easle data 0</button>
 <button id="easleData1">Easle data 1</button>
+<button id="easleData2">Easle data 2</button>
 
 <p>Easle js version</p>
 <!--<div id="chartHolder_es"><canvas id="easleCanvas" width="900px" height="600px"></canvas></div>-->
-<div id="chartHolder0"><canvas id="easleCanvas" width="800px" height = "500px"></canvas></div>
-<div id="chartHolder1"><canvas id="processingCanvas" width="800px" height = "500px"></canvas></div>
+<!--<div id="chartHolder0"></div>-->
 
-<div id="chartHolder1"></div>
-<div id="chartHolder2"></div>
+<div id="chartHolder1"><canvas id="easleCanvas" width="2000px" height = "500px"></canvas></div>
 
 
 
