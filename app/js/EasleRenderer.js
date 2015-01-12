@@ -103,7 +103,6 @@ EasleRenderer.prototype.makeDot = function(i){
     return __circle
 }
 
-
 //----
 
 EasleRenderer.prototype.render = function(){
@@ -156,7 +155,7 @@ var onRolled = function(e){
 var renderTooltip = function(){
     this._toolTipHtml = document.createElement('div')
     this.p=document.createElement("p")
-    this.tollText=document.createTextNode("Hello World");
+    this.tollText=document.createTextNode("");
     this.p.appendChild(this.tollText);
     this._toolTipHtml.appendChild(this.p);
     this.toolTipSpeed = .2
@@ -201,7 +200,7 @@ var showTooltip = function(index, e){
     this._toolTipHtml.style.left=  e.target.x+"px";
     this._toolTipHtml.style.top=  e.target.y+"px";
 
-    this._toolTipHtml.innerHTML = "<p style='-webkit-margin-before: 0px; -webkit-margin-after: 0px; -webkit-margin-start: 0px; -webkit-margin-end: 0px; color: rgb(255, 255, 255);'> the y value is "+this.getData()[index].y+"</p>"
+    this._toolTipHtml.innerHTML = "<p style='-webkit-margin-before: 0px; -webkit-margin-after: 0px; -webkit-margin-start: 0px; -webkit-margin-end: 0px; color: rgb(255, 255, 255);'>  "+(this.getData()[index].y).toFixed(2)+"</p>"
 
 
     this.tooltip.removeAllChildren();
@@ -243,7 +242,7 @@ var updateLine = function(){
        // this.lineGraph.graphics.bezierCurveTo(this._dotArray[i].x-this._curveRadius, this._dotArray[i].y, this._dotArray[i].x+this._curveRadius, this._dotArray[i].y, this._dotArray[i].x, this._dotArray[i].y);
     }
     this.lineGraph.graphics.lineTo(this._dotArray[ this._dotArray.length -1].x, this.getHeight());
-    this.lineGraph.graphics.lineTo(0, this.getHeight());
+    this.lineGraph.graphics.lineTo(this._dotArray[ 0 ].x, this.getHeight());
 }
 
 var updateBackground = function(){

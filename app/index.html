@@ -4,6 +4,8 @@
     <title></title>
     <link href='http://fonts.googleapis.com/css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Special+Elite' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/datavis.css"/>
+
     <style>
         /*#chartHolder{*/
             /*background-color:#ff00ff;*/
@@ -67,7 +69,7 @@
                 yMax: 100,
                 xStart: 0,
                 xEnd: 1900,
-                steps : 132
+                steps : 88
             }
 
             var data0 = new data_model(dataConfig0).getData();
@@ -86,7 +88,6 @@
             function togglePlay1(e){
                 _EasleRenderer.setPlaying(!_EasleRenderer.getPlaying())
             }
-            document.getElementById("togglePlay0").addEventListener('click', togglePlay1)
 
             ///-- data updates
             function easleData0(){
@@ -107,18 +108,15 @@
     </script>
 </head>
 <body onload="onLoad()">
-<button id="togglePlay0">toggle play</button>
-<button id="togglePlay1">toggle play</button>
-
 <button id="easleData0">Easle data 0</button>
 <button id="easleData1">Easle data 1</button>
 <button id="easleData2">Easle data 2</button>
 
 <p>Easle js version</p>
 <!--<div id="chartHolder_es"><canvas id="easleCanvas" width="900px" height="600px"></canvas></div>-->
-<div id="chartHolder0"><canvas id="easleCanvas" width="2000px" height = "500px"></canvas></div>
+<!--<div id="chartHolder0"></div>-->
 
-<div id="chartHolder1"></div>
+<div id="chartHolder1"><canvas id="easleCanvas" width="2000px" height = "500px"></canvas></div>
 
 
 
