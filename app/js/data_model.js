@@ -68,4 +68,4 @@ data_model = (function(opt_config){
 
 
 
-
+exports.data_model = data_model

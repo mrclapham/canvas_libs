@@ -2,6 +2,10 @@ var gulp = require('gulp');
 
 var watchify = require('gulp-watchify');
 
+var browserify = require("browserify");
+
+var rename = require("gulp-rename");
+
 var bundlePaths = {
     src: [
         'app/js/**/*.js',
@@ -11,12 +15,23 @@ var bundlePaths = {
 }
 
 
+gulp.task('scripts', function() {
+    // Single entry point to browserify
+    gulp.src('app/js/app.js')
+        .pipe(browserify({
+            insertGlobals : true,
+            debug : true
+        }))
+        .pipe(gulp.dest('./build/js'))
+});
+
+
 // Hack to enable configurable watchify watching
 var watching = false;
 gulp.task('enable-watch-mode', function() { watching = true })
 
 // Browserify and copy js files
-gulp.task('browserify', watchify(function(watchify) {
+gulp.task('build', watchify(function(watchify) {
     return gulp.src(bundlePaths.src)
         .pipe(watchify({
             watch:watching
@@ -24,7 +39,7 @@ gulp.task('browserify', watchify(function(watchify) {
         .pipe(gulp.dest(bundlePaths.dest))
 }))
 
-gulp.task('watchify', ['enable-watch-mode', 'browserify'])
+gulp.task('watchify', ['enable-watch-mode', 'build'])
 
 
 // Rerun tasks when a file changes
@@ -41,4 +56,4 @@ gulp.task('jsdoc', function() {
 });
 
 // The default task (called when you run `gulp` from cli)
-gulp.task('default', ['browserify'])
+gulp.task('default', ['build'])

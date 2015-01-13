@@ -234,6 +234,8 @@ BaseChart= (function(target, opt_data, opt_config){
 
 })();
 
+exports.BaseChart = BaseChart;
+
 // Static functions...
 
 //BaseChart.importJSON = function(path){

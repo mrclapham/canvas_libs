@@ -458,3 +458,6 @@ PaperRenderer.prototype.render = function(){
     //this.myPath.smooth();
     _paper.view.draw();
 }
+
+
+exports.PaperRenderer = PaperRenderer;
