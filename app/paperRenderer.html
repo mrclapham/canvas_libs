@@ -35,15 +35,23 @@
                                  steps : 12
                                }
 
-            var dataConfig1 =  {  yMin : 0,
-                yMax: 1500,
-                xStart: 0,
-                xEnd: 900,
-                steps : 48
-            }
+            var dataConfig1 =  {    yMin : 0,
+                                    yMax: 1500,
+                                    xStart: 0,
+                                    xEnd: 900,
+                                    steps : 48
+                                }
+
+            var dataConfig2 =  {    yMin : 0,
+                                    yMax: 1500,
+                                    xStart: 0,
+                                    xEnd: 900,
+                                    steps : 248
+                                }
 
             var data0 = new data_model(dataConfig).getData();
             var data1 = new data_model(dataConfig1).getData();
+            var data2 = new data_model(dataConfig2).getData();
 
             var dataR0 = new data_model().getRegualaData(6);
             var dataR1 = new data_model().getRegualaData(12);
@@ -59,12 +67,17 @@
             document.getElementById("togglePlay1").addEventListener('click', function(){
                 _paper.setData(data1)
             })
+
+            document.getElementById("togglePlay2").addEventListener('click', function(){
+                _paper.setData(data2)
+            })
         }
     </script>
 </head>
 <body onload="onLoad()">
-<button id="togglePlay0">toggle play</button>
-<button id="togglePlay1">toggle play</button>
+<button id="togglePlay0">Data 0</button>
+<button id="togglePlay1">Data 1</button>
+<button id="togglePlay2">Data 2</button>
 
 
 <p>Paper js version</p>

@@ -1,6 +1,6 @@
-var gulp = require('gulp')
+var gulp = require('gulp');
 
-var watchify = require('gulp-watchify')
+var watchify = require('gulp-watchify');
 
 var bundlePaths = {
     src: [
@@ -12,7 +12,7 @@ var bundlePaths = {
 
 
 // Hack to enable configurable watchify watching
-var watching = false
+var watching = false;
 gulp.task('enable-watch-mode', function() { watching = true })
 
 // Browserify and copy js files
