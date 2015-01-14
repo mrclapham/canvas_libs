@@ -54,13 +54,24 @@ gulp.task('build', function(){
 
 
 gulp.task('browse', function () {
-    var filename = "./app/js/app.js"
     var browserified = transform(function(filename) {
         var b = browserify(filename);
         return b.bundle();
     });
 
-    return gulp.src(['./app/js/*.js'])
+    return gulp.src(['./app/js/**/*.js'])
+        .pipe(browserified)
+        .pipe(uglify())
+        .pipe(gulp.dest('./build'));
+});
+
+gulp.task('browse_app', function () {
+    var browserified = transform(function(filename) {
+        var b = browserify(filename);
+        return b.bundle();
+    });
+
+    return gulp.src(['./app/js/app.js'])
         .pipe(browserified)
         .pipe(uglify())
         .pipe(gulp.dest('./build'));
