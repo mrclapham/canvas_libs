@@ -145,18 +145,15 @@ Easle if Flash ported to JavasScript (well, a cut-down version anyway) and would
 
 Fabric, whilst not without its uses, fell in a the middle ground between the other libraries. It's drag and drop implementation seemed to be the only thing it excelled at, compared to the other libraries.
 
-Time will tell, but Paper is the library is the library I am keenest to explore in more depth – although I have been toying with p5 for purely recriational ends [http://codepen.io/mrClapham/pen/zxoogq](http://codepen.io/mrClapham/pen/zxoogq).
+Time will tell, but Paper is the library is the library I am keenest to explore in more depth – although I have been toying with p5 for purely recreational ends [http://codepen.io/mrClapham/pen/zxoogq](http://codepen.io/mrClapham/pen/zxoogq).
 
-This is far from an exhaustive test and it's best you test drive each library for yourself. There are examples to reverse engineer – my  experience with each library dictated how far I took them. 
+This is far from an exhaustive test and it's best for you test drive each library for yourself. There are examples in the repo to reverse engineer – my  experience with each library dictated how far I took them. 
 
 ###Running the examples
 
-Browserify is an optional extra - the individual examples will all run in isolation.
-
-run `npm install -g browserify`
 
 run `npm install`
 
 run `bower install`
 
-Then to set up the watch run `gulp watch` to auto compile the code to build.
+Then to set up the watch run `gulp watch-less` to auto compile the code to build.
