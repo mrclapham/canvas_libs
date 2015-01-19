@@ -49,4 +49,4 @@ Scale.max = function(value, objectValue){
     return objectValue ?  _.max(value, function(o){return o[objectValue]}) : _.max(value);
 }
 
-exports.Scale = Scale;
+//exports.Scale = Scale;

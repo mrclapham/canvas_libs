@@ -234,7 +234,7 @@ BaseChart= (function(target, opt_data, opt_config){
 
 })();
 
-exports.BaseChart = BaseChart;
+//exports.BaseChart = BaseChart;
 
 // Static functions...
 

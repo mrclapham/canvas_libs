@@ -31,6 +31,15 @@
 
     <script>    var createjs = window; // sets window as the createjs namespace (the object the classes will be defined in) </script>
 
+    <!-- angular -->
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+
+    <!-- angular modules -->
+    <script src="js/modules/main/Main.js"></script>
+    <script src="js/modules/main/MainController.js"></script>
+
     <!--<script type="text/javascript" src="js/bundle.js"></script>-->
     <script type="text/javascript" src="bower_components/easeljs/lib/easeljs-0.7.1.min.js"></script>
     <script type="text/javascript" src="bower_components/TweenJS/lib/tweenjs-0.5.1.min.js"></script>
@@ -43,81 +52,12 @@
     <script type="text/javascript" src="js/data_model.js"></script>
     <script type="text/javascript" src="js/BaseChart.js"></script>
     <script type="text/javascript" src="js/EasleRenderer.js"></script>
-    <script type="text/javascript">
-        onLoad = function(){
 
-            var targ0 = document.getElementById("chartHolder0");
-            var targ1 = document.getElementById("chartHolder1");
-            var targ2 = document.getElementById("chartHolder2");
-
-            var dataConfig0 =  {  yMin : 0,
-                                 yMax: 100,
-                                 xStart: 0,
-                                 xEnd: 900,
-                                 steps : 12
-                               }
-
-
-            var dataConfig1 =  {  yMin : 0,
-                yMax: 100,
-                xStart: 0,
-                xEnd: 900,
-                steps : 32
-            }
-
-            var dataConfig2 =  {  yMin : 0,
-                yMax: 100,
-                xStart: 0,
-                xEnd: 1900,
-                steps : 88
-            }
-
-            var data0 = new data_model(dataConfig0).getData();
-            var data1 = new data_model(dataConfig1).getData();
-            var data2 = new data_model(dataConfig2).getData();
-
-            var dataR0 = new data_model().getRegualaData(26);
-            var dataR1 = new data_model().getRegualaData(52);
-
-        var _base = new BaseChart(targ1);
-        _base.setData("Testing 1");
-
-        var _EasleRenderer = new EasleRenderer("easleCanvas", data0, {createCanvas: false});
-
-            //-- functions
-            function togglePlay1(e){
-                _EasleRenderer.setPlaying(!_EasleRenderer.getPlaying())
-            }
-
-            ///-- data updates
-            function easleData0(){
-                _EasleRenderer.setData(data0)
-            }
-            function easleData1(){
-                _EasleRenderer.setData(data1)
-            }
-
-            function easleData2(){
-                _EasleRenderer.setData(data2)
-            }
-            document.getElementById("easleData0").addEventListener('click', easleData0)
-            document.getElementById("easleData1").addEventListener('click', easleData1)
-            document.getElementById("easleData2").addEventListener('click', easleData2)
-        }
-
-    </script>
 </head>
-<body onload="onLoad()">
-<button id="easleData0">Easle data 0</button>
-<button id="easleData1">Easle data 1</button>
-<button id="easleData2">Easle data 2</button>
-
-<p>Easle js version</p>
-<!--<div id="chartHolder_es"><canvas id="easleCanvas" width="900px" height="600px"></canvas></div>-->
-<!--<div id="chartHolder0"></div>-->
-
-<div id="chartHolder1"><canvas id="easleCanvas" width="2000px" height = "500px"></canvas></div>
-
+<body>
+<div ng-app="Main" ng-controller="MainController">
+    <div>{{testalue}}</div>
+</div>
 
 
 </body>

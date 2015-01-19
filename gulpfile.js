@@ -4,6 +4,17 @@ var streamify = require('gulp-streamify');
 var rename = require("gulp-rename");
 var reactify = require("reactify");
 var source = require('vinyl-source-stream');
+var less = require('gulp-less');
+
+
+// Standard handler
+function standardHandler(err){
+    // Notification
+    var notifier = Notification();
+    notifier.notify({ message: 'Error: ' + err.message });
+    // Log to console
+    util.log(util.colors.red('Error'), err.message);
+}
 
 
 var transform = require('vinyl-transform');
@@ -77,12 +88,23 @@ gulp.task('browse_app', function () {
         .pipe(gulp.dest('./build'));
 });
 
+// Less task
+gulp.task('less', function () {
+    gulp.src('./less/app.less')
+        .pipe(less())
+        .on('error', standardHandler)
+        .pipe(gulp.dest('./app/css'));
 
+    gulp.src('./node_modules/bootstrap/less/bootstrap.less')
+        .pipe(less())
+        .on('error', standardHandler )
+        .pipe(gulp.dest('./app/css'));
+});
 
-
-
-
-
+// Watch tasks
+gulp.task('watch-less', function () {
+    gulp.watch(['less/*.less'], ['less']);
+});
 
 
 gulp.task('watchify', ['enable-watch-mode', 'build'])
