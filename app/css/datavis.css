@@ -1,133 +1,12 @@
-/* line 1, ../sass/partials/_scatterplot.scss */
-#icons {
-  margin: 0;
-  padding: 0;
-}
 
-/* line 5, ../sass/partials/_scatterplot.scss */
-#icons li {
-  margin: 2px;
-  position: relative;
-  padding: 4px 0;
-  cursor: pointer;
-  float: left;
-  list-style: none;
-}
-
-/* line 14, ../sass/partials/_scatterplot.scss */
-a.icon {
-  position: relative;
-  padding: 4px;
-  cursor: pointer;
-  display: block;
-  list-style: none;
-}
-
-/* line 24, ../sass/partials/_scatterplot.scss */
-#icons span.ui-icon, a.icon {
-  float: left;
-}
-
-/* line 30, ../sass/partials/_scatterplot.scss */
-.scale_holder {
-  width: 22px;
-  height: 200px;
-}
-
-/* line 37, ../sass/partials/_scatterplot.scss */
-#scatter_holder {
-  margin: 20px auto 0 auto;
-  position: relative;
-}
-
-/* line 46, ../sass/partials/_scatterplot.scss */
-html,
-button,
-input,
-select,
-textarea {
-  color: #1d1d1d;
-}
-
-/* line 50, ../sass/partials/_scatterplot.scss */
-body {
-  font-size: 1em;
-  line-height: 1.4;
-}
-
-/*
- * Remove text-shadow in selection highlight: h5bp.com/i
- * These selection declarations have to be separate.
- * Customize the background color to match your design.
- */
-/*::-moz-selection {*/
-/*background: #606043;*/
-/*color:#fefdf5;*/
-/*text-shadow: none;*/
-/*}*/
-/*::selection {*/
-/*background: #606043;*/
-/*color:#fefdf5;*/
-/*text-shadow: none;*/
-/*}*/
-/*
- * A better looking default horizontal rule
- */
-/* line 77, ../sass/partials/_scatterplot.scss */
-hr {
-  display: block;
-  height: 1px;
-  border: 0;
-  border-top: 1px solid #ccc;
-  margin: 1em 0;
-  padding: 0;
-}
-
-/*
- * Remove the gap between images and the bottom of their containers: h5bp.com/i/440
- */
-/* line 90, ../sass/partials/_scatterplot.scss */
-img {
-  vertical-align: middle;
-}
-
-/*
- * Remove default fieldset styles.
- */
-/* line 98, ../sass/partials/_scatterplot.scss */
-fieldset {
-  border: 0;
-  margin: 0;
-  padding: 0;
-}
-
-/*
- * Allow only vertical resizing of textareas.
- */
-/* line 108, ../sass/partials/_scatterplot.scss */
-textarea {
-  resize: vertical;
-}
-
-/* ==========================================================================
-   Chrome Frame prompt
-   ========================================================================== */
-/* line 116, ../sass/partials/_scatterplot.scss */
-.chromeframe {
-  margin: 0.2em 0;
-  background: #ccc;
-  color: #000;
-  padding: 0.2em 0;
-}
 
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
 /* line 126, ../sass/partials/_scatterplot.scss */
 body {
-  background: #1d1d1d;
-  font-family: 'Trade Gothic Next W01',sans-serif;
-  color: #333;
+  background: #454545;
+  color: #cccccc;
 }
 
 /* line 131, ../sass/partials/_scatterplot.scss */
@@ -136,128 +15,6 @@ body {
   margin: 30px auto;
 }
 
-/* line 135, ../sass/partials/_scatterplot.scss */
-h1 {
-  color: #606043;
-  font-size: 65px;
-  margin: 0;
-  font-family: 'TradeGothicNextW01-BdCm';
-}
-
-/* line 141, ../sass/partials/_scatterplot.scss */
-header p {
-  margin: 0 0 20px;
-}
-
-/* line 144, ../sass/partials/_scatterplot.scss */
-#select {
-  height: 50px;
-  position: relative;
-  z-index: 2;
-}
-
-/* line 149, ../sass/partials/_scatterplot.scss */
-#navToggle {
-  border-top: 1px solid #d6d5c8;
-  border-bottom: 1px solid #d6d5c8;
-  padding: 4px 0;
-  display: inline-block;
-  color: #606043;
-  outline: none;
-  font-size: 20px;
-  font-family: 'TradeGothicNextW01-BdCm';
-  position: relative;
-}
-
-/* line 160, ../sass/partials/_scatterplot.scss */
-#navToggle.active {
-  border-bottom: none;
-  padding: 4px 0 0;
-}
-
-/* line 164, ../sass/partials/_scatterplot.scss */
-#navToggle:hover {
-  color: #111;
-}
-
-/* line 167, ../sass/partials/_scatterplot.scss */
-#navToggle span {
-  display: inline-block;
-  background: #bac2a5;
-  text-transform: uppercase;
-  text-decoration: none;
-  padding: 10px 50px 10px 25px;
-}
-
-/* line 174, ../sass/partials/_scatterplot.scss */
-#navToggle span::after {
-  background: url(../img/arrows.png) no-repeat 0 0;
-  content: '';
-  display: block;
-  width: 15px;
-  height: 15px;
-  position: absolute;
-  right: 20px;
-  top: 20px;
-}
-
-/* line 184, ../sass/partials/_scatterplot.scss */
-#navToggle.active span::after {
-  background-position: 0 -68px;
-}
-
-/* line 187, ../sass/partials/_scatterplot.scss */
-#navList {
-  background: #bac2a5;
-  margin: 0;
-  padding: 20px 30px;
-  -moz-column-count: 2;
-  -moz-column-gap: 40px;
-  -webkit-column-count: 2;
-  -webkit-column-gap: 40px;
-  column-count: 2;
-  column-gap: 40px;
-  display: none;
-}
-
-/*#navList::after {
-    border-bottom:1px solid #d6d5c8;
-    position:relative;
-    content:'';
-    width:100%;
-    height:3px;
-    display:block;
-}*/
-/* line 207, ../sass/partials/_scatterplot.scss */
-.nl {
-  list-style: none;
-  margin-bottom: 5px;
-}
-
-/* line 211, ../sass/partials/_scatterplot.scss */
-.nl a {
-  outline: none;
-  color: #606043;
-  background: url(../img/nl.png) no-repeat 0 3px;
-  padding-left: 30px;
-  display: inline-block;
-  text-decoration: none;
-}
-
-/* line 219, ../sass/partials/_scatterplot.scss */
-.nl a:hover {
-  color: #111;
-}
-
-/* line 222, ../sass/partials/_scatterplot.scss */
-.nl a.active {
-  background-position: 0 -61px;
-}
-
-/* line 225, ../sass/partials/_scatterplot.scss */
-#chart {
-  position: relative;
-}
 
 /* line 228, ../sass/partials/_scatterplot.scss */
 svg {
@@ -272,17 +29,7 @@ rect {
   shape-rendering: crispEdges;
 }
 
-/* line 239, ../sass/partials/_scatterplot.scss */
-.active {
-  z-index: 5;
-  position: relative;
-}
 
-/* line 243, ../sass/partials/_scatterplot.scss */
-.inactive polygon {
-  fill: #aaa;
-  opacity: 0.1;
-}
 
 /* line 250, ../sass/partials/_scatterplot.scss */
 .axis path,
@@ -695,7 +442,7 @@ body.bp {
   line-height: 1.5;
   font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #333333;
-  font-size: 75%;
+  /*font-size: 75%;*/
 }
 /* line 51, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 body.bp h1, body.bp h2, body.bp h3, body.bp h4, body.bp h5, body.bp h6 {
@@ -1295,13 +1042,7 @@ body.two-col #content {
   box-shadow: inset -1px 1px 1px 1px rgba(0, 0, 0, 0.25);
 }
 
-/* line 220, ../sass/datavis.scss */
-#line_graph_holder {
-  width: 750px;
-  height: 344px;
-  color: #ffffff;
-  float: right;
-}
+
 
 /* line 227, ../sass/datavis.scss */
 #line_graph_outer {
@@ -1313,13 +1054,7 @@ body.two-col #content {
   border-bottom: 1px solid #303030;
 }
 
-/* line 235, ../sass/datavis.scss */
-.container {
-  width: 1400px;
-  margin: 60px auto;
-  -webkit-box-shadow: 0px 2px 2px 3px rgba(0, 0, 0, 0.1);
-  box-shadow: 0px 2px 2px 3px rgba(0, 0, 0, 0.1);
-}
+
 
 /* tooltips */
 /* line 244, ../sass/datavis.scss */
@@ -1662,4 +1397,22 @@ ul.main_nav_ul {
 /* line 548, ../sass/datavis.scss */
 .x_tool_legend, .y_tool_legend {
   font-size: 11px;
+}
+
+
+.jumbotron{
+    background-color: #3E3E3E;
+}
+
+
+a {
+    color: #ff9900;
+}
+
+a:hover{
+    color: #cccccc;
+}
+
+.button-holder{
+    padding: 15px;
 }

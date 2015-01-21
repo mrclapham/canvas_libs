@@ -1,3 +1,28 @@
-<h1>Paper js</h1>
-<p>{{testalue}}</p>
-<p>{{testalue2}}</p>
+<h1>PaperJs</h1>
+<p><a href="http://paperjs.org/">http://paperjs.org/</a></p>
+<p> Main features:</p>
+<ul>
+    <li>Strong path and geometry features;</li>
+    <li>Vector and maths capabilities;</li>
+    <li>Event listeners;</li>
+    <li>Canvas elements treated as DOM elements;</li>
+</ul>
+
+<p>PaperJs whets you appetite with some very impressive examples on its website, with source code provided. As with many of the libraries it takes a DOM-like approach to created elements allowing them to be manipulated individually and to have EventListeners added.</p>
+
+<p>The learning curve is slightly steeper for PaperJs - there are, however, a wealth of tutorials on the site and the documentation is excellent. The learning curve is steeper partly due to the wealth of features and partly to do with the quirks involved in scoping, particularly if using PaperJs in JavaScript mode not PaperScript mode (see <a href="http://paperjs.org/tutorials/getting-started/working-with-paper-js/">http://paperjs.org/tutorials/getting-started/working-with-paper-js/</a>). I pefer a modular, Class based approach and initially found I was drawing to the wrong canvas instance when creating a number of Class instances. Once I surrmounted that hurdle I found it a joy to work with. If it has a USP it is probably paths (hence the proponderance of animated curves in the code examples) with smoothing, simplifying and flattening available out-of-the-box.</p>
+
+<p>The inclusion of vector geometry is a big bonus, particularly for data visualisation and mimiking kinetic physics.</p>
+
+<p>Animation is handled in a fairly rudimentry fashion using what I assume is requestAnimationFrame, running at 60fps by calling its onFrame() method. This could become sluggish if expensive tasks are being performed on each frame. It could, however, be teamed with TweenMax (<a href="http://greensock.com/tweenmax">http://greensock.com/tweenmax</a>) or Even TweenJs (<a href="http://www.createjs.com/#!/TweenJS">http://www.createjs.com/#!/TweenJS</a>), sister library to the aforementioned EasleJs, if this becomes an issue.</p>
+
+
+<div id="chartHolder0"></div>
+    <div class="button-holder">
+        <button ng-click="setData(data0)" type="button" class="btn btn-xs btn-warning">Data set 1</button>
+        <button ng-click="setData(data1)" type="button" class="btn btn-xs btn-warning">Data set 2</button>
+        <button ng-click="setData(data2)" type="button" class="btn btn-xs btn-warning">Data set 3</button>
+    </div>
+<div id="chartHolder1"><canvas id = "paperCanv" width="900px" height="500px"></canvas></div>
+<div id="chartHolder1"><canvas id = "paperCanv2" width="900px" height="500px"></canvas></div>
+<div id="chartHolder1"><canvas id = "paperCanv3" width="900px" height="500px"></canvas></div>

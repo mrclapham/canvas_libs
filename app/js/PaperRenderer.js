@@ -460,4 +460,4 @@ PaperRenderer.prototype.render = function(){
 }
 
 
-exports.PaperRenderer = PaperRenderer;
+//exports.PaperRenderer = PaperRenderer;

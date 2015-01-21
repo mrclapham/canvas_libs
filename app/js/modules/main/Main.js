@@ -8,7 +8,11 @@ Main.config(['$routeProvider',
             }).
             when('/p5', {
                 templateUrl: './js/modules/main/templates/p5.html',
-                controller: 'PaperController'
+                controller: 'p5Controller'
+            }).
+            when('/d3', {
+                templateUrl: './js/modules/main/templates/d3.html',
+                controller: 'd3Controller'
             }).
             otherwise({
                 redirectTo: '/'

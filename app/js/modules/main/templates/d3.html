@@ -1,0 +1,37 @@
+<h1>D3</h1>
+
+<p><a href="http://d3js.org/">http://d3js.org/</a></p>
+
+<p>Main features:</p>
+
+<ul>
+    <li>SVG rendering;</li>
+    <li>A mature set of data visualisation tools;</li>
+    <li>Excellent documentation and examples.</li>
+</ul>
+
+
+<p>D3 is a heavyweight of data visualisation. It is a mature library of tools which allows data points to be bound to DOM elements and to mutate their state if and when the underlying data changes.</p>
+
+<p>By default SVG is used for display. This can be a blessing or a curse. As SVG is resolution independent your creations will look pin sharp on any monitor and can be zoomed with no loss of resolution. The downside is that each data point is a DOM element so when you are rendering thousands of points you can run into performance issues - particularly when animating. And older versions of IE are not supported (but we're used to that).</p>
+
+<p>D3 is not a charting library such as Google Charts or ChartJS – which provide specific, off-the-shelf, bar, line, pie etc charts, with an API to customize the look and feel. D3 is much nore low level - it provides the wearwithall to create your own custom charts, graphs and visualisations. It also provides a comprehensive set of helpers to allow you to, for example, create numerical and time-series axises, scale functions and layout helpers for common graph types like bar, pie, chord and scatterplot.
+    A skim through the examples provided on the site will give you a flavour of the what may be achieved using D3. The tutorials provided tend to be fairly rudimentary but there are numerous examples with source code which may be reverse engineered to work out how they were put together.</p>
+
+<p>Tweening is built in for some slinky animations and styling of SVG elements may be achieved through a combination of JavaScript, CSS. You can also create SVG filters for shadow and glow effects - although this can become complex.</p>
+
+
+
+<div class="row">
+    <div class="button-holder">
+        <button ng-click="setData(data0)" type="button" class="btn btn-xs btn-warning">Data set 1</button>
+        <button ng-click="setData(data1)" type="button" class="btn btn-xs btn-warning">Data set 2</button>
+        <button ng-click="setData(data2)" type="button" class="btn btn-xs btn-warning">Data set 3</button>
+    </div>
+    <div class="col-md-8">
+        <div id="line_graph_holder"></div>
+    </div>
+
+    <div class="col-md-4">
+    </div>
+</div>
