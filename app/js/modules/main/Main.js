@@ -14,6 +14,11 @@ Main.config(['$routeProvider',
                 templateUrl: './js/modules/main/templates/d3.html',
                 controller: 'd3Controller'
             }).
+            when('/easle', {
+                templateUrl: './js/modules/main/templates/easle.html',
+                controller: 'easleController'
+            }).
+
             otherwise({
                 redirectTo: '/'
             });

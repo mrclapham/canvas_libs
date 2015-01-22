@@ -158,7 +158,6 @@ Main.controller('p5Controller', ['$scope', function($scope) {
 
     $scope.parseStaticJson();
 
-
     var dataConfig =  {  yMin : 0,
         yMax: 2200,
         xStart: 0,
@@ -178,8 +177,54 @@ Main.controller('p5Controller', ['$scope', function($scope) {
     $scope.setData = function(value){
         $scope._pro.setData(value)
     }
+}]);
 
 
+
+/*  Easle */
+
+
+
+Main.controller('easleController', ['$scope', function($scope) {
+    $scope.targ0 = document.getElementById("chartHolder0");
+    $scope.targ1 = document.getElementById("chartHolder1");
+    $scope.targ2 = document.getElementById("chartHolder2");
+
+    $scope.dataConfig0 =  {  yMin : 0,
+        yMax: 100,
+        xStart: 0,
+        xEnd: 900,
+        steps : 12
+    }
+
+    $scope.dataConfig1 =  {  yMin : 0,
+        yMax: 100,
+        xStart: 0,
+        xEnd: 900,
+        steps : 32
+    }
+
+    $scope.dataConfig2 =  {  yMin : 0,
+        yMax: 100,
+        xStart: 0,
+        xEnd: 1900,
+        steps : 88
+    }
+
+    $scope.data0 = new data_model($scope.dataConfig0).getData();
+    $scope.data1 = new data_model($scope.dataConfig1).getData();
+    $scope.data2 = new data_model($scope.dataConfig2).getData();
+    $scope.dataR0 = new data_model().getRegualaData(26);
+    $scope.dataR1 = new data_model().getRegualaData(52);
+    $scope._EasleRenderer = new EasleRenderer("easleCanvas", $scope.data0, {createCanvas: false});
+
+    //-- functions
+
+    ///-- data updates
+
+    $scope.setData = function(value){
+        $scope._EasleRenderer.setData(value);
+    }
 
 }]);
 

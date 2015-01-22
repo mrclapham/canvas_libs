@@ -1,0 +1,37 @@
+<h1>easle.js</h1>
+
+
+<p><a href="http://www.createjs.com/#!/EasleJS">http://www.createjs.com/#!/EasleJS</a></p>
+
+<p> Main features:</p>
+
+<ul>
+    <li>ActionScript like syntax;</li>
+    <li>Grouping of elements;</li>
+    <li>Masking;</li>
+    <li>Caching of graphic elements;</li>
+    <li>touch support for mobile devices;</li>
+    <li>Event listeners.</li>
+</ul>
+
+
+<p>For anyone with ActionScript experience Easle should have a fairly shallow learning curve, having borrowed much of its syntax and paradigms from ActionScript. It allows the nested grouping of elements and EventListeners to be added to created elements in a DOM-like fashion. It also retains the ‘display list’ paradignm of ActionScript where elements may be added and removed form the 'Stage' as and when required.</p>
+
+<p>Paths drawing and modification is fairly straightforward using the same moveTo/lineTo syntax found in native Canvas and ActionScript. Both bezier and quadratic curves are supported.</p>
+
+<p>Animations is not handled natively but, fortunately, Easle is part of the Create.js package which includes TweenJs - a tweening library similar to GreenSock’s TweenMax.</p>
+
+<p>The documentation contains a caveat about the text being expensive to generate, in my test example I generated the text-based tool-tips via HTML but used the DisplayObject localToGlobal method to position them correctly. Easle also has the ability to cache DisplayObjects - be they graphic or text - to speed up rendering and make it a less expesive prospect.</p>
+
+<p>All in all Easle is a hugely versatile canvas library for a range of applications: charting, data-viz, game development, banner ads - basically anything once done with Flash.</p>
+
+<p>As for cons, a certain amount of built-in animation capability would have been nice as would a 2D Vector class. Both of these capabilities may, however, be handled by third party libraries.</p>
+
+
+
+<div class="button-holder">
+    <button ng-click="setData(data0)" type="button" class="btn btn-xs btn-warning">Data 0</button>
+    <button ng-click="setData(data1)" type="button" class="btn btn-xs btn-warning">Data 1</button>
+    <button ng-click="setData(data2)" type="button" class="btn btn-xs btn-warning">Data 2</button>
+</div>
+<div id="chartHolder1"><canvas id="easleCanvas" width="2000px" height = "500px"></canvas></div>

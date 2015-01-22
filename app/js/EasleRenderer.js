@@ -125,7 +125,6 @@ EasleRenderer.prototype.render = function(){
             toDelete.parent.removeChild(toDelete);
         }
     }
-        console.log(this._dotArray.length, this.getData().length);
 
     for(var i=0; i<this.getData().length; i++){
             var xp = this.getXscale().map( this.getData()[i].x );
@@ -184,10 +183,12 @@ var renderTooltip = function(){
                             '-webkit-margin-end: 0px;'+
                             'color: #ff00ff';
     console.log("this.getTarget() ",this.getTarget())
-    document.getElementById(this.getTarget()).parentNode.appendChild(this._toolTipHtml)
+    var _element = document.getElementById(this.getTarget()).parentNode
+    _element.appendChild(this._toolTipHtml)
+// Make sure the enclosing div is relative or the tooltip will be all over the place
+       _element.style.position ='relative';
     this.stage.update();
 }
-
 
 
 var showTooltip = function(index, e){
@@ -196,11 +197,10 @@ var showTooltip = function(index, e){
     console.log("TARG Y ",e.target.y)
 
 
-    this._toolTipHtml.style.left=  e.target.x+"px";
-    this._toolTipHtml.style.top=  e.target.y+"px";
+    this._toolTipHtml.style.left =  e.target.x+"px";
+    this._toolTipHtml.style.top =  e.target.y+"px";
 
     this._toolTipHtml.innerHTML = "<p style='-webkit-margin-before: 0px; -webkit-margin-after: 0px; -webkit-margin-start: 0px; -webkit-margin-end: 0px; color: rgb(255, 255, 255);'>  "+(this.getData()[index].y).toFixed(2)+"</p>"
-
 
     this.tooltip.removeAllChildren();
     var _background = new createjs.Shape()

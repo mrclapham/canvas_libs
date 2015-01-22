@@ -1,6 +1,28 @@
 <h1>p5.js</h1>
 
 
+<p><a href="http://p5js.org/">http://p5js.org/</a></p>
+
+<p>Main features:</p>
+
+<ul>
+    <li>Strong path and geometry features;</li>
+    <li>Vector and maths capabilities;</li>
+    <li>Additional libraries to allow webcam access and music synthesis.</li>
+</ul>
+
+
+<p>P5 is the new kid on the block and currently still in Beta. It is a javaScript interpretation of Processing <a href="https://www.processing.org/">https://www.processing.org/</a> the popular Java based language for data visualisation and generative art. There has been, for some time, a javaScript version of sorts for Processing. This was, however, more of a parser for converting Java based Processing files to JavaScript and not everything could be successfully converted from Java to JavaScript. Although later iterations of processing.jsallowed using JavaScript natively this appears to have been userped by p5.js.</p>
+
+<p>Just as Easle.js will have a relatively shallow learning curve for ActionScripters p5 will feel very familer to anyone who has used Processing. The principal is you need to write two functions setup() and draw(). As they suggest 'setup' is an initialisation function and draw is called, by default, 60 times a second (processor allowing).</p>
+
+<p>P5 is closest to Paper.js in feel with built-in vector geometry, a host of excellent maths and geometry functions and curve and shape methods which make it extremely flexible for making marks on screen.</p>
+
+<p>In addition it has three add-on libraries p5.dom, p5.sound and p5.gibber which provide access to webcams, video, audio sythesis and music sequencing capabilites.</p>
+
+<p>Unlike the other libraries showcased there is less of a DOM approach and more aof a raw canvas approach to image creation. calling the 'background' method within the 'draw' method floods the canvas with a specified colour and clearing all previously drawn elements in the process. Not calling the 'background' method allows the image to build up - frame by frame. Setting an alpha value on the background (or indeed any drawn element) has the effect of building the image up in translucent layers. It means it's down to you to create your own interactivity and map your on-screen elements. It also, currently, lacks a direct method to create gradient fills (although, you have access to the underlying canvas context). That said it reamins a powerful and versitile library and fun to use, particularly if you wish to create generative art.</p>
+
+
 <div class="button-holder">
     <button ng-click="setData(_dataSetXl)" type="button" class="btn btn-xs btn-warning">Standard Test Data</button>
     <button ng-click="setData(_msData)" type="button" class="btn btn-xs btn-warning">FTSE</button>
