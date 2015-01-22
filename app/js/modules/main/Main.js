@@ -18,7 +18,10 @@ Main.config(['$routeProvider',
                 templateUrl: './js/modules/main/templates/easle.html',
                 controller: 'easleController'
             }).
-
+            when('/fabric', {
+                templateUrl: './js/modules/main/templates/fabric.html',
+                controller: 'fabricController'
+            }).
             otherwise({
                 redirectTo: '/'
             });

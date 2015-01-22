@@ -218,13 +218,60 @@ Main.controller('easleController', ['$scope', function($scope) {
     $scope.dataR1 = new data_model().getRegualaData(52);
     $scope._EasleRenderer = new EasleRenderer("easleCanvas", $scope.data0, {createCanvas: false});
 
-    //-- functions
-
-    ///-- data updates
-
     $scope.setData = function(value){
         $scope._EasleRenderer.setData(value);
     }
 
 }]);
+
+
+/* Fabric */
+
+
+Main.controller('fabricController', ['$scope', function($scope) {
+    $scope.helloWorld = "Hello world."
+    $scope.targ0 = document.getElementById("chartHolder0");
+
+    $scope.dataConfig =  {  yMin : 0,
+        yMax: 100,
+        xStart: 0,
+        xEnd: 900,
+        steps : 12
+    }
+
+    $scope.dataConfig1 =  {  yMin : 0,
+        yMax: 100,
+        xStart: 0,
+        xEnd: 900,
+        steps : 18
+    }
+
+
+    $scope.data0 = new data_model($scope.dataConfig).getData();
+    $scope.data1 = new data_model($scope.dataConfig1).getData();
+
+    $scope.dataR0 = new data_model().getRegualaData(6);
+    $scope.dataR1 = new data_model().getRegualaData(12);
+
+
+    $scope._Fabric = new FabricRendererer($scope.targ0, $scope.data0, {createCanvas: true, canvasId:"chartHolder_fab"});
+    $scope._Fabric.setData($scope.data0)
+
+    $scope.setData = function(value){
+        $scope._Fabric.setData(value);
+    }
+
+    //document.getElementById("togglePlay0").addEventListener('click', function(){
+    //    _Fabric.setData(data0)
+    //})
+    //
+    //document.getElementById("togglePlay1").addEventListener('click', function(){
+    //    _Fabric.setData(data1)
+    //})
+
+
+
+
+
+}])
 
