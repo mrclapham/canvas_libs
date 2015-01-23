@@ -114,6 +114,8 @@ var s = function( sketch ) {
                 sketch.line(sketch._leftOffset, yPos, sketch.width-sketch._rightOffset,  yPos);
                 sketch.textAlign(sketch.RIGHT);
                 sketch.fill("rgba(255,255,255,255)");
+                sketch.textFont( "'Special Elite', sans-serif" );
+
                 sketch.text(i,sketch._leftOffset-5, yPos);
             }
         }
@@ -121,7 +123,7 @@ var s = function( sketch ) {
 
     sketch.draw = function() {
         sketch.background(sketch._bg_r,sketch._bg_g,sketch._bg_b,sketch._bg_a);
-        sketch.textFont("'Special Elite', cursive");
+        sketch.textFont( "'Special Elite', sans-serif" );
 
         var _context = sketch.drawingContext;
         var grd = _context.createLinearGradient(0, 0, 0, 200);
@@ -234,9 +236,9 @@ var s = function( sketch ) {
 
         sketch._roundedYValues = sketch.roundValues(sketch.minY.y, sketch.maxY.y);
 
-
-        console.log(sketch.minY.y, sketch.maxY.y)
-        console.log(sketch._roundedYValues)
+        //
+        //console.log(sketch.minY.y, sketch.maxY.y)
+        //console.log(sketch._roundedYValues)
 
         sketch._scaleX = new Scale([sketch.minX.x, sketch.maxX.x],[sketch._leftOffset, sketch.getWidth()-sketch._rightOffset]);
         sketch._scaleY = new Scale([sketch._roundedYValues.min, sketch._roundedYValues.max],[sketch._bottomOffset, sketch.getHeight()-sketch._topOffset]);
@@ -325,7 +327,7 @@ var s = function( sketch ) {
                 _passed= false
             }
         }
-        if(!_passed) throw new Error("setColor requites an array of four numbers, all between 0 and 255")
+        if(!_passed) throw new Error("setColor requires an array of four numbers, all between 0 and 255")
         sketch._color = value;
     }
 
@@ -423,6 +425,9 @@ var ChartDot = (function(x,y){
             this._p5Canvas.rect(leftPad+this.getCurrentPosition().x,topPad+this.getCurrentPosition().y, 160, 20);
             this._p5Canvas.fill(255);
             this._p5Canvas.noStroke();
+
+            this._p5Canvas.textFont( "'Special Elite', sans-serif" );
+
             this._p5Canvas.textAlign(this._p5Canvas.LEFT);
             this._p5Canvas.text("x:"+this.getData().x.toFixed(2)+ "y:"+this.getData().y.toFixed(2), leftPad+5+this.getCurrentPosition().x,topPad+15+this.getCurrentPosition().y);
         },
