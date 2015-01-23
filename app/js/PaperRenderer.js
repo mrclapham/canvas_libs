@@ -449,13 +449,6 @@ PaperRenderer.prototype.render = function(){
     _drawDynamicDots.call(this);
     _createToolTip.call(this);
 
-    //this._path.lineTo(this._start.add([ Math.random()*300, Math.random()*300 ]));
-    // Draw the view now:
-    //_paper.view.draw();
-    //_paper2.view.draw();
-    //_paper.remove( this._circle );
-   // this.myPath.fullySelected = true;
-    //this.myPath.smooth();
     _paper.view.draw();
 }
 
