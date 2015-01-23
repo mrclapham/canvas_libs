@@ -46,7 +46,6 @@ Main.controller('PaperController', ['$scope', function($scope){
         $scope._paper.setData(data);
     }
 
-
 }])
 
 
@@ -103,14 +102,6 @@ Main.controller('d3Controller', ['$scope', function($scope) {
 
     }
 }]);
-
-
-
-
-
-
-
-
 
 
 
