@@ -121,6 +121,7 @@ var s = function( sketch ) {
 
     sketch.draw = function() {
         sketch.background(sketch._bg_r,sketch._bg_g,sketch._bg_b,sketch._bg_a);
+        sketch.textFont("Arial");
 
         var _context = sketch.drawingContext;
         var grd = _context.createLinearGradient(0, 0, 0, 200);
