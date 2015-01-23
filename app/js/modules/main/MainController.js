@@ -160,9 +160,7 @@ Main.controller('p5Controller', ['$scope', function($scope) {
 
 
     $scope._targ = document.getElementById("processDiv");
-    if(! $scope._pro){
-        setTimeout(function(){$scope._pro = new ProcessingRenderer($scope._targ, $scope.data0, {width:1200, height:900});}, 2000)
-    }
+    $scope._pro = new ProcessingRenderer($scope._targ, $scope.data0, {width:1200, height:900});
     $scope._pro.setWidth(1200)
     $scope._pro.setData($scope._dataSetXl);
 

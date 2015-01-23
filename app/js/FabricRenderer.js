@@ -46,7 +46,6 @@ FabricRendererer.prototype.animatePoint = function(i, prop, endPoints, polygon) 
         endValue: endPoints[i][prop],
         duration: 1000,
         onChange: function(value) {
-            console.log("CHANGED")
             polygon.points[i][prop] = value;
             // only render once
             if (i === polygon.points.length - 1 && prop === 'y') {
