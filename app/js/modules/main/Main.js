@@ -22,6 +22,12 @@ Main.config(['$routeProvider',
                 templateUrl: './js/modules/main/templates/fabric.html',
                 controller: 'fabricController'
             }).
+            when('/introduction', {
+                templateUrl: './js/modules/main/templates/introduction.html',
+                controller: 'introController'
+            }).
+
+
             otherwise({
                 redirectTo: '/'
             });

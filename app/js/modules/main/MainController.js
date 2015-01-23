@@ -229,7 +229,6 @@ Main.controller('easleController', ['$scope', function($scope) {
 
 
 Main.controller('fabricController', ['$scope', function($scope) {
-    $scope.helloWorld = "Hello world."
     $scope.targ0 = document.getElementById("chartHolder0");
 
     $scope.dataConfig =  {  yMin : 0,
@@ -246,12 +245,17 @@ Main.controller('fabricController', ['$scope', function($scope) {
         steps : 18
     }
 
+    $scope.dataConfig2 =  {  yMin : 0,
+        yMax: 100,
+        xStart: 0,
+        xEnd: 900,
+        steps : 80
+    }
 
     $scope.data0 = new data_model($scope.dataConfig).getData();
     $scope.data1 = new data_model($scope.dataConfig1).getData();
+    $scope.data2 = new data_model($scope.dataConfig2).getData();
 
-    $scope.dataR0 = new data_model().getRegualaData(6);
-    $scope.dataR1 = new data_model().getRegualaData(12);
 
 
     $scope._Fabric = new FabricRendererer($scope.targ0, $scope.data0, {createCanvas: true, canvasId:"chartHolder_fab"});
@@ -260,17 +264,10 @@ Main.controller('fabricController', ['$scope', function($scope) {
     $scope.setData = function(value){
         $scope._Fabric.setData(value);
     }
-
-    //document.getElementById("togglePlay0").addEventListener('click', function(){
-    //    _Fabric.setData(data0)
-    //})
-    //
-    //document.getElementById("togglePlay1").addEventListener('click', function(){
-    //    _Fabric.setData(data1)
-    //})
+}])
 
 
-
+Main.controller('introController', ['$scope', function($scope) {
 
 
 }])

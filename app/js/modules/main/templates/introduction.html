@@ -1,0 +1,39 @@
+<h1>Canvas Library shootout</h1>
+
+<pre><code>NB: Currently work in progress
+</code></pre>
+
+<h3>Canvas/SVG/Charting library comparison</h3>
+
+<p>The code is on Github <a href="https://github.com/mrClapham/canvas_libs">https://github.com/mrClapham/canvas_libs</a>.</p>
+
+<p>A comparison of the main HTML5 Canvas Libraries with examples.</p>
+
+<p>My aim was to build a simple chart - incorporating type and with an animated state change when data is updated - utilising a number of the leading canvas libraries.</p>
+
+<h3>Comparison of JavaScript Canvas and SVG libraries</h3>
+
+<p>One of the most exciting aspects of HTML5 is the <strong>canvas</strong> element allowing the free creation of on-screen imagery and pixel wrangling previously reserved for the likes of Flash. Wide browser adoption of the Serial Vector Graphics(SVG)  format has further opened the options for creating rich graphic experiences in-browser.</p>
+
+<p>Whilst the canvas api is powerful tool it remains quite low-level meaning developers have a fair amount of work on their hands if they wish to create their own interfaces. The canvas element is a single element, not comprised of individual DOM elements, therefore, workarounds are required if user interaction is to be captured on a canvas element (eg: mouse clicks and rollovers on individual graphic elements drawn on the canvas).</p>
+
+<p>SVG does create individual DOM elements. These may be styled via css, to a certain extent. Some styling may, however, require writing SVG shaders in a nested XML format, which can be tricky.</p>
+
+<p>Fortunately, there are a growing number of JavaScript libraries there to sugar the pill.</p>
+
+<p>The ones I am comparing here are:</p>
+
+<ul>
+    <li>Easle.js</li>
+    <li>Fabric.js</li>
+    <li>p5.js</li>
+    <li>Paper.js</li>
+    <li>D3.js</li>
+</ul>
+
+
+<p>Although not an exhaustive comparison this is an attempt to test drive a number of differing libraries, with somewhat contrasting approaches, strengths and weaknesses. As to which is the ‘best’, well, it very much depend on what you are trying to achieve. Are your priorities simply drawing or are animation, interactivity and physics simulations a priority? Or is ease of use a greater priority than flexibility – all packages having their own learning curves, but none are too steep.</p>
+
+<p>Although all libraries appear, on the surface, to be aiming for a similar goal, creating images in a web browser, they all have differing approaches and focuses. It is telling that both Fabric and p5.js have ‘noise’ methods but with totally different purposes – fabric’s noise method is an image filter adding pixel ‘noise’ to a loaded image, as per PhotoShop’s noise filter. P5’s noise method creates random values using Perlin Noise showing it’s more generative art roots.</p>
+
+<p>Libraries I looked at but decided to not trial, at this point, were two.js and kinetic.js. Kinetic shows some promise and is very popular, however,  at present its website appears to be in need of some maintenance with 404s on the tutorials. Two.js is a promising newcomer but, at present, lacks image and text support.</p>
