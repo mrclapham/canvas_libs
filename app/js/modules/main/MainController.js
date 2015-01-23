@@ -140,7 +140,6 @@ Main.controller('p5Controller', ['$scope', function($scope) {
     $scope.parseStaticJson = function(){
         var xOffset = 10;
         for(var i=0; i<$scope.staticJson.data.length; i++){
-//                    console.log("e.detail.data[i].mks ", e.detail.data.data[i].mks)
             $scope._msData.push({date:$scope.staticJson.data[i].date, x:i*xOffset, y:$scope.staticJson.data[i].mks})
             $scope._ftseData.push({date:$scope.staticJson.data[i].date, x:i*xOffset, y:$scope.staticJson.data[i].ftse})
             $scope._msVftse.push({date:$scope.staticJson.data[i].date, y:$scope.staticJson.data[i].mks, x:$scope.staticJson.data[i].ftse})
@@ -161,7 +160,9 @@ Main.controller('p5Controller', ['$scope', function($scope) {
 
 
     $scope._targ = document.getElementById("processDiv");
-    $scope._pro = new ProcessingRenderer($scope._targ, $scope.data0, {width:1200, height:900});
+    if(! $scope._pro){
+        setTimeout(function(){$scope._pro = new ProcessingRenderer($scope._targ, $scope.data0, {width:1200, height:900});}, 2000)
+    }
     $scope._pro.setWidth(1200)
     $scope._pro.setData($scope._dataSetXl);
 
