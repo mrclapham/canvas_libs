@@ -27,9 +27,10 @@ Main.config(['$routeProvider',
                 controller: 'introController'
             }).
 
-
             otherwise({
-                redirectTo: '/'
+                redirectTo: '/',
+                templateUrl: './js/modules/main/templates/introduction.html',
+                controller: 'introController'
             });
     }]);
 
