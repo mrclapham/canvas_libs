@@ -2,7 +2,7 @@
  * Created by grahamclapham on 02/12/2014.
  */
 var defaultCanvasConfig = {
-    backgroundColor: 'rgb(200,200,200)',
+    backgroundColor: 'rgb(20,20,20)',
         selectionColor: '#cccccc',
         selectionLineWidth: 2
     // ...
@@ -12,9 +12,8 @@ function FabricRendererer(target, opt_data, opt_config) {
     //opt_config ? opt_config.createCanvas = false : opt_config = {createCanvas:false};
     BaseChart.call(this, target, opt_data, opt_config); // call super constructor.
     this._dotArray = [];
-    this.backgroundColor = "rgb(200,200,200)"
+    this.backgroundColor = "rgb(20,20,20)"
     this.dotdColor = "rgb(200,200,200)"
-    this.fillGradient = "rgb(200,0,200)"
     this.areaChartArray = [];
     this.areaChart = null;
 }
@@ -47,6 +46,21 @@ FabricRendererer.prototype.animatePoint = function(i, prop, endPoints, polygon) 
         duration: 1000,
         onChange: function(value) {
             polygon.points[i][prop] = value;
+            polygon.set( {fill: "rgba(0, 255,0, 0.1)"} )
+
+            polygon.setGradient('fill', {
+                x1: 0,
+                y1: 0,
+                x2: 0,
+                y2: _this.height,
+                colorStops: {
+                    0: 'rgba(255, 0, 99, 0.2)',
+                    1: 'rgba(0, 0, 0, 0.2)'
+                },
+                opacity: 0.05
+            })
+           // _this.getCanvas().renderAll();
+
             // only render once
             if (i === polygon.points.length - 1 && prop === 'y') {
                 _this.getCanvas().renderAll();
@@ -54,7 +68,8 @@ FabricRendererer.prototype.animatePoint = function(i, prop, endPoints, polygon) 
         },
         onComplete: function() {
             polygon.setCoords();
-            polygon.set( {fill: "rgba(100, 90,0, 0.01)"} )
+            this.renderDotChart();
+            
             console.log("AniamationFinished")
             // only start animation once
         }
@@ -63,8 +78,9 @@ FabricRendererer.prototype.animatePoint = function(i, prop, endPoints, polygon) 
 
 FabricRendererer.prototype.render = function(){
     if(this.getData() && this.getData().length>1){
-        this.renderAreaChart();
         this.renderDotChart();
+        this.renderAreaChart();
+
     }
 //////////////////
     this.getCanvas().renderAll();
@@ -77,6 +93,7 @@ FabricRendererer.prototype.renderAreaChart = function(){
 
 //------------
     this.areaChartArray = [];
+    this.oldPositions = [];
  //   for(var i=0;i<this.getData().length; i++){
         for(var ii=0; ii<this.getData().length; ii++){
             var __yVal = this.getData()[ii].y
@@ -98,13 +115,16 @@ FabricRendererer.prototype.renderAreaChart = function(){
             {
                 originX: 'left',
                 originY: 'top',
-                fill: "rgba(0, 0,100, 0.01)",
+                //fill: "rgba(0, 0,100, 0.01)",
                 selectable: true,
                 centeredRotation: false,
                 centeredScaling: false
             }
         )
         this.areaChart.set({points:this.areaChartArray});
+        for(var i=0; i<this.areaChartArray.length; i++){
+            this.oldPositions.push({x:this.areaChartArray[i].x, y:this.areaChartArray[i].y})
+        }
 
         try{
             this.getCanvas().add(this.areaChart);
@@ -132,27 +152,24 @@ FabricRendererer.prototype.renderAreaChart = function(){
     if(pointsMissmatch<0){
         ///there are too many points in the polygon
         console.log("TOO FEW there are ",this.areaChart.points.length, " and should be ", this.areaChartArray.length)
-        this.areaChart.points.slice(0, this.areaChartArray.length-1)
+        //this.areaChart.points.slice(0, this.areaChartArray.length-1)
+        for(var i = this.areaChart.points.length; i < this.areaChartArray.length; i++ ){
+           this.areaChart.points.push({x:100, y:100})
+        }
         console.log("REVISED NUMBER  ",this.areaChart.points.length)
-
     }
 
-
-//    console.log("PRE ====  THE POINTS MISSMATCH IS this.areaChart.points.length", this.areaChart.points.length)
-//    console.log("PRE ===== THE POINTS MISSMATCH IS this.areaChartArray.length", this.areaChartArray.length)
-        for(var i=0; i<this.areaChartArray.length; i++){
-            this.areaChart.points[i] = this.areaChartArray[i];
+        for(var i=0; i<this.oldPositions.length; i++){
+            this.areaChart.points[i] = this.oldPositions[i];
         // console.log("FOUND A POINT ",this.this.areaChart.points.length[i].y)
     }
-//    console.log("THE POINTS MISSMATCH IS this.areaChart.points.length", this.areaChart.points.length)
-//    console.log("THE POINTS MISSMATCH IS this.areaChartArray.length", this.areaChartArray.length)
-    this.areaChart.set({ fill: 'rgba(0,255,0,0.1)', stroke: 'reg', opacity: 0.05 });
-//    for(var i=0; i<this.areaChart.points.length; i++){
-//        this.animatePoint(i, 'y', this.areaChartArray, this.areaChart)
-//        this.animatePoint(i, 'x', this.areaChartArray, this.areaChart)
-////       console.log(this.areaChartArray);
-//         console.log("FOUND A POINT ",this.this.areaChart.points.length[i].y)
-//    }
+//    this.areaChart.set({ fill: 'rgba(0,255,0,0.1)', stroke: 'reg', opacity: 0.05 });
+
+    for(var i=0; i<this.areaChart.points.length; i++){
+        this.animatePoint(i, 'y', this.areaChartArray, this.areaChart)
+        this.animatePoint(i, 'x', this.areaChartArray, this.areaChart)
+//       console.log(this.areaChartArray);
+    }
 };
 
 ////////////////////////////////////////////
