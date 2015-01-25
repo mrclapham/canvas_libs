@@ -251,6 +251,7 @@ Main.controller('fabricController', ['$scope', function($scope) {
     $scope._Fabric = new FabricRendererer($scope.targ0, $scope.data0, {createCanvas: true, canvasId:"chartHolder_fab"});
     $scope._Fabric.setData($scope.data0)
 
+
     $scope.setData = function(value){
         $scope._Fabric.setData(value);
     }

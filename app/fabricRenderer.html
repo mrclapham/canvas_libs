@@ -54,9 +54,12 @@
             var dataR0 = new data_model().getRegualaData(6);
             var dataR1 = new data_model().getRegualaData(12);
 
+            console.log("DAT ZERO : ",data0)
+            console.log("DATA ONE ",data1)
+
 
         var _Fabric = new FabricRendererer(targ0, data0, {createCanvas: true, canvasId:"chartHolder_fab"});
-            _Fabric.setData(data0)
+            _Fabric.setData(data1)
 
             document.getElementById("togglePlay0").addEventListener('click', function(){
                 _Fabric.setData(data0)

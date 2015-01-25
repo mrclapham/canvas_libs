@@ -234,23 +234,4 @@ BaseChart= (function(target, opt_data, opt_config){
 
 })();
 
-//exports.BaseChart = BaseChart;
 
-// Static functions...
-
-//BaseChart.importJSON = function(path){
-//
-//var oReq = new XMLHttpRequest();
-//oReq.onload = function(e){reqListener(e)};
-//oReq.open("get", path, true);
-//oReq.send();
-//
-//var reqListener =  function (e) {
-//    console.log(e.target)
-//    console.log(e.responseText)
-//    return e.target(e.responseText);
-//    //return e.target;
-//}
-//
-//
-//}

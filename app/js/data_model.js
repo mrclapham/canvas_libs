@@ -13,9 +13,7 @@ data_model = (function(opt_config){
         if(opt_config) _init.call(this, opt_config);
 
     }
-
     //===================
-
     //
     var _init =function(opt_config){
         //First, have you got a config object?
@@ -26,17 +24,10 @@ data_model = (function(opt_config){
     }
 
     var _onConfigSet = function(opt_config){
-       // console.log("_onConfigSet ", opt_config)
-
         for(var value in opt_config){
-            //console.log(value)
             //Underscore properties are not to be changed.
-
             if(String(value).charAt(0) != '_') this._private[value] = opt_config[value];
-
         }
-
-
     }
     //====================
 
@@ -46,7 +37,8 @@ data_model = (function(opt_config){
         var stepsize = (this._private.xEnd - this._private.xStart) / this._private.steps;
         for(var i=0; i<this._private.steps; i++){
             //_data.push({x:stepsize*i, y:this._private.yMin+Math.random()*this._private.yMax});
-            _data.push({x:stepsize*i, y:this._private.yMin+Math.random()*this._private.yMax});
+            var __y = this._private.yMin+Math.random()*this._private.yMax
+            _data.push({x:stepsize*i, y:__y});
         }
         return _data;
     }
@@ -60,8 +52,6 @@ data_model = (function(opt_config){
         }
             return _data;
     }
-
-
 
     return _scope;
 })();

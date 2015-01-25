@@ -9,18 +9,69 @@ var dataConfig =  {
                     steps : 12
                     }
 
+var dataConfig1 = { yMin: 0,
+                    yMax: 100,
+                    xStart: 0,
+                    xEnd: 900,
+                    steps: 18
+                };
 
- data0 = new data_model(dataConfig).getData();
- data1 = new data_model(dataConfig).getData();
+
+
 
 beforeEach(function(){
     _fixture = document.createElement('div');
     _body =  document.getElementsByTagName('body');
     domholder = document.getElementById('dom-holder');
+    data0 = new data_model(dataConfig).getData();
+    data1 = new data_model(dataConfig1).getData();
 });
 afterEach(function(){
     delete _fixture;
 })
+
+
+describe('Dater faker should return correct data length', function(){
+    it("data0 should have an array length of 12", function(){
+       expect(data0).length.to.be(12)
+    })
+
+    it("data1 should have an array length of 18", function(){
+        expect(data1).length.to.be(18)
+    })
+})
+
+
+describe('Dater faker should return only number data for x and y', function(){
+    var _xAreNumbers = true
+    var _yAreNumbers = true
+
+
+    beforeEach(function(){
+        for(var i=0; i<data0.length; i++){
+            if(isNaN(data0[i].x)) _xAreNumbers = false
+            if(isNaN(data0[i].y)) _yAreNumbers = false
+        }
+    })
+    it("data0 should have numbers for x data", function(){
+        expect(_xAreNumbers).to.be.true
+    })
+
+    it("data0 should have numbers for y data", function(){
+        expect(_yAreNumbers).to.be.true
+    })
+    it("data1 should have numbers for x data", function(){
+        expect(_xAreNumbers).to.be.true
+    })
+
+    it("data1 should have numbers for y data", function(){
+        expect(_yAreNumbers).to.be.true
+    })
+
+})
+
+
+
 
 describe('Array', function(){
     describe('#indexOf()', function(){
@@ -406,16 +457,16 @@ describe("Tests for the Scale Domain utility" ,function(){
                 expect(_sketch.calculateYDivisions).to.be.a("function");
         })
 
-        it("_sketch.calculateYDivisions(3000000) to return 10000", function(){
-            expect(_sketch.calculateYDivisions(3000000)).to.equal(10000);
+        it("_sketch.calculateYDivisions(3000000) to return 100000", function(){
+            expect(_sketch.calculateYDivisions(3000000)).to.equal(100000);
         })
 
-        it("_sketch.calculateYDivisions(1000000) to return 10000", function(){
-            expect(_sketch.calculateYDivisions(1000000)).to.equal(1000);
+        it("_sketch.calculateYDivisions(1000000) to return 100000", function(){
+            expect(_sketch.calculateYDivisions(1000000)).to.equal(100000);
         })
 
         it("_sketch.calculateYDivisions(100000) to return 10000", function(){
-            expect(_sketch.calculateYDivisions(100000)).to.equal(1000);
+            expect(_sketch.calculateYDivisions(100000)).to.equal(10000);
         })
 
         it("_sketch.calculateYDivisions(100000) to return 10000", function(){
@@ -427,11 +478,15 @@ describe("Tests for the Scale Domain utility" ,function(){
         })
 
         it("_sketch.calculateYDivisions(1000) to return 100", function(){
+            expect(_sketch.calculateYDivisions(1000)).to.equal(100);
+        })
+
+        it("_sketch.calculateYDivisions(100) to return 10", function(){
             expect(_sketch.calculateYDivisions(100)).to.equal(10);
         })
 
-        it("_sketch.calculateYDivisions(1000) to return 100", function(){
-            expect(_sketch.calculateYDivisions(10)).to.equal(1);
+        it("_sketch.calculateYDivisions(10) to return 10", function(){
+            expect(_sketch.calculateYDivisions(10)).to.equal(10);
         })
 
     })
@@ -444,7 +499,7 @@ describe("Tests for the Scale Domain utility" ,function(){
         return {min:_min, max:_max}
     }
 
-    describe.only("The number should be rounded up or down", function(){
+    describe("The number should be rounded up or down", function(){
         beforeEach(function(){
             _sketch = new p5(s, _fixture);
         });
