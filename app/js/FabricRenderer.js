@@ -69,7 +69,7 @@ FabricRendererer.prototype.animatePoint = function(i, prop, endPoints, polygon) 
         onComplete: function() {
             polygon.setCoords();
             this.renderDotChart();
-            
+
             console.log("AniamationFinished")
             // only start animation once
         }
