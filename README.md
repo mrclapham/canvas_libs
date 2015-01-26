@@ -79,7 +79,7 @@ If you can get past its eye-wateringly ugly website Fabric has a wealth of featu
 
 If each library has its niche Fabric's niche seems to be for creating on-line versions of PhotoShop/Illustrator/Paint type apps. There are off-the-shelf tools in there for creating drawing brushes, image filtering and manipulation. 
 
-On the down side the line/shape drawing API is cumbersome compared to the other libraries looked at and animating path elements created some unwanted image-noise type artifacts around the path’s edges. The documentation could be more comprehensive too.
+To try an be fair to Fabric the task I set myself may not have been playing to its strengths, but I found its line/shape drawing API cumbersome compared to the other libraries. My initial attempts at animating path elements created some unwanted image-noise type artifacts around the path’s edges. Adding and subtracting points to the path, and animating the points was not only arduous but proved a performance killer and retaining the transparency of a gradient proved a puzzel I was unable to solve. Even using the animation feature I found the browser hanging or limping along at 14fps. The documentation could be more comprehensive and experienced Fabric users may tell me I was doing it all wrong, but this was by far the least successful of the libraries I tried.
 
 ###PaperJs
 [http://paperjs.org/](http://paperjs.org/)

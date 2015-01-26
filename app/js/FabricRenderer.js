@@ -54,7 +54,7 @@ FabricRendererer.prototype.animatePoint = function(i, prop, endPoints, polygon) 
                 x2: 0,
                 y2: _this.height,
                 colorStops: {
-                    0: 'rgba(255, 0, 99, 0.2)',
+                    0: 'rgba(255, 153, 0, 0.2)',
                     1: 'rgba(0, 0, 0, 0.2)'
                 },
                 opacity: 0.05
@@ -68,7 +68,7 @@ FabricRendererer.prototype.animatePoint = function(i, prop, endPoints, polygon) 
         },
         onComplete: function() {
             polygon.setCoords();
-            this.renderDotChart();
+            _this.renderDotChart();
 
             console.log("AniamationFinished")
             // only start animation once
@@ -162,13 +162,28 @@ FabricRendererer.prototype.renderAreaChart = function(){
         for(var i=0; i<this.oldPositions.length; i++){
             this.areaChart.points[i] = this.oldPositions[i];
         // console.log("FOUND A POINT ",this.this.areaChart.points.length[i].y)
-    }
+        }
 //    this.areaChart.set({ fill: 'rgba(0,255,0,0.1)', stroke: 'reg', opacity: 0.05 });
-
+    var _this = this
+    this.areaChart.setGradient('fill', {
+        x1: 0,
+        y1: 0,
+        x2: 0,
+        y2: _this.height,
+        colorStops: {
+            0: 'rgba(255, 153, 0, 0.2)',
+            1: 'rgba(0, 0, 0, 0.2)'
+        },
+        opacity: 0.05
+    })
     for(var i=0; i<this.areaChart.points.length; i++){
-        this.animatePoint(i, 'y', this.areaChartArray, this.areaChart)
-        this.animatePoint(i, 'x', this.areaChartArray, this.areaChart)
+       // this.animatePoint(i, 'y', this.areaChartArray, this.areaChart)
+        //this.animatePoint(i, 'x', this.areaChartArray, this.areaChart)
+
+     //   this.areaChart.points[i]set({x:this.areaChartArray[i].x, y:this.areaChartArray[i].y})
 //       console.log(this.areaChartArray);
+
+
     }
 };
 
