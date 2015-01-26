@@ -122,9 +122,6 @@ FabricRendererer.prototype.renderAreaChart = function(){
             }
         )
         this.areaChart.set({points:this.areaChartArray});
-        for(var i=0; i<this.areaChartArray.length; i++){
-            this.oldPositions.push({x:this.areaChartArray[i].x, y:this.areaChartArray[i].y})
-        }
 
         try{
             this.getCanvas().add(this.areaChart);
@@ -136,33 +133,8 @@ FabricRendererer.prototype.renderAreaChart = function(){
         //TODO: cull any extra items id the array is shorter
     // Find out if we ahave too many or too few points
 
-    var pointsMissmatch = this.areaChart.points.length - this.areaChartArray.length
+    this.areaChart.set({points:this.areaChartArray});
 
-    console.log("Points missmatch ", pointsMissmatch)
-    console.log("There should be  ", this.areaChartArray.length, " points" )
-    console.log("but there are   ", this.areaChart.points.length )
-
-
-    if(pointsMissmatch>0){
-        console.log("TOO MANY there are ",this.areaChart.points.length, " and should be ", this.areaChartArray.length)
-        this.areaChart.points.splice( this.areaChartArray.length )
-        console.log("REVISED NUMBER  ",this.areaChart.points.length)
-    }
-
-    if(pointsMissmatch<0){
-        ///there are too many points in the polygon
-        console.log("TOO FEW there are ",this.areaChart.points.length, " and should be ", this.areaChartArray.length)
-        //this.areaChart.points.slice(0, this.areaChartArray.length-1)
-        for(var i = this.areaChart.points.length; i < this.areaChartArray.length; i++ ){
-           this.areaChart.points.push({x:100, y:100})
-        }
-        console.log("REVISED NUMBER  ",this.areaChart.points.length)
-    }
-
-        for(var i=0; i<this.oldPositions.length; i++){
-            this.areaChart.points[i] = this.oldPositions[i];
-        // console.log("FOUND A POINT ",this.this.areaChart.points.length[i].y)
-        }
 //    this.areaChart.set({ fill: 'rgba(0,255,0,0.1)', stroke: 'reg', opacity: 0.05 });
     var _this = this
     this.areaChart.setGradient('fill', {
@@ -176,15 +148,7 @@ FabricRendererer.prototype.renderAreaChart = function(){
         },
         opacity: 0.05
     })
-    for(var i=0; i<this.areaChart.points.length; i++){
-       // this.animatePoint(i, 'y', this.areaChartArray, this.areaChart)
-        //this.animatePoint(i, 'x', this.areaChartArray, this.areaChart)
-
-     //   this.areaChart.points[i]set({x:this.areaChartArray[i].x, y:this.areaChartArray[i].y})
-//       console.log(this.areaChartArray);
-
-
-    }
+    // Damn you fabric.js, damn you!!!! >:(
 };
 
 ////////////////////////////////////////////
