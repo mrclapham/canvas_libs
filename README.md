@@ -3,7 +3,7 @@ Canvas Library shootout
 	NB: Currently work in progress
 
 ### Canvas/SVG/Charting library comparison
-there is a live version at [https://canvas-shootout.herokuapp.com/#/paper](https://canvas-shootout.herokuapp.com/#/paper)
+There is a live version at [https://canvas-shootout.herokuapp.com/#/paper](https://canvas-shootout.herokuapp.com/#/)
 
 A comparison of the main HTML5 Canvas Libraries with examples.
 
